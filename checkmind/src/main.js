@@ -1,12 +1,10 @@
 import { createApp } from 'vue'
-import Vue from 'vue'
+import {createBootstrap} from 'bootstrap-vue-next'
 import App from './App.vue'
 
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 
-Vue.use(BootstrapVue)
-Vue.use(IconsPlugin)
-
-createApp(App).mount('#app')
+const app = createApp(App)
+app.use(createBootstrap())
+app.mount('#app')
