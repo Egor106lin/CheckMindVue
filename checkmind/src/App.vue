@@ -4,15 +4,14 @@
     <title>CheckMind</title>
   </head>
   <PageHeader/>
-  <MainPage/>
+  <RouterView></RouterView>
 </template>
 
 <script>
-import MainPage from './components/MainPage.vue';
 import PageHeader from './components/PageHeader.vue';
 
 export default {
-  components: {MainPage, PageHeader},
+  components: {PageHeader},
   name: 'App',
 }
 </script>
