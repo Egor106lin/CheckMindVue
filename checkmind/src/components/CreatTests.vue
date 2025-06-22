@@ -21,7 +21,17 @@
                             type="text"
                             placeholder="Название теста"
                             @blur="v$.test_name.$touch()">
-                            <p class="error-alert" v-if="v$.test_name.$error">Поле не должно быть пустым</p>
+                            <div class="alert alert-danger" role="alert" v-if="v$.test_name.$error">Поле не должно быть пустым</div>
+                            <div class="alert alert-success" role="alert" v-if="!v$.test_name.$error && v$.test_name.$dirty">Такое название доступно</div>
+                            <hr>
+                            <textarea
+                            v-model="v$.test_description.$model"
+                            class="form-control"
+                            type="text"
+                            placeholder="Описание теста"
+                            @blur="v$.test_description.$touch()"></textarea>
+                            <div class="alert alert-danger" role="alert" v-if="v$.test_description.$error">Описание не может быть пустым</div>
+                            <div class="alert alert-success" role="alert" v-if="!v$.test_description.$error && v$.test_description.$dirty">Такое описание доступно</div>
                             <hr>
                             <input
                             v-model="v$.group_id.$model"
@@ -29,7 +39,8 @@
                             class="form-control"
                             type="text"
                             placeholder="ID-группы">
-                            <p class="error-alert" v-if="v$.group_id.$error">Поле не может быть пустым и должно содержать только цифры</p>
+                            <div class="alert alert-danger" role="alert" v-if="v$.group_id.$error">Поле не должно быть пустым</div>
+                            <div class="alert alert-success" role="alert" v-if="!v$.group_id.$error && v$.group_id.$dirty">Коректный ID</div>
                             <hr>
                             <input
                             v-model="v$.questions_quantity.$model"
@@ -37,24 +48,16 @@
                             class="form-control"
                             type="number"
                             placeholder="Количество вопросов">
-                            <p class="error-alert" v-if="v$.questions_quantity.$error">Поле не может быть пустым и должно содержать только цифры</p>
+                            <div class="alert alert-danger" role="alert" v-if="v$.questions_quantity.$error">Поле не должно быть пустым</div>
+                            <div class="alert alert-success" role="alert" v-if="!v$.questions_quantity.$error && v$.questions_quantity.$dirty">Отлично</div>
                             <hr>
-                            <input
-                            v-model="v$.answers_quantity.$model"
-                            @blur="v$.answers_quantity.$touch"
-                            class="form-control"
-                            type="number"
-                            placeholder="Количество ответов">
-                            <p class="error-alert" v-if="v$.answers_quantity.$error">Поле не может быть пустым и должно содержать только цифры</p>
-                            <hr>
-                            <input
-                            v-model="v$.correct_answers_quantity.$model"
-                            @blur="v$.correct_answers_quantity.$touch"
-                            class="form-control"
-                            type="number"
-                            placeholder="Количество верных ответов">
-                            <p class="error-alert" v-if="v$.correct_answers_quantity.$error">Поле не может быть пустым и должно содержать только цифры</p>
-                            <button name="create_test" class="mt-auto btn btn-primary w-100 disabled">Перейти к написанию заданий</button>
+                            <button 
+                            name="create_test" 
+                            class="mt-auto btn btn-primary w-100"
+                            :class="((!v$.test_name.$error && v$.test_name.$dirty) &&
+                                    (!v$.test_description.$error && v$.test_description.$dirty) &&
+                                    (!v$.group_id.$error && v$.group_id.$dirty) &&
+                                    (!v$.questions_quantity.$error && v$.questions_quantity.$dirty)) ? '' : 'disabled'">Перейти к написанию заданий</button>
                         </div>
                     </div>
                 </div>
@@ -72,29 +75,22 @@ import { ref, computed, reactive } from 'vue';
 export default {
     setup() {
         const user = ref(false)
+        let canCreateTest = ref(0)
         const state = reactive({
             test_name: '',
+            test_description: '',
             group_id: '',
-            questions_quantity: '',
-            answers_quantity: '',
-            correct_answers_quantity: '',
+            questions_quantity: '',  
         })
         const rules = computed(() => ({
             test_name: {required},
+            test_description: {required},
             group_id: {required, numeric},
             questions_quantity: {required, numeric},
-            answers_quantity: {required, numeric},
-            correct_answers_quantity: {required, numeric},
         }))
         const v$ = useVuelidate(rules, state)
-
-        return {state, v$, user}
+        
+        return {state, v$, user, canCreateTest}
     },
 }
 </script>
-
-<style>
-.error-alert {
-    border: 1px groove red;
-}
-</style>
