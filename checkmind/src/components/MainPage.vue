@@ -31,7 +31,7 @@
       <div class="row">
         <div class="col">
           <div class="card h-100 w-50">
-            <img src="" class="card-img-top" alt="Нет доступных тестов">
+            <img src="../assets/images/logo.png" class="card-img-top" alt="Нет доступных тестов">
             <div class="card-body d-flex flex-column">
               <p class="card-text">Нет доступных тестов</p>
               <button name="test_button" class="mt-auto btn btn-primary w-100 disabled">Пройти</button>
