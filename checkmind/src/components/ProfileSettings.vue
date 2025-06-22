@@ -4,7 +4,8 @@
         <div class="row">
             <div class="col">
                 <div class="card h-100">
-                    <img alt="Фото профиля">
+                    <img alt="Фото профиля" src="../assets/images/logo.png">
+                    <p>тут будет фото профиля</p>
                 </div>
             </div>
             <div class="col">
