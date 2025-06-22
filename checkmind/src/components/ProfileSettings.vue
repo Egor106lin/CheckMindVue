@@ -11,9 +11,9 @@
                 <div class="card">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title"><b>Информация о пользователе</b></h5>
-                        <p class="card-text">Имя:</p>
-                        <p class="card-text">Фамилия:</p>
-                        <p class="card-text">Роль:</p>
+                        <p class="card-text">Имя: Иван</p>
+                        <p class="card-text">Фамилия: Иванов</p>
+                        <p class="card-text">Роль: {{user ? "Пользователь" : "Администратор"}}</p>
                         <div class="row">
                             <div class="col">
                                 <button name="change_avatar" class="mt-auto btn btn-primary w-100">Сменить аватар</button>
@@ -21,15 +21,16 @@
                                 <button name="change_name" class="mt-auto btn btn-primary w-100">Сменить имя и фамилию</button>
                             </div>
                             <div class="col">
-                                <button name="leave_account" class="mt-auto btn btn-danger w-100">Выйти из аккаунта</button>
+                                <button name="change_password" class="mt-auto btn btn-primary w-100">Сменить пароль</button>
                                 <hr>
-                                <button name="change_password" class="mt-auto btn btn-danger w-100">Сменить пароль</button>
+                                <button name="leave_account" class="mt-auto btn btn-danger w-100">Выйти из аккаунта</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <hr>
         <div class="row">
             <div class="col">
                 <div v-if="user" class="card">
