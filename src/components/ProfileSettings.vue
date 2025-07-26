@@ -72,9 +72,9 @@
                     <p class="card-text">В группы участники могут вступать по уникальному ID, который предоставит администратор.</p>
                     <p class="card-text">Роль задается при регистрации аккаунта, и не может быть изменена.</p>
                     <p class="card-text">Тесты создаются во вкладке "Задания"</p>
-                    <form action="/create_tests">
-                        <button v-bind:class="user ? 'disabled' : ''" name="create_tests_link" class="mt-auto btn btn-primary w-100">Создать тест</button>
-                    </form>
+                    <router-link v-if="!user" to="/create_tests">
+                        <button name="create_tests_link" class="mt-auto btn btn-primary w-100">Создать тест</button>
+                    </router-link>
                     </div>
                 </div>
             </div>
