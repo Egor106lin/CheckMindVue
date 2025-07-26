@@ -1,0 +1,10 @@
+{
+    "components": {
+        "pageHeader": {
+            "productName": "CheckMind",
+            "mainPage": "Главная",
+            "createTests": "Задания",
+            "pfofile": "Профиль"
+        }
+    }
+}
