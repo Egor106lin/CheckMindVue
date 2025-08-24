@@ -5,7 +5,7 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-body">
-                            <h3 class="card-title">Упс! Тесты может создавать только администратор!</h3>
+                            <h3 class="card-title">{{ $t('components.createTests.alertNotAdmin') }}</h3>
                         </div>
                     </div>
                 </div>
@@ -14,42 +14,34 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">Создание нового теста</h5>
-                            <input
+                            <h5 class="card-title">{{ $t('components.createTests.createNewTest') }}</h5>
+                            <input 
                             v-model="v$.test_name.$model"
                             class="form-control"
                             type="text"
-                            placeholder="Название теста"
+                            :placeholder="$t('components.createTests.testName')"
                             @blur="v$.test_name.$touch()">
-                            <div class="alert alert-danger" role="alert" v-if="v$.test_name.$error">Поле не должно быть пустым</div>
-                            <div class="alert alert-success" role="alert" v-if="!v$.test_name.$error && v$.test_name.$dirty">Такое название доступно</div>
                             <hr>
                             <textarea
                             v-model="v$.test_description.$model"
                             class="form-control"
                             type="text"
-                            placeholder="Описание теста"
+                            :placeholder="$t('components.createTests.testDescription')"
                             @blur="v$.test_description.$touch()"></textarea>
-                            <div class="alert alert-danger" role="alert" v-if="v$.test_description.$error">Описание не может быть пустым</div>
-                            <div class="alert alert-success" role="alert" v-if="!v$.test_description.$error && v$.test_description.$dirty">Такое описание доступно</div>
                             <hr>
                             <input
                             v-model="v$.group_id.$model"
                             @blur="v$.group_id.$touch"
                             class="form-control"
                             type="text"
-                            placeholder="ID-группы">
-                            <div class="alert alert-danger" role="alert" v-if="v$.group_id.$error">Поле не должно быть пустым</div>
-                            <div class="alert alert-success" role="alert" v-if="!v$.group_id.$error && v$.group_id.$dirty">Коректный ID</div>
+                            :placeholder="$t('components.createTests.groupId')">
                             <hr>
                             <input
                             v-model="v$.questions_quantity.$model"
                             @blur="v$.questions_quantity.$touch"
                             class="form-control"
                             type="number"
-                            placeholder="Количество вопросов">
-                            <div class="alert alert-danger" role="alert" v-if="v$.questions_quantity.$error">Поле не должно быть пустым</div>
-                            <div class="alert alert-success" role="alert" v-if="!v$.questions_quantity.$error && v$.questions_quantity.$dirty">Отлично</div>
+                            :placeholder="$t('components.createTests.questionsQuanity')">
                             <hr>
                             <button 
                             name="create_test" 
@@ -57,7 +49,9 @@
                             :class="((!v$.test_name.$error && v$.test_name.$dirty) &&
                                     (!v$.test_description.$error && v$.test_description.$dirty) &&
                                     (!v$.group_id.$error && v$.group_id.$dirty) &&
-                                    (!v$.questions_quantity.$error && v$.questions_quantity.$dirty)) ? '' : 'disabled'">Перейти к написанию заданий</button>
+                                    (!v$.questions_quantity.$error && v$.questions_quantity.$dirty)) ? '' : 'disabled'">
+                                    {{ $t('components.createTests.createNewTest') }}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -68,6 +62,7 @@
 </template>
 
 <script>
+import { useI18n } from 'vue-i18n';
 import useVuelidate from '@vuelidate/core';
 import { numeric, required } from '@vuelidate/validators';
 import { ref, computed, reactive } from 'vue';
@@ -92,5 +87,10 @@ export default {
         
         return {state, v$, user, canCreateTest}
     },
+    data() {
+    return {
+      $t: useI18n().t,
+    }
+  }
 }
 </script>

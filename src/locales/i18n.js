@@ -11,8 +11,10 @@ function loadLocaleMessages() {
   return messages;
 }
 
+let language = localStorage.getItem('storedLanguage') ? "en-EN" : "ru-RU"
+
 const i18n = createI18n({
-  locale: window.localStorage.getItem('storedLanguage'),
+  locale: language,
   fallbackLocale: 'en-US',
   silentFallbackWarn: true,
   messages: loadLocaleMessages(),

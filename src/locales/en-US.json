@@ -4,7 +4,54 @@
             "productName": "CheckMind",
             "mainPage": "Main Page",
             "createTests": "Exercises",
-            "pfofile": "Profile"
+            "profile": "Profile"
+        },
+        "mainPage": {
+            "headerInGroup": "Tests suggested to you by the group administrator",
+            "startTest": "Take the test",
+            "headerNotInGroup": "Join the group in the profile tab and start taking tests!",
+            "noTests": "You do not have any tests to take"
+        },
+        "createTests": {
+            "alertNotAdmin": "Tests can be created by administrator only :(",
+            "createNewTest": "Create a new test",
+            "testName": "Test Name",
+            "testDescription": "Test Description",
+            "groupId": "Group ID",
+            "questionsQuanity": "Questions quanity"
+        },
+        "profileSettings": {
+            "userActions": {
+                "title": "About user",
+                "name": "Name",
+                "sirname": "Sirname",
+                "role": "Role",
+                "roles": {
+                    "user": "User",
+                    "admin": "Administrator"
+                },
+                "changePhoto": "Change photo",
+                "changeNameAndSirname": "Change name and sirname",
+                "changePassword": "Change password",
+                "logout": "Logout"
+            },
+            "groupsActions": {
+                "title": "Groups actions",
+                "createNewGroup": "Create group",
+                "joinGroup": "Join group by ID",
+                "join": "Join",
+                "create": "Create",
+                "groupId": "Group ID: ",
+                "usersQuanity": "Users quanity"
+            },
+            "guide": {
+                "title": "Guide",
+                "rule1": "Administators can create groups and tests.",
+                "rule2": "Users can join groups by ID, given by administrator.",
+                "rule3": "You choose role while creating account and you can not change it.",
+                "rule4": "If you are administrator, you can create tests on page 'Exercises'.",
+                "btnCreateTests": "Create test!"
+            }
         }
     }
 }

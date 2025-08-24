@@ -11,20 +11,20 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title"><b>Информация о пользователе</b></h5>
-                        <p class="card-text">Имя: Иван</p>
-                        <p class="card-text">Фамилия: Иванов</p>
-                        <p class="card-text">Роль: {{user ? "Пользователь" : "Администратор"}}</p>
+                        <h5 class="card-title"><b>{{ $t('components.profileSettings.userActions.title') }}</b></h5>
+                        <p class="card-text">{{ $t('components.profileSettings.userActions.name') }}: Иван</p>
+                        <p class="card-text">{{ $t('components.profileSettings.userActions.sirname') }}: Иванов</p>
+                        <p class="card-text">{{ $t('components.profileSettings.userActions.role') }}: {{user ? "Пользователь" : "Администратор"}}</p>
                         <div class="row">
                             <div class="col">
-                                <button name="change_avatar" class="mt-auto btn btn-primary w-100">Сменить аватар</button>
+                                <button name="change_avatar" class="mt-auto btn btn-primary w-100">{{ $t('components.profileSettings.userActions.changePhoto') }}</button>
                                 <hr>
-                                <button name="change_name" class="mt-auto btn btn-primary w-100">Сменить имя и фамилию</button>
+                                <button name="change_name" class="mt-auto btn btn-primary w-100">{{ $t('components.profileSettings.userActions.changeNameAndSirname') }}</button>
                             </div>
                             <div class="col">
-                                <button name="change_password" class="mt-auto btn btn-primary w-100">Сменить пароль</button>
+                                <button name="change_password" class="mt-auto btn btn-primary w-100">{{ $t('components.profileSettings.userActions.changePassword') }}</button>
                                 <hr>
-                                <button name="leave_account" class="mt-auto btn btn-danger w-100">Выйти из аккаунта</button>
+                                <button name="leave_account" class="mt-auto btn btn-danger w-100">{{ $t('components.profileSettings.userActions.logout') }}</button>
                             </div>
                         </div>
                     </div>
@@ -36,29 +36,29 @@
             <div class="col">
                 <div v-if="user" class="card">
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title"><b>Управление группами</b></h5>
-                        <p class="card-text">Присоединитесь к группе по ID</p>
+                        <h5 class="card-title"><b>{{ $t('components.profileSettings.groupsActions.title') }}</b></h5>
+                        <p class="card-text">{{ $t('components.profileSettings.groupsActions.joinGroup') }}</p>
                         <div class="row">
                             <div class="col">
-                                <input class="form-control w-100" type="text" placeholder="ID-группы">
+                                <input class="form-control w-100" type="text" :placeholder="$t('components.profileSettings.groupsActions.groupId')">
                             </div>
                             <div class="col">
-                                <button name="join_group" class="mt-auto btn btn-primary w-100">Присоединиться</button>
+                                <button name="join_group" class="mt-auto btn btn-primary w-100">{{ $t('components.profileSettings.groupsActions.join') }}</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div v-else class="card">
                     <div class="card-body d-flex flex-column">
-                    <h5 class="card-title"><b>Управление группами</b></h5>
-                    <p class="card-text">Создать новую группу</p>
-                    <p v-if="created_group"><b>ID группы:</b> 1234567890</p>
+                    <h5 class="card-title"><b>{{ $t('components.profileSettings.groupsActions.title') }}</b></h5>
+                    <p class="card-text">{{ $t('components.profileSettings.groupsActions.createNewGroup') }}</p>
+                    <p v-if="created_group"><b>{{ $t('components.profileSettings.groupsActions.groupId') }}</b>1234567890</p>
                         <div class="row">
                             <div class="col">
-                                <input class="form-control w-100" type="number" placeholder="Кол-во участников">
+                                <input class="form-control w-100" type="number" :placeholder="$t('components.profileSettings.groupsActions.usersQuanity')">
                             </div>
                             <div class="col">
-                                <button @click="created_group = !created_group" name="ccreate_group" class="mt-auto btn btn-primary w-100">Создать</button>
+                                <button @click="created_group = !created_group" name="create_group" class="mt-auto btn btn-primary w-100">{{ $t('components.profileSettings.groupsActions.create') }}</button>
                             </div>
                         </div>
                     </div>
@@ -67,13 +67,13 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body d-flex flex-column">
-                    <h5 class="card-title"><b>Гайд</b></h5>
-                    <p class="card-text">Администраторы могут создавать тесты и группы.</p>
-                    <p class="card-text">В группы участники могут вступать по уникальному ID, который предоставит администратор.</p>
-                    <p class="card-text">Роль задается при регистрации аккаунта, и не может быть изменена.</p>
-                    <p class="card-text">Тесты создаются во вкладке "Задания"</p>
+                    <h5 class="card-title"><b>{{ $t('components.profileSettings.guide.title') }}</b></h5>
+                    <p class="card-text">{{ $t('components.profileSettings.guide.rule1') }}</p>
+                    <p class="card-text">{{ $t('components.profileSettings.guide.rule2') }}</p>
+                    <p class="card-text">{{ $t('components.profileSettings.guide.rule3') }}</p>
+                    <p class="card-text">{{ $t('components.profileSettings.guide.rule4') }}</p>
                     <router-link v-if="!user" to="/create_tests">
-                        <button name="create_tests_link" class="mt-auto btn btn-primary w-100">Создать тест</button>
+                        <button name="create_tests_link" class="mt-auto btn btn-primary w-100">{{ $t('components.profileSettings.guide.btnCreateTests') }}</button>
                     </router-link>
                     </div>
                 </div>
@@ -84,6 +84,7 @@
 
 <script>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n';
 
 export default {
   setup() {
@@ -91,6 +92,11 @@ export default {
     const created_group = ref(false)
     return {
       user, created_group
+    }
+  },
+  data() {
+    return {
+      $t: useI18n().t,
     }
   }
 }
