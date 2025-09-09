@@ -19,15 +19,9 @@
 </nav>
 </template>
 
-<script>
+<script setup>
 import { useI18n } from 'vue-i18n';
 
-export default {
-  data() {
-    return {
-      $t: useI18n().t,
-    }
-  }
-}
+const $t = useI18n().t
 </script>
 

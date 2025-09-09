@@ -44,22 +44,11 @@
   
 </template>
 
-<script>
+<script setup>
 import { useI18n } from 'vue-i18n';
 import { ref } from 'vue'
 
-export default {
-  setup() {
-    const in_group = ref(true)
-    return {
-      in_group
-    }
-  },
-  data() {
-    return {
-      $t: useI18n().t,
-    }
-  }
-}
+const in_group = ref(true)
+const $t = useI18n().t
 </script>
 

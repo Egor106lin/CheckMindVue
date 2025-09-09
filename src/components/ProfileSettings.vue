@@ -82,22 +82,12 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n';
 
-export default {
-  setup() {
-    const user = ref(true)
-    const created_group = ref(false)
-    return {
-      user, created_group
-    }
-  },
-  data() {
-    return {
-      $t: useI18n().t,
-    }
-  }
-}
+const user = ref(true)
+const created_group = ref(false)
+
+const $t = useI18n().t
 </script>
