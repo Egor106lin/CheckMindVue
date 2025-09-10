@@ -13,12 +13,25 @@
             "noTests": "У вас нет тестов для прохождения"
         },
         "createTests": {
-            "alertNotAdmin": "Создавать тесты может только администратор :(",
-            "createNewTest": "Создать новый тест",
-            "testName": "Название теста",
-            "testDescription": "Описание теста",
-            "groupId": "ID группы",
-            "questionsQuanity": "Количество вопросов"
+            "alert": {
+                "alertNotAdmin": "Создавать тесты может только администратор :("
+            },
+            "testDataForm": {
+                "createNewTest": "Создать новый тест",
+                "testName": "Название теста",
+                "testDescription": "Описание теста",
+                "groupId": "ID группы",
+                "questionsQuanity": "Количество вопросов"
+            },
+            "everyQuestionForm": {
+                "questionNumber": "Вопрос номер",
+                "questionTitle": "Текст вопроса:",
+                "answerOptions": "Варианты ответа:",
+                "buttons": {
+                    "previousButton": "<- Предыдущий вопрос",
+                    "nextButton": "Следующий вопрос ->"
+                }
+            }
         },
         "profileSettings": {
             "userActions": {

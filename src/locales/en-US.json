@@ -13,12 +13,25 @@
             "noTests": "You do not have any tests to take"
         },
         "createTests": {
-            "alertNotAdmin": "Tests can be created by administrator only :(",
-            "createNewTest": "Create a new test",
-            "testName": "Test Name",
-            "testDescription": "Test Description",
-            "groupId": "Group ID",
-            "questionsQuanity": "Questions quanity"
+            "alert": {
+                "alertNotAdmin": "Tests can be created by administrator only :("
+            },
+            "testDataForm": {
+                "createNewTest": "Create a new test",
+                "testName": "Test Name",
+                "testDescription": "Test Description",
+                "groupId": "Group ID (must be numeric)",
+                "questionsQuanity": "Questions quanity (must be numeric)"
+            },
+            "everyQuestionForm": {
+                "questionNumber": "Question",
+                "questionTitle": "Question title:",
+                "answerOptions": "Answer options:",
+                "buttons": {
+                    "previousButton": "<- Previous question",
+                    "nextButton": "Next question ->"
+                }
+            }
         },
         "profileSettings": {
             "userActions": {

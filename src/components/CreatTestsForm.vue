@@ -5,28 +5,28 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-body">
-                            <h3 class="card-title">{{ $t('components.createTests.alertNotAdmin') }}</h3>
+                            <h3 class="card-title">{{ $t('components.createTests.alert.alertNotAdmin') }}</h3>
                         </div>
                     </div>
                 </div>
             </div>
-            <div>
+            <div v-if="!user" class="mb-3">
                 <div class="col">
                     <div class="card">
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">{{ $t('components.createTests.createNewTest') }}</h5>
+                            <h5 class="card-title">{{ $t('components.createTests.testDataForm.createNewTest') }}</h5>
                             <input 
                             v-model="v$.test_name.$model"
                             class="form-control"
                             type="text"
-                            :placeholder="$t('components.createTests.testName')"
+                            :placeholder="$t('components.createTests.testDataForm.testName')"
                             @blur="v$.test_name.$touch()">
                             <hr>
                             <textarea
                             v-model="v$.test_description.$model"
                             class="form-control"
                             type="text"
-                            :placeholder="$t('components.createTests.testDescription')"
+                            :placeholder="$t('components.createTests.testDataForm.testDescription')"
                             @blur="v$.test_description.$touch()"></textarea>
                             <hr>
                             <input
@@ -34,26 +34,27 @@
                             @blur="v$.group_id.$touch"
                             class="form-control"
                             type="text"
-                            :placeholder="$t('components.createTests.groupId')">
+                            :placeholder="$t('components.createTests.testDataForm.groupId')">
                             <hr>
                             <input
                             v-model="v$.questions_quantity.$model"
                             @blur="v$.questions_quantity.$touch"
                             class="form-control"
                             type="number"
-                            :placeholder="$t('components.createTests.questionsQuanity')">
+                            :placeholder="$t('components.createTests.testDataForm.questionsQuanity')">
                             <hr>
                             <button
                             @click="saveFormData()"
                             name="create_test" 
                             class="mt-auto btn btn-primary w-100"
-                            :class="(!v$.$error && v$.$dirty) ? '' : 'disabled'">
-                                    {{ $t('components.createTests.createNewTest') }}
+                            :class="(!v$.$error && v$.$dirty && canCreateTests) ? '' : 'disabled'">
+                                    {{ $t('components.createTests.testDataForm.createNewTest') }}
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
+            <create-tests-writer v-if="!canCreateTests" />
         </div>
     </div>
     <button @click="user = !user">user/admin</button>
@@ -64,10 +65,13 @@ import { useI18n } from 'vue-i18n';
 import useVuelidate from '@vuelidate/core';
 import { numeric, required } from '@vuelidate/validators';
 import { ref, computed, reactive } from 'vue';
+import CreateTestsWriter from './CreateTestsWriter.vue';
 
 const $t = useI18n().t
 const user = ref(false)
-const state = reactive({
+let canCreateTests = ref(true)
+
+let state = reactive({
     test_name: '',
     test_description: '',
     group_id: '',
@@ -82,8 +86,7 @@ const rules = computed(() => ({
 const saveFormData = () => {
     const formDataJSON = JSON.stringify(state)
     localStorage.setItem('formData', formDataJSON)
-    console.log('Данные формы:', state)
-    console.log('Данные сохранены в localStorage:', formDataJSON)
+    canCreateTests.value = false
 }
 const v$ = useVuelidate(rules, state)
 </script>
