@@ -54,7 +54,7 @@
                     </div>
                 </div>
             </div>
-            <create-tests-writer v-if="!cancreateTestsForm" />
+            <create-tests-writer v-if="!cancreateTestsForm && !user" />
         </div>
     </div>
     <button @click="user = !user">user/admin</button>

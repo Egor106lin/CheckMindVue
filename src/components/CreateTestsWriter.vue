@@ -44,7 +44,7 @@
                                 <div class="col d-flex justify-content-end">
                                     <button
                                         class="btn btn-primary w-50"
-                                        :disabled="optionsCounter >= 10"
+                                        :disabled="testCreatedByUser[questionWrittenByUserNow].options.length >= 10"
                                         @click="addOption"
                                     >+</button>
                                 </div>
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     <div v-for="option in testCreatedByUser[questionWrittenByUserNow].options" :key="option">
-                        <div class="row" v-if="option.number < optionsCounter">
+                        <div class="row">
                             <div class="col-1">
                                 <input v-model="option.correct" class="form-check-input" type="checkbox">
                             </div>
@@ -62,7 +62,7 @@
                             <div class="col-1">
                                 <button
                                     class="btn btn-danger"
-                                    :disabled="optionsCounter <= 2"
+                                    :disabled="testCreatedByUser[questionWrittenByUserNow].options.length <= 2"
                                     @click="deleteOption(option)"
                                 >-</button>
                             </div>
@@ -87,25 +87,16 @@ import { useI18n } from 'vue-i18n';
 import { ref } from 'vue';
 
 const $t = useI18n().t
-let optionsCounter = ref(2)
 
 const testDataJSON = localStorage.getItem('formData')
 const testData = JSON.parse(testDataJSON)
-const testCreatedByUser = Array.from({ length: testData.questions_quantity }).map(() => ({
+const testCreatedByUser = ref(Array.from({ length: testData.questions_quantity }).map(() => ({
     question: '',
-    options: {
-        option0: { title: '', correct: false, number: "0" },
-        option1: { title: '', correct: false, number: "1" },
-        option2: { title: '', correct: false, number: "2" },
-        option3: { title: '', correct: false, number: "3" },
-        option4: { title: '', correct: false, number: "4" },
-        option5: { title: '', correct: false, number: "5" },
-        option6: { title: '', correct: false, number: "6" },
-        option7: { title: '', correct: false, number: "7" },
-        option8: { title: '', correct: false, number: "8" },
-        option9: { title: '', correct: false, number: "9" }
-    }
-}));
+    options: [
+        { title: '', correct: false},
+        { title: '', correct: false}
+    ]
+})));
 
 let questionWrittenByUserNow = ref(0)
 console.log(testData, questionWrittenByUserNow)
@@ -120,12 +111,11 @@ function previousQuestion() {
 }
 
 function addOption() {
-    optionsCounter.value++
+    testCreatedByUser.value[questionWrittenByUserNow.value].options.push({ title: '', correct: false })
 }
 
 function deleteOption(option) {
-    option.title = ''
-    option.correct = false
-    optionsCounter.value--
+    let index = testCreatedByUser.value[questionWrittenByUserNow.value].options.indexOf(option)
+    testCreatedByUser.value[questionWrittenByUserNow.value].options.splice(index, 1)
 }
 </script>
