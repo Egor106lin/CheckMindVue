@@ -18,7 +18,8 @@
                         <button
                             class="btn btn-primary w-100 h-100"
                             type="submit"
-                            :disabled="!(questionWrittenByUserNow + 1 < testData.questions_quantity)"
+                            id="next-btn"
+                            :disabled="disableNextQuestionButton()"
                             @click="nextQuestion()"
                         >{{ $t('components.createTestsWriter.everyQuestionForm.buttons.nextButton') }}</button>
                     </div>
@@ -99,8 +100,6 @@ const testCreatedByUser = ref(Array.from({ length: testData.questions_quantity }
 })));
 
 let questionWrittenByUserNow = ref(0)
-console.log(testData, questionWrittenByUserNow)
-console.log(testCreatedByUser)
 
 function nextQuestion() {
     questionWrittenByUserNow.value++
@@ -117,5 +116,36 @@ function addOption() {
 function deleteOption(option) {
     let index = testCreatedByUser.value[questionWrittenByUserNow.value].options.indexOf(option)
     testCreatedByUser.value[questionWrittenByUserNow.value].options.splice(index, 1)
+}
+
+function disableNextQuestionButton() {
+    if (questionWrittenByUserNow.value + 1 >= testData.questions_quantity) {
+        return true
+    } else if (
+        isOnlySpacesOrEmpty(testCreatedByUser.value[questionWrittenByUserNow.value].question)
+    ) {
+        return true
+    } else if (findUncorrectOption()) {
+        return true
+    } else {
+        return false
+    }
+}
+
+function isOnlySpacesOrEmpty(inputText) {
+  return /^\s*$/.test(inputText) || inputText == '';
+}
+
+function findUncorrectOption() {
+    let getCorrectOption = false
+    let emptyOption = false
+    for (const option of testCreatedByUser.value[questionWrittenByUserNow.value].options) {
+        if (isOnlySpacesOrEmpty(option.title)) {
+            emptyOption = true
+        } else if (option.correct == true) {
+            getCorrectOption = true
+        }
+    }
+    return !getCorrectOption || emptyOption
 }
 </script>

@@ -63,7 +63,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n';
 import useVuelidate from '@vuelidate/core';
-import { numeric, required } from '@vuelidate/validators';
+import { numeric, required, minValue, maxValue } from '@vuelidate/validators';
 import { ref, computed, reactive } from 'vue';
 import createTestsWriter from './CreateTestsWriter.vue';
 
@@ -81,7 +81,7 @@ const rules = computed(() => ({
     test_name: {required},
     test_description: {required},
     group_id: {required, numeric},
-    questions_quantity: {required, numeric},
+    questions_quantity: {required, numeric, min_value: minValue(1), max_value: maxValue(30)},
 }))
 const saveFormData = () => {
     const formDataJSON = JSON.stringify(state)
