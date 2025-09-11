@@ -48,26 +48,26 @@
                                         @click="addOption"
                                     >+</button>
                                 </div>
-                                <div class="col">
-                                    <button
-                                        class="btn btn-primary w-50"
-                                        :disabled="optionsCounter <= 2"
-                                        @click="deleteOption"
-                                    >-</button>
-                                </div>
                             </div>
                         </div>
                     </div>
-                    <div v-for="n in optionsCounter" :key="n">
-                        <div class="row">
+                    <div v-for="option in testCreatedByUser[questionWrittenByUserNow].options" :key="option">
+                        <div class="row" v-if="option.number < optionsCounter">
                             <div class="col-1">
-                                <input v-model="testCreatedByUser[questionWrittenByUserNow][`option${n}`].correct" class="form-check-input" type="checkbox">
+                                <input v-model="option.correct" class="form-check-input" type="checkbox">
                             </div>
-                            <div class="col-11">
-                                <input v-model="testCreatedByUser[questionWrittenByUserNow][`option${n}`].title" class="form-control">
+                            <div class="col-10">
+                                <input v-model="option.title" class="form-control">
                             </div>
+                            <div class="col-1">
+                                <button
+                                    class="btn btn-danger"
+                                    :disabled="optionsCounter <= 2"
+                                    @click="deleteOption(option)"
+                                >-</button>
+                            </div>
+                            <hr class="mt-2 mb-2">
                         </div>
-                        <hr class="mt-2 mb-2">
                     </div>
                 </div>
                 <div class="row">
@@ -93,16 +93,18 @@ const testDataJSON = localStorage.getItem('formData')
 const testData = JSON.parse(testDataJSON)
 const testCreatedByUser = Array.from({ length: testData.questions_quantity }).map(() => ({
     question: '',
-    option1: { title: '', correct: false },
-    option2: { title: '', correct: false },
-    option3: { title: '', correct: false },
-    option4: { title: '', correct: false },
-    option5: { title: '', correct: false },
-    option6: { title: '', correct: false },
-    option7: { title: '', correct: false },
-    option8: { title: '', correct: false },
-    option9: { title: '', correct: false },
-    option10: { title: '', correct: false },
+    options: {
+        option0: { title: '', correct: false, number: "0" },
+        option1: { title: '', correct: false, number: "1" },
+        option2: { title: '', correct: false, number: "2" },
+        option3: { title: '', correct: false, number: "3" },
+        option4: { title: '', correct: false, number: "4" },
+        option5: { title: '', correct: false, number: "5" },
+        option6: { title: '', correct: false, number: "6" },
+        option7: { title: '', correct: false, number: "7" },
+        option8: { title: '', correct: false, number: "8" },
+        option9: { title: '', correct: false, number: "9" }
+    }
 }));
 
 let questionWrittenByUserNow = ref(0)
@@ -110,21 +112,20 @@ console.log(testData, questionWrittenByUserNow)
 console.log(testCreatedByUser)
 
 function nextQuestion() {
-    console.log(testCreatedByUser)
-    questionWrittenByUserNow.value += 1
+    questionWrittenByUserNow.value++
 }
 
 function previousQuestion() {
-    questionWrittenByUserNow.value -= 1
+    questionWrittenByUserNow.value--
 }
 
 function addOption() {
-    optionsCounter.value += 1
+    optionsCounter.value++
 }
 
-function deleteOption() {
-    testCreatedByUser[questionWrittenByUserNow][`option${optionsCounter.value}`].title = ''
-    testCreatedByUser[questionWrittenByUserNow][`option${optionsCounter.value}`].correct = false
-    optionsCounter.value -= 1
+function deleteOption(option) {
+    option.title = ''
+    option.correct = false
+    optionsCounter.value--
 }
 </script>
