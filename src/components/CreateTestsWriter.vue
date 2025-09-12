@@ -1,81 +1,103 @@
 <template>
-<div class="mt-1">
+<div>
     <div class="col">
-        <div class="card">
-            <div class="mb-0">
+        <div v-if="testInProgress" class="card">
+            <div class="card-body">
                 <div class="row">
-                    <div class="col-6">
-                        <h4>{{ $t('components.createTestsWriter.everyQuestionForm.questionNumber') }} {{ questionWrittenByUserNow + 1}}</h4>
+                    <div class="col-4 card-title">
+                        <h5>{{ $t('components.createTestsWriter.everyQuestionForm.questionNumber') }} {{ questionWrittenByUserNow + 1}}</h5>
                     </div>
-                    <div class="col-3">
+                    <div class="col-4">
                         <button
-                            class="btn btn-primary w-100 h-100"
+                            class="btn btn-secondary w-100"
                             :disabled="!(questionWrittenByUserNow > 0)"
                             @click="previousQuestion"
                         >{{ $t('components.createTestsWriter.everyQuestionForm.buttons.previousButton') }}</button>
                     </div>
-                    <div class="col-3">
+                    <div class="col-4" v-if="questionWrittenByUserNow + 1 < testData.questions_quantity">
                         <button
-                            class="btn btn-primary w-100 h-100"
+                            class="btn btn-primary w-100"
                             type="submit"
                             id="next-btn"
                             :disabled="disableNextQuestionButton()"
                             @click="nextQuestion()"
                         >{{ $t('components.createTestsWriter.everyQuestionForm.buttons.nextButton') }}</button>
                     </div>
-                </div>
-                
-            </div>
-            <hr class="mt-0 mb-0">
-            <div class="card-body d-flex flex-column">
-                <div class="row">
-                    <input
-                        v-model="testCreatedByUser[questionWrittenByUserNow].question"
-                        class="form-control mb-3"
-                        :placeholder="$t('components.createTestsWriter.everyQuestionForm.questionTitle')"
-                    >
-                </div>
-                <div class="row">
-                    <div class="row mb-3">
-                        <div class="col-4">
-                            <h5>{{ $t('components.createTestsWriter.everyQuestionForm.answerOptions') }}</h5>
-                        </div>
-                        <div class="col-8">
-                            <div class="row">
-                                <div class="col d-flex justify-content-end">
-                                    <button
-                                        class="btn btn-primary w-50"
-                                        :disabled="testCreatedByUser[questionWrittenByUserNow].options.length >= 10"
-                                        @click="addOption"
-                                    >+</button>
-                                </div>
-                            </div>
+                    <div class="col-4" v-else-if="questionWrittenByUserNow + 1 == testData.questions_quantity">
+                        <div class="col d-flex justify-content-end">
+                            <button
+                                class="btn btn-primary w-100"
+                                :disabled="disableSaveButton()"
+                                @click="saveTest()"
+                            >{{ $t('components.createTestsWriter.everyQuestionForm.buttons.saveTest') }}</button>
                         </div>
                     </div>
-                    <div v-for="option in testCreatedByUser[questionWrittenByUserNow].options" :key="option">
-                        <div class="row">
-                            <div class="col-1">
-                                <input v-model="option.correct" class="form-check-input" type="checkbox">
-                            </div>
-                            <div class="col-10">
-                                <input v-model="option.title" class="form-control">
-                            </div>
-                            <div class="col-1">
-                                <button
-                                    class="btn btn-danger"
-                                    :disabled="testCreatedByUser[questionWrittenByUserNow].options.length <= 2"
-                                    @click="deleteOption(option)"
-                                >-</button>
-                            </div>
-                            <hr class="mt-2 mb-2">
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col">
+                        <input
+                            v-model="testCreatedByUser[questionWrittenByUserNow].question"
+                            class="form-control"
+                            :placeholder="$t('components.createTestsWriter.everyQuestionForm.questionTitle')"
+                        >
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col-8">
+                        <h5>{{ $t('components.createTestsWriter.everyQuestionForm.answerOptions') }}</h5>
+                    </div>
+                    <div class="col-4">
+                        <button
+                            class="btn btn-primary w-100"
+                            :disabled="testCreatedByUser[questionWrittenByUserNow].options.length >= 10"
+                            @click="addOption"
+                        >{{ $t('components.createTestsWriter.everyQuestionForm.buttons.addOption') }}</button>
+                    </div>
+                </div>
+                <div v-for="option in testCreatedByUser[questionWrittenByUserNow].options" :key="option" class="row">
+                    <div class="row">
+                        <div class="col-1">
+                            <input v-model="option.correct" class="form-check-input" type="checkbox">
                         </div>
+                        <div class="col-10">
+                            <input v-model="option.title" class="form-control">
+                        </div>
+                        <div class="col-1">
+                            <button
+                                class="btn btn-danger"
+                                :disabled="testCreatedByUser[questionWrittenByUserNow].options.length <= 2"
+                                @click="deleteOption(option)"
+                            >{{ $t('components.createTestsWriter.everyQuestionForm.buttons.deleteOption') }}</button>
+                        </div>
+                        <div class="d-flex justify-content-center"><hr class="mt-2 mb-2 w-50"></div>
                     </div>
                 </div>
                 <div class="row">
                     <p>{{ $t('components.createTestsWriter.everyQuestionForm.rule1') }}</p>
                 </div>
+            </div>
+        </div>
+        <div v-if="!testInProgress" class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    <h5>{{ $t('components.createTestsWriter.readyTestCard.title') }}</h5>
+                </div>
                 <div class="row">
-                    <p>{{ $t('components.createTestsWriter.everyQuestionForm.rule2') }}</p>
+                    <div class="col-7">
+                        <p>{{ $t('components.createTestsWriter.readyTestCard.forGroup') }} <b>{{ testData.group_id }}</b></p>
+                    </div>    
+                    <div class="col-3">
+                        <button
+                            class="btn btn-primary"
+                            @click="console.log('continue');"
+                        >{{ $t('components.createTestsWriter.readyTestCard.buttons.continue') }}</button>
+                    </div>
+                    <div class="col-2">
+                        <button
+                            class="btn btn-primary"
+                            @click="console.log('leave');"
+                        >{{ $t('components.createTestsWriter.readyTestCard.buttons.leave') }}</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -90,6 +112,7 @@ import { ref } from 'vue';
 const $t = useI18n().t
 
 const testDataJSON = localStorage.getItem('formData')
+const testInProgress = ref(true)
 const testData = JSON.parse(testDataJSON)
 const testCreatedByUser = ref(Array.from({ length: testData.questions_quantity }).map(() => ({
     question: '',
@@ -132,6 +155,18 @@ function disableNextQuestionButton() {
     }
 }
 
+function disableSaveButton() {
+    if (
+        isOnlySpacesOrEmpty(testCreatedByUser.value[questionWrittenByUserNow.value].question)
+    ) {
+        return true
+    } else if (findUncorrectOption()) {
+        return true
+    } else {
+        return false
+    }
+}
+
 function isOnlySpacesOrEmpty(inputText) {
   return /^\s*$/.test(inputText) || inputText == '';
 }
@@ -147,5 +182,11 @@ function findUncorrectOption() {
         }
     }
     return !getCorrectOption || emptyOption
+}
+
+function saveTest() {
+    testInProgress.value = false
+    let testForBack = JSON.stringify(testCreatedByUser.value)
+    console.log(testForBack)
 }
 </script>

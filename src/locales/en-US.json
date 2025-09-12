@@ -27,13 +27,23 @@
         "createTestsWriter": {
             "everyQuestionForm": {
                 "questionNumber": "Question",
-                "rule1": "This is the test creation window. The + and - buttons allow you to add and remove answer options. Minimum 2 questions required, maximum - 10. There can be any number of correct answer options.",
-                "rule2": "The arrow buttons allow navigation between questions. It is impossible to proceed to the next question until the current one meets the requirements, but you can always go back to previous questions.",
+                "rule1": "This is the test creation window. The + and - buttons allow you to add and remove answer options. Minimum 2 questions required, maximum - 10. There can be any number of correct answer options. The arrow buttons allow navigation between questions. It is impossible to proceed to the next question until the current one meets the requirements, but you can always go back to previous questions.",
                 "questionTitle": "Question title:",
                 "answerOptions": "Answer options:",
                 "buttons": {
                     "previousButton": "<- Previous question",
-                    "nextButton": "Next question ->"
+                    "nextButton": "Next question ->",
+                    "addOption": "Add option",
+                    "deleteOption": "-",
+                    "saveTest": "Save"
+                }
+            },
+            "readyTestCard": {
+                "title": "Your test is ready!",
+                "forGroup": "It was opened for group with ID",
+                "buttons": {
+                    "leave": "Leave",
+                    "continue": "Create another test"
                 }
             }
         },
