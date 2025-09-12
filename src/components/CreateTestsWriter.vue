@@ -110,10 +110,9 @@ import { useI18n } from 'vue-i18n';
 import { ref } from 'vue';
 
 const $t = useI18n().t
-
-const testDataJSON = localStorage.getItem('formData')
 const testInProgress = ref(true)
-const testData = JSON.parse(testDataJSON)
+
+const testData= JSON.parse(localStorage.getItem('formData'))
 const testCreatedByUser = ref(Array.from({ length: testData.questions_quantity }).map(() => ({
     question: '',
     options: [
@@ -186,7 +185,9 @@ function findUncorrectOption() {
 
 function saveTest() {
     testInProgress.value = false
-    let testForBack = JSON.stringify(testCreatedByUser.value)
-    console.log(testForBack)
+    let testForBackend = JSON.stringify(testCreatedByUser.value)
+    let testParamsForBackend = JSON.stringify(testData)
+    console.log(testForBackend, testParamsForBackend)
+    localStorage.removeItem('formData')
 }
 </script>
