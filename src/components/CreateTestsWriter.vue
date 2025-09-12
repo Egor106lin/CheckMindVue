@@ -83,19 +83,13 @@
                     <h5>{{ $t('components.createTestsWriter.readyTestCard.title') }}</h5>
                 </div>
                 <div class="row">
-                    <div class="col-7">
+                    <div class="col-10">
                         <p>{{ $t('components.createTestsWriter.readyTestCard.forGroup') }} <b>{{ testData.group_id }}</b></p>
-                    </div>    
-                    <div class="col-3">
-                        <button
-                            class="btn btn-primary"
-                            @click="console.log('continue');"
-                        >{{ $t('components.createTestsWriter.readyTestCard.buttons.continue') }}</button>
                     </div>
                     <div class="col-2">
                         <button
                             class="btn btn-primary"
-                            @click="console.log('leave');"
+                            @click="leaveOnMain()"
                         >{{ $t('components.createTestsWriter.readyTestCard.buttons.leave') }}</button>
                     </div>
                 </div>
@@ -107,12 +101,14 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n';
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
 
 const $t = useI18n().t
 const testInProgress = ref(true)
 
-const testData= JSON.parse(localStorage.getItem('formData'))
+const emit = defineEmits(['leaveOnMain'])
+
+const testData = JSON.parse(localStorage.getItem('formData') || null)
 const testCreatedByUser = ref(Array.from({ length: testData.questions_quantity }).map(() => ({
     question: '',
     options: [
@@ -124,6 +120,7 @@ const testCreatedByUser = ref(Array.from({ length: testData.questions_quantity }
 let questionWrittenByUserNow = ref(0)
 
 function nextQuestion() {
+    localStorage.setItem('testCreatedByUser', JSON.stringify(testCreatedByUser.value))
     questionWrittenByUserNow.value++
 }
 
@@ -185,9 +182,14 @@ function findUncorrectOption() {
 
 function saveTest() {
     testInProgress.value = false
-    let testForBackend = JSON.stringify(testCreatedByUser.value)
-    let testParamsForBackend = JSON.stringify(testData)
+    const testForBackend = JSON.stringify(testCreatedByUser.value)
+    const testParamsForBackend = JSON.stringify(testData)
     console.log(testForBackend, testParamsForBackend)
+}
+
+function leaveOnMain() {
+    localStorage.removeItem('testCreatedByUser')
     localStorage.removeItem('formData')
+    emit('leaveOnMain')
 }
 </script>
