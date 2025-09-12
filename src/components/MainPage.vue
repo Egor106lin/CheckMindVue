@@ -1,54 +1,73 @@
 <template>
-  <button class="mt-auto btn btn-primary w-10" @click="in_group = !in_group">Переключатель</button>
-  <div v-if="in_group" class="user_in_group">
     <div class="container">
-      <div class="row">
-        <div class="col">
-          <h3>{{ $t('components.mainPage.headerInGroup') }}</h3>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <div class="card h-100 w-50">
-            <img src="" class="card-img-top">
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">заглушка</h5>
-              <p class="card-text">заглушка</p>
-              <button name="test_button" class="mt-auto btn btn-primary w-100">{{ $t('components.mainPage.startTest') }}</button>
+        <div class="row">
+            <div class="col">
+                <div class="card card-body mb-3 mt-2">
+                    <h2 class="card-title">CheckMind</h2>
+                    <div>
+                        <p>Инфа о проекте</p>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </div>
-  <div v-else>
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <h3>{{ $t('components.mainPage.headerNotInGroup') }}</h3>
+        <div v-if="admin">
+
         </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <div class="card h-100 w-50">
-            <img src="../assets/images/logo.png" class="card-img-top">
-            <div class="card-body d-flex flex-column">
-              <p class="card-text">{{ $t('components.mainPage.noTests') }}</p>
-              <button name="test_button" class="mt-auto btn btn-primary w-100 disabled">{{ $t('components.mainPage.startTest') }}</button>
+        <div v-else-if="!admin">
+            <div v-if="in_group" class="row">
+                <div class="col-6">
+                    <div class="card card-body">
+                        <div class="card-title">
+                            <h5>Название теста</h5>
+                        </div>
+                        <div>
+                            <p>Описание теста</p>
+                        </div>
+                        <button
+                            class="btn btn-primary"
+                            @click="takeTheTest()"
+                        >
+                            Пройти тест
+                        </button>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card card-body">
+                        <div class="card-title">
+                            <h5>Название теста 2</h5>
+                        </div>
+                        <div>
+                            <p>Описание теста 2</p>
+                        </div>
+                        <button
+                            class="btn btn-primary"
+                            @click="takeTheTest()"
+                        >
+                            Пройти тест
+                        </button>
+                    </div>
+                </div>
             </div>
-          </div>
+            <div v-else-if="!in_group">
+                <p>Ты не в группе. иди добавься хотя-бы в одну</p>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  
+    <button @click="admin = !admin">админ-юзер</button>
+    <button @click="in_group = !in_group">вГруппе-нет</button>
 </template>
 
 <script setup>
-import { useI18n } from 'vue-i18n';
+//import { useI18n } from 'vue-i18n';
+import router from '@/router/routes'
 import { ref } from 'vue'
 
 const in_group = ref(true)
-const $t = useI18n().t
+const admin = ref(false)
+//const $t = useI18n().t
+
+function takeTheTest() {
+    router.push('/testing')
+}
 </script>
 

@@ -1,7 +1,9 @@
 import { createWebHistory, createRouter } from 'vue-router'
+
 import ProfileSettings from '@/components/ProfileSettings.vue'
 import MainPage from '@/components/MainPage.vue'
 import CreatTestsForm from '@/components/CreatTestsForm.vue'
+import TestingInProgress from '@/components/TestingInProgress.vue'
 
 const routes = [
     {
@@ -15,6 +17,10 @@ const routes = [
     {   
         path: '/create_tests',
         component: CreatTestsForm
+    },
+    {   
+        path: '/testing',
+        component: TestingInProgress
     }
 ]
 
