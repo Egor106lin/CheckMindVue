@@ -57,7 +57,7 @@
                 <div v-for="option in testCreatedByUser[questionWrittenByUserNow].options" :key="option" class="row">
                     <div class="row">
                         <div class="col-1">
-                            <input v-model="option.correct" class="form-check-input" type="checkbox">
+                            <input v-model="option.correct" class="form-check-input large-checkbox" type="checkbox">
                         </div>
                         <div class="col-10">
                             <input v-model="option.title" class="form-control">
@@ -102,6 +102,9 @@
 <script setup>
 import { useI18n } from 'vue-i18n';
 import { ref, defineEmits } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore()
 
 const $t = useI18n().t
 const testInProgress = ref(true)
@@ -180,11 +183,18 @@ function findUncorrectOption() {
     return !getCorrectOption || emptyOption
 }
 
-function saveTest() {
+async function saveTest() {
     testInProgress.value = false
-    const testForBackend = JSON.stringify(testCreatedByUser.value)
-    const testParamsForBackend = JSON.stringify(testData)
-    console.log(testForBackend, testParamsForBackend)
+    testCreatedByUser.value.groupID = testData.group_id
+    testCreatedByUser.value.questions_quantity = testData.questions_quantity
+    testCreatedByUser.value.testName = testData.test_name
+    testCreatedByUser.value.testDescription = testData.test_description
+    const testJSON = JSON.stringify(testCreatedByUser.value)
+    try {
+        await store.dispatch('sendTestData', testJSON)
+    } catch (error) {
+        console.error('Ошибка:', error)
+    }
 }
 
 function leaveOnMain() {
@@ -193,3 +203,11 @@ function leaveOnMain() {
     emit('leaveOnMain')
 }
 </script>
+
+<style lang="css" scoped>
+.large-checkbox {
+    transform: scale(1.3);
+    opacity: 0.9;
+    cursor: pointer;
+}
+</style>

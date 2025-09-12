@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 
 import router from './router/routes.js'
+import store from './store'
 import i18n from './locales/i18n';
 
 import {createBootstrap} from 'bootstrap-vue-next'
@@ -16,4 +17,5 @@ app.use(createBootstrap())
 app.use(useVuelidate);
 app.use(i18n);
 app.use(router)
+app.use(store)
 app.mount('#app')

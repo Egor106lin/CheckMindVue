@@ -1,4 +1,5 @@
 import { createI18n } from 'vue-i18n';
+import { ref } from 'vue';
 
 import en_us from './en-US.json';
 import ru_ru from './ru-RU.json';
@@ -11,10 +12,10 @@ function loadLocaleMessages() {
   return messages;
 }
 
-let language = localStorage.getItem('storedLanguage') ? "en-EN" : "ru-RU"
+let language = ref(localStorage.getItem('storedLanguage') ? "en-EN" : "ru-RU")
 
 const i18n = createI18n({
-  locale: language,
+  locale: language.value,
   fallbackLocale: 'en-US',
   silentFallbackWarn: true,
   messages: loadLocaleMessages(),

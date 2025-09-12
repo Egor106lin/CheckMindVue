@@ -22,6 +22,7 @@
                                     v-model="v$.test_name.$model"
                                     class="form-control"
                                     type="text"
+                                    :disabled="!canCreateTestsForm"
                                     :placeholder="$t('components.createTestsForm.testDataForm.testName')"
                                     @blur="v$.test_name.$touch()"
                                 >
@@ -30,6 +31,7 @@
                                     v-model="v$.test_description.$model"
                                     class="form-control"
                                     type="text"
+                                    :disabled="!canCreateTestsForm"
                                     :placeholder="$t('components.createTestsForm.testDataForm.testDescription')"
                                     @blur="v$.test_description.$touch()">
                                 </textarea>
@@ -39,6 +41,7 @@
                                     @blur="v$.group_id.$touch"
                                     class="form-control"
                                     type="text"
+                                    :disabled="!canCreateTestsForm"
                                     :placeholder="$t('components.createTestsForm.testDataForm.groupId')"
                                 >
                                 <hr>
@@ -47,6 +50,7 @@
                                     @blur="v$.questions_quantity.$touch"
                                     class="form-control"
                                     type="number"
+                                    :disabled="!canCreateTestsForm"
                                     :placeholder="$t('components.createTestsForm.testDataForm.questionsQuanity')"
                                 >
                                 <hr>
