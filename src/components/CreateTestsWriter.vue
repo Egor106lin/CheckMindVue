@@ -120,7 +120,7 @@ const testCreatedByUser = ref(Array.from({ length: testData.questions_quantity }
     ]
 })));
 
-let questionWrittenByUserNow = ref(0)
+const questionWrittenByUserNow = ref(0)
 
 function nextQuestion() {
     localStorage.setItem('testCreatedByUser', JSON.stringify(testCreatedByUser.value))
@@ -185,11 +185,14 @@ function findUncorrectOption() {
 
 async function saveTest() {
     testInProgress.value = false
-    testCreatedByUser.value.groupID = testData.group_id
-    testCreatedByUser.value.questions_quantity = testData.questions_quantity
-    testCreatedByUser.value.testName = testData.test_name
-    testCreatedByUser.value.testDescription = testData.test_description
-    const testJSON = JSON.stringify(testCreatedByUser.value)
+    const testDataToSend = {
+        groupID: testData.group_id,
+        questionsQuantity: testData.questions_quantity,
+        testName: testData.test_name,
+        testDescription: testData.test_description,
+        questionsAndOptions: testCreatedByUser.value,
+    };
+    const testJSON = JSON.stringify(testDataToSend)
     try {
         await store.dispatch('sendTestData', testJSON)
     } catch (error) {

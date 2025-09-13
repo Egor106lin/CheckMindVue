@@ -47,6 +47,11 @@
                 }
             }
         },
+        "testingInProgress": {
+            "questionNumber": "Question number",
+            "nextQuestion": "Next question",
+            "previousQuestion": "Previous question"
+        },
         "profileSettings": {
             "userActions": {
                 "title": "About user",

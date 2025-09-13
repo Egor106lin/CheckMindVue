@@ -47,6 +47,11 @@
                 }
             }
         },
+        "testingInProgress": {
+            "questionNumber": "Вопрос номер",
+            "nextQuestion": "Следующий вопрос",
+            "previousQuestion": "Предыдущий вопрос"
+        },
         "profileSettings": {
             "userActions": {
                 "title": "О пользователе",
