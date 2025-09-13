@@ -1,24 +1,42 @@
-# checkmind
+🧠 CheckMind - Платформа для тестирования
 
-## Project setup
+Платформа для создания, проведения и анализа тестов с современным интерфейсом и расширенными возможностями.
+
+Особенности:
+
+    🎨 Современный и интуитивно понятный интерфейс
+
+    ⚡ Быстрая работа благодаря Vue 3 Composition API
+
+    🗃️ Централизованное управление состоянием через Vuex
+
+    🎯 Поддержка различных типов вопросов (одиночный выбор, множественный выбор)
+
+    📊 Анализ результатов тестирования
+
+🚀 Быстрый старт (Frontend)
+
+Предварительные требования:
+
+    Node.js 16.x или выше
+
+    npm 8.x или выше
+
+Установка и запуск:
+
+Клонирование репозитория
+
+```
+git clone <ссылка-на-репозиторий>
+cd checkmind-frontend
+```
+Установка зависимостей
+
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+Запуск development сервера
 ```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
