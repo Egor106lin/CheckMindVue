@@ -41,11 +41,15 @@
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router'
 
 const $t = useI18n().t
 const store = useStore()
 const test = ref()
 const questionNow = ref(1)
+const router = useRoute()
+const groupIDFromUrl = router.params.groupID
+const testNameFromUrl = router.params.testName
 
 onMounted(() => {
     const questionNowLocalStorage = localStorage.getItem('questionNow')
@@ -63,12 +67,14 @@ onBeforeUnmount(() => {
 
 async function getTest() {
     try {
-        await store.dispatch('getTest')
+        await store.dispatch('getTest', {
+            groupID: groupIDFromUrl,
+            testName: testNameFromUrl
+        })
         test.value = store.state.testingInProgress.test
     } catch (error) {
         console.error('Ошибка:', error)
     }
-    console.log(test.value)
 }
 
 function changeQuestion(next = true) {

@@ -19,7 +19,7 @@ const routes = [
         component: CreatTestsForm
     },
     {   
-        path: '/testing',
+        path: '/testing/:groupID/:testName',
         component: TestingInProgress
     }
 ]

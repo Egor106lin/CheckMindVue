@@ -67,7 +67,7 @@ const admin = ref(false)
 //const $t = useI18n().t
 
 function takeTheTest() {
-    router.push('/testing')
+    router.push('/testing/123456789/Тестдляотладки')
 }
 </script>
 
