@@ -21,7 +21,7 @@ const CreateTestsStore = {
         async sendTestData({ commit }, testData) {
             commit('setError', null)
             try {
-                const response = await api.post('/tests', testData)
+                const response = await api.post('/tests/created_test', testData)
                 commit('setTestData', response.data)
                 return response.data
             } catch (error) {
