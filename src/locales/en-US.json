@@ -49,6 +49,7 @@
         },
         "testingInProgress": {
             "questionNumber": "Question number",
+            "testName": "Test:",
             "nextQuestion": "Next question",
             "previousQuestion": "Previous question"
         },

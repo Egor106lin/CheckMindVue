@@ -2,10 +2,16 @@
     <div class="container">
         <div class="row mt-5">
             <div class="col">
-                <div class="card card-body">
+                <div v-if="testInProgress" class="card card-body">
                     <div class="row mb-2">
-                        <div class="col-8">
-                            <h5 class="card-title">{{ $t('components.testingInProgress.questionNumber') }} {{ questionNow }} / {{ test?.questionsQuantity }}</h5>
+                        <div :class="questionNow == test?.questionsQuantity ? 'col-6' : 'col-8'">
+                            <h5 class="card-title">
+                                {{ $t('components.testingInProgress.testName') }} <b>"{{ test?.testName }}"</b>
+                            </h5>
+                            <h5 class="card-title">
+                                {{ $t('components.testingInProgress.questionNumber') }} 
+                                {{ questionNow }} / {{ test?.questionsQuantity }}
+                            </h5>
                         </div>
                         <div class="col-2">
                             <button class="btn btn-secondary" @click="changeQuestion(false)">Предыдущий вопрос</button>
@@ -13,23 +19,43 @@
                         <div class="col-2">
                             <button class="btn btn-primary" @click="changeQuestion(true)">Следующий вопрос</button>
                         </div>
+                        <div v-if="questionNow == test?.questionsQuantity" class="col-1">
+                            <button
+                                class="btn btn-danger"
+                                :disabled="btnFinishDisabled()"
+                                @click="finishTest()"
+                            >Завершить</button>
+                        </div>
                     </div>
                     <hr>
                     <div class="row mb-2">
                         <div class="col">
-                            <h3>{{ test?.questionsAndOptions[questionNow - 1].question }}</h3>
+                            <h3>{{ test?.questionsAndOptions[questionNow - 1]?.question }}</h3>
                         </div>
                     </div>
-                    <div v-for="option in test?.questionsAndOptions[questionNow - 1].options" :key="option">
+                    <div v-for="option in test?.questionsAndOptions[questionNow - 1]?.options" :key="option">
                         <div class="row">
                             <div class="col-1">
-                                <input class="form-check-input large-checkbox" type="checkbox">
+                                <input
+                                    class="form-check-input large-checkbox"
+                                    type="checkbox"
+                                    :value="option.title"
+                                    v-model="answers[questionNow - 1].options"
+                                >
                             </div>
                             <div class="col-11">
                                 <p>{{ option.title }}</p>
                             </div>
                         </div>
                         <hr>
+                    </div>
+                </div>
+                <div v-if="!testInProgress" class="card card-body">
+                    <div class="row">
+                        <h3 class="card-title">Тест <b>"{{ result.testName }}"</b> пройден!</h3>
+                    </div>
+                    <div class="row">
+                        <h5>Ваш результат: <b>{{ result.result }} / {{ result.questionsQuantity }}</b></h5>
                     </div>
                 </div>
             </div>
@@ -40,44 +66,60 @@
 <script setup>
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router'
 
 const $t = useI18n().t
 const store = useStore()
+
 const test = ref()
-const questionNow = ref(1)
+const answers = ref()
+const result = ref()
+
 const router = useRoute()
 const groupIDFromUrl = router.params.groupID
 const testNameFromUrl = router.params.testName
 
-onMounted(() => {
+const testInProgress = ref(true)
+const questionNow = ref(1)
+
+
+onBeforeMount(() => {
     const questionNowLocalStorage = localStorage.getItem('questionNow')
     if (questionNowLocalStorage == null) {
-        questionNow.value = 0
+        questionNow.value = 1
     } else {
         questionNow.value = questionNowLocalStorage
     }
-    getTest()
+    getTestAndAnswers()
 })
 
-onBeforeUnmount(() => {
-    localStorage.setItem('questionNow', questionNow.value)
-})
-
-async function getTest() {
+function getTestAndAnswers() {
     try {
-        await store.dispatch('getTest', {
+        store.dispatch('getTest', {
             groupID: groupIDFromUrl,
             testName: testNameFromUrl
+        }).then( () => {
+            test.value = store.getters.test
+
+            const answersLocaleStorage = JSON.parse(localStorage.getItem('answers'))
+            if (answersLocaleStorage == null) {
+                answers.value = Array.from({ length: test.value.questionsQuantity }).map(() => ({
+                    question: '',
+                    options: []
+                }))
+            } else {
+                answers.value = answersLocaleStorage
+            }    
         })
-        test.value = store.state.testingInProgress.test
     } catch (error) {
         console.error('Ошибка:', error)
     }
 }
 
 function changeQuestion(next = true) {
+    localStorage.setItem('answers', JSON.stringify(answers.value))
+    localStorage.setItem('questionNow', questionNow.value)
     if (next) {
         if (questionNow.value < test.value.questionsQuantity) {
             questionNow.value++
@@ -91,5 +133,38 @@ function changeQuestion(next = true) {
             return
         }
     }
+}
+
+function finishTest() {
+    testInProgress.value = false
+    answers.value.forEach((answer, index) => {
+        if (test.value.questionsAndOptions[index]?.question) {
+            answer.question = test.value.questionsAndOptions[index].question;
+        }
+    });
+    answers.value.unshift({ groupID: test.value.groupID })
+    answers.value.unshift({ testName: test.value.testName })
+    store.dispatch('checkAnswers', {
+        answers: JSON.stringify(answers.value)
+    })
+    localStorage.removeItem('answers')
+    localStorage.removeItem('questionNow')
+    showResult()
+}
+
+function btnFinishDisabled() {
+    const res = ref(false)
+    answers.value.forEach((answer) => {
+        if (answer.options.length == 0) {
+            res.value = true
+        }
+    });
+    return res.value
+}
+
+function showResult() {
+    result.value = store.getters.result
+    console.log(result.value)
+
 }
 </script>
