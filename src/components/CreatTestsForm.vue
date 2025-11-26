@@ -115,3 +115,25 @@ function finishedTest() {
     router.push('/')    
 }
 </script>
+
+<style lang="css" scoped>
+.card {
+    border: 2px solid #3846D3;
+    border-radius: 20px;
+}
+
+.form-control:focus {
+    border: 2px solid #3846D3;
+    border-radius: 20px;
+}
+
+.form-control {
+    outline: none !important;
+    box-shadow: none !important;
+    border-radius: 20px;
+}
+
+.btn {
+    background-color: #3846D3;
+}
+</style>
