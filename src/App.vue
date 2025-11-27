@@ -12,11 +12,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="css">
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+  font-family: 'Manrope';
 }
 </style>
