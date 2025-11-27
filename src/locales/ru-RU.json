@@ -3,6 +3,7 @@
         "pageHeader": {
             "productName": "CheckMind",
             "mainPage": "Главная",
+            "groupsManagement": "Группы",
             "createTests": "Задания",
             "profile": "Профиль"
         },
@@ -11,6 +12,9 @@
             "startTest": "Начать тест",
             "headerNotInGroup": "Присоединяйтесь к группе во вкладке 'Профиль' и получайте задания",
             "noTests": "У вас нет тестов для прохождения"
+        },
+        "groupsManagement": {
+            "title": "Ваши группы"
         },
         "createTestsForm": {
             "alert": {

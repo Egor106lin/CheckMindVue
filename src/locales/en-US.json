@@ -3,6 +3,7 @@
         "pageHeader": {
             "productName": "CheckMind",
             "mainPage": "Main Page",
+            "groupsManagement": "Groups",
             "createTests": "Exercises",
             "profile": "Profile"
         },
@@ -11,6 +12,9 @@
             "startTest": "Take the test",
             "headerNotInGroup": "Join the group in the profile tab and start taking tests!",
             "noTests": "You do not have any tests to take"
+        },
+        "groupsManagement": {
+            "title": "Your groups"
         },
         "createTestsForm": {
             "alert": {
@@ -51,7 +55,9 @@
             "questionNumber": "Question number",
             "testName": "Test:",
             "nextQuestion": "Next question",
-            "previousQuestion": "Previous question"
+            "previousQuestion": "Previous question",
+            "rightAnswer": "Right",
+            "wrongAnswer": "Wrong"
         },
         "profileSettings": {
             "userActions": {

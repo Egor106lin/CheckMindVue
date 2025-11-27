@@ -47,15 +47,27 @@
                                 <p>{{ option.title }}</p>
                             </div>
                         </div>
-                        <hr>
                     </div>
                 </div>
                 <div v-if="!testInProgress" class="card card-body">
                     <div class="row">
-                        <h3 class="card-title">Тест <b>"{{ result.testName }}"</b> пройден!</h3>
+                        <h3 class="card-title">Тест <b>"{{ result?.testName }}"</b> пройден!</h3>
                     </div>
                     <div class="row">
-                        <h5>Ваш результат: <b>{{ result.result }} / {{ result.questionsQuantity }}</b></h5>
+                        <h5>Ваш результат: <b>{{ result?.result }} / {{ result?.questionsQuantity }}</b></h5>
+                    </div>
+                    <div v-for="question in result?.mistakes" :key="question">
+                        <div class="row">
+                            <div class="col-8">
+                                <p>{{ question?.question }}</p>
+                            </div>
+                            <div class="col-4" v-if="question?.correct">
+                                <p>{{ $t('components.testingInProgress.rightAnswer') }}</p>
+                            </div>
+                            <div class="col-4" v-else-if="!question?.correct">
+                                <p>{{ $t('components.testingInProgress.wrongAnswer') }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -163,8 +175,53 @@ function btnFinishDisabled() {
 }
 
 function showResult() {
+    console.log(store.getters.result)
     result.value = store.getters.result
     console.log(result.value)
 
 }
 </script>
+
+<style lang="css" scoped>
+
+.large-checkbox {
+    transform: scale(1.3);
+    opacity: 0.9;
+    cursor: pointer;
+}
+.card {
+    border: 2px solid #3846D3;
+    border-radius: 20px;
+}
+
+.form-control:focus {
+    border: 2px solid #3846D3;
+    border-radius: 20px;
+}
+
+.form-control {
+    outline: none !important;
+    box-shadow: none !important;
+    border-radius: 20px;
+    border: 2px solid #f3f3f3;
+}
+
+.btn-primary {
+    background-color: #3846D3;
+    border-radius: 15px;
+    border: none;
+}
+
+.btn-secondary {
+    background-color: #232b86;
+    border-radius: 15px;
+    border: none;
+}
+
+.btn-danger {
+    background-color: #d33838;
+    border-radius: 15px;
+    border: none;
+}
+
+</style>

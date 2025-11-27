@@ -71,3 +71,17 @@ function takeTheTest() {
 }
 </script>
 
+<style lang="css" scoped>
+.card {
+    border: 2px solid #3846D3;
+    border-radius: 20px;
+}
+
+.btn-primary {
+    border-radius: 15px;
+    background-color: #3846D3;
+    border: none;
+}
+
+</style>
+

@@ -4,16 +4,17 @@
         <div class="row">
             <div class="col">
                 <div class="card h-100">
-                    <img alt="Фото профиля" src="../assets/images/logo.png">
-                    <p>тут будет фото профиля</p>
+                    <div class="row">
+                        <div class="col">
+                            <p class="card-text">{{ $t('components.profileSettings.userActions.name') }}: Иван Иванов</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title"><b>{{ $t('components.profileSettings.userActions.title') }}</b></h5>
-                        <p class="card-text">{{ $t('components.profileSettings.userActions.name') }}: Иван</p>
-                        <p class="card-text">{{ $t('components.profileSettings.userActions.sirname') }}: Иванов</p>
                         <p class="card-text">{{ $t('components.profileSettings.userActions.role') }}: {{user ? "Пользователь" : "Администратор"}}</p>
                         <div class="row">
                             <div class="col">
@@ -91,3 +92,40 @@ const created_group = ref(false)
 
 const $t = useI18n().t
 </script>
+
+<style lang="css" scoped>
+.card {
+    border: 2px solid #3846D3;
+    border-radius: 20px;
+}
+
+.form-control:focus {
+    border: 2px solid #3846D3;
+    border-radius: 20px;
+}
+
+.form-control {
+    outline: none !important;
+    box-shadow: none !important;
+    border-radius: 20px;
+    border: 2px solid #f3f3f3;
+}
+
+.btn-primary {
+    background-color: #3846D3;
+    border-radius: 15px;
+    border: none;
+}
+
+.btn-secondary {
+    background-color: #232b86;
+    border-radius: 15px;
+    border: none;
+}
+
+.btn-danger {
+    background-color: #d33838;
+    border-radius: 15px;
+    border: none;
+}
+</style>

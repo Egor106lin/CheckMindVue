@@ -209,8 +209,42 @@ function leaveOnMain() {
 
 <style lang="css" scoped>
 .large-checkbox {
-    transform: scale(1.3);
+    transform: scale(1.7);
     opacity: 0.9;
     cursor: pointer;
+}
+.card {
+    border: 2px solid #3846D3;
+    border-radius: 20px;
+}
+
+.form-control:focus {
+    border: 2px solid #3846D3;
+    border-radius: 20px;
+}
+
+.form-control {
+    outline: none !important;
+    box-shadow: none !important;
+    border-radius: 20px;
+    border: 2px solid #f3f3f3;
+}
+
+.btn-primary {
+    background-color: #3846D3;
+    border-radius: 15px;
+    border: none;
+}
+
+.btn-secondary {
+    background-color: #232b86;
+    border-radius: 15px;
+    border: none;
+}
+
+.btn-danger {
+    background-color: #d33838;
+    border-radius: 15px;
+    border: none;
 }
 </style>

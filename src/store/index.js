@@ -3,7 +3,8 @@ import Vuex from 'vuex';
 import CreateTestsStore from './modules/CreateTestsStore';
 import MainPageStore from './modules/MainPageStore';
 import ProfileSettingsStore from './modules/ProfileSettingsStore';
-import TestingInProgress from './modules/TestingInProgressStore';
+import TestingInProgressStore from './modules/TestingInProgressStore';
+import GroupsManagementStore from './modules/GroupsManagementStore';
 
 const store = new Vuex.Store({
   state: {},
@@ -13,7 +14,8 @@ const store = new Vuex.Store({
     createTests: CreateTestsStore,
     mainPage: MainPageStore,
     profileSettings: ProfileSettingsStore,
-    testingInProgress: TestingInProgress
+    testingInProgress: TestingInProgressStore,
+    groupsManagement: GroupsManagementStore,
   },
 })
 

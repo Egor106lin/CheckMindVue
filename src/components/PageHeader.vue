@@ -8,6 +8,9 @@
           <router-link class="nav-link text-white" to="/">{{ $t('components.pageHeader.mainPage') }}</router-link>
         </li>
         <li class="nav-item">
+          <router-link class="nav-link text-white" to="/groups">{{ $t('components.pageHeader.groupsManagement') }}</router-link>
+        </li>
+        <li class="nav-item">
           <router-link class="nav-link text-white" to="/create_tests">{{ $t('components.pageHeader.createTests') }}</router-link>
         </li>
         <li class="nav-item">

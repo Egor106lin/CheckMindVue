@@ -131,9 +131,11 @@ function finishedTest() {
     outline: none !important;
     box-shadow: none !important;
     border-radius: 20px;
+    border: 2px solid #f3f3f3;
 }
 
-.btn {
+.btn-primary {
     background-color: #3846D3;
+    border-radius: 15px;
 }
 </style>
