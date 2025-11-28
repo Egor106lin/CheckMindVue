@@ -32,10 +32,11 @@ cd CheckMindVue/
 ```
 Установка зависимостей
 
-=======
-# checkmind
-
-## Project setup
 ```
 npm install
+```
+
+Запуск локального сервера
+```
+npm run serve
 ```
