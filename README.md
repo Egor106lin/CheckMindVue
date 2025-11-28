@@ -36,7 +36,6 @@ cd CheckMindVue/
 # checkmind
 
 ## Project setup
->>>>>>> master
 ```
 npm install
 ```
