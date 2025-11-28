@@ -28,7 +28,7 @@
 
 ```
 git clone <ссылка-на-репозиторий>
-cd checkmind-frontend
+cd CheckMindVue/
 ```
 Установка зависимостей
 
