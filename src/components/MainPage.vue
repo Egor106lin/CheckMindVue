@@ -1,4 +1,5 @@
 <template>
+    <PageHeader />
     <div class="container">
         <div class="row">
             <div class="col">
@@ -61,6 +62,8 @@
 //import { useI18n } from 'vue-i18n';
 import router from '@/router/routes'
 import { ref } from 'vue'
+import PageHeader from './PageHeader.vue';
+
 
 const in_group = ref(true)
 const admin = ref(false)

@@ -62,6 +62,7 @@
         "profileSettings": {
             "userActions": {
                 "title": "About user",
+                "userManagement": "Actions",
                 "name": "Name",
                 "sirname": "Sirname",
                 "role": "Role",
@@ -70,7 +71,7 @@
                     "admin": "Administrator"
                 },
                 "changePhoto": "Change photo",
-                "changeNameAndSirname": "Change name and sirname",
+                "changeName": "Change name",
                 "changePassword": "Change password",
                 "logout": "Logout"
             },

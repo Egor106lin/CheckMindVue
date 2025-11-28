@@ -1,5 +1,6 @@
 import Vuex from 'vuex';
 
+import LoginPageStore from './modules/LoginPageStore';
 import CreateTestsStore from './modules/CreateTestsStore';
 import MainPageStore from './modules/MainPageStore';
 import ProfileSettingsStore from './modules/ProfileSettingsStore';
@@ -11,6 +12,7 @@ const store = new Vuex.Store({
   mutations: {},
   actions: {},
   modules: {
+    loginPage: LoginPageStore,
     createTests: CreateTestsStore,
     mainPage: MainPageStore,
     profileSettings: ProfileSettingsStore,

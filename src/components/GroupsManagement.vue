@@ -1,4 +1,5 @@
 <template>
+    <PageHeader />
     <div class="container">
         <div class="card mt-5">
             <div class="card-body">
@@ -48,6 +49,8 @@
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
+import PageHeader from './PageHeader.vue';
+
 
 const $t = useI18n().t
 const store = useStore()

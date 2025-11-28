@@ -1,4 +1,5 @@
 <template>
+    <PageHeader />
     <div class="container">
         <div v-if="user">
             <div class="col">
@@ -84,6 +85,7 @@ import { numeric, required, minValue, maxValue } from '@vuelidate/validators';
 import { ref, computed, reactive } from 'vue';
 import createTestsWriter from './CreateTestsWriter.vue';
 import router from '@/router/routes';
+import PageHeader from './PageHeader.vue';
 
 const $t = useI18n().t
 const user = ref(false)

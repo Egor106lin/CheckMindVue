@@ -1,4 +1,5 @@
 <template>
+    <PageHeader />
     <div class="container">
         <div class="row mt-5">
             <div class="col">
@@ -80,6 +81,7 @@ import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router'
+import PageHeader from './PageHeader.vue';
 
 const $t = useI18n().t
 const store = useStore()
@@ -148,6 +150,13 @@ function changeQuestion(next = true) {
 }
 
 function finishTest() {
+    try {
+        store.dispatch('checkAnswers').then( () => {
+            result.value = store.getters.result   
+        })
+    } catch (error) {
+        console.error('Ошибка:', error)
+    }
     testInProgress.value = false
     answers.value.forEach((answer, index) => {
         if (test.value.questionsAndOptions[index]?.question) {
@@ -156,12 +165,8 @@ function finishTest() {
     });
     answers.value.unshift({ groupID: test.value.groupID })
     answers.value.unshift({ testName: test.value.testName })
-    store.dispatch('checkAnswers', {
-        answers: JSON.stringify(answers.value)
-    })
     localStorage.removeItem('answers')
     localStorage.removeItem('questionNow')
-    showResult()
 }
 
 function btnFinishDisabled() {
@@ -172,13 +177,6 @@ function btnFinishDisabled() {
         }
     });
     return res.value
-}
-
-function showResult() {
-    console.log(store.getters.result)
-    result.value = store.getters.result
-    console.log(result.value)
-
 }
 </script>
 
