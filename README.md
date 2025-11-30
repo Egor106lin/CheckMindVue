@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 🧠 CheckMind - Платформа для тестирования
 
 Платформа для создания, проведения и анализа тестов с современным интерфейсом и расширенными возможностями.
@@ -34,15 +33,10 @@ cd checkmind-frontend
 Установка зависимостей
 
 =======
-# checkmind
-
-## Project setup
->>>>>>> master
 ```
 npm install
 ```
 
-<<<<<<< HEAD
 Запуск development сервера
 ```
 npm run serve
@@ -65,4 +59,3 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
->>>>>>> master
