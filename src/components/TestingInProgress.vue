@@ -108,24 +108,23 @@ onBeforeMount(() => {
     getTestAndAnswers()
 })
 
-function getTestAndAnswers() {
+async function getTestAndAnswers() {
     try {
-        store.dispatch('getTest', {
+        await store.dispatch('getTest', {
             groupID: groupIDFromUrl,
             testName: testNameFromUrl
-        }).then( () => {
-            test.value = store.getters.test
-
-            const answersLocaleStorage = JSON.parse(localStorage.getItem('answers'))
-            if (answersLocaleStorage == null) {
-                answers.value = Array.from({ length: test.value.questionsQuantity }).map(() => ({
-                    question: '',
-                    options: []
-                }))
-            } else {
-                answers.value = answersLocaleStorage
-            }    
         })
+        test.value = store.getters.test
+
+        const answersLocaleStorage = JSON.parse(localStorage.getItem('answers'))
+        if (answersLocaleStorage == null) {
+            answers.value = Array.from({ length: test.value.questionsQuantity }).map(() => ({
+                question: '',
+                options: []
+            }))
+        } else {
+            answers.value = answersLocaleStorage
+        }
     } catch (error) {
         console.error('Ошибка:', error)
     }
@@ -149,10 +148,11 @@ function changeQuestion(next = true) {
     }
 }
 
-function finishTest() {
+async function finishTest() {
     try {
-        store.dispatch('checkAnswers').then( () => {
-            result.value = store.getters.result   
+        await store.dispatch('checkAnswers', { answers: answers.value }).then( () => {
+            result.value = store.getters.result
+            console.log(result.value)   
         })
     } catch (error) {
         console.error('Ошибка:', error)
