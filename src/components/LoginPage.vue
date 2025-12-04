@@ -9,7 +9,7 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col text-center">
-                        <button class="btn btn-primary">
+                        <button class="btn btn-primary" @click="loginWithGoogle()">
                             <h5>Зайти с Google</h5>
                         </button>
                     </div>
@@ -17,14 +17,14 @@
                 <div class="row mb-3">
                     <div class="col text-center">
                         <button class="btn btn-primary">
-                            <h5>Зайти с Google</h5>
+                            <h5>Зайти с VK</h5>
                         </button>
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col text-center">
                         <button class="btn btn-primary">
-                            <h5>Зайти с Google</h5>
+                            <h5>Зайти с Яндекс</h5>
                         </button>
                     </div>
                 </div>
@@ -34,7 +34,18 @@
 </template>
 
 <script setup>
+import { useStore } from 'vuex';
+const store = useStore()
 
+async function loginWithGoogle() {
+    try {
+        await store.dispatch('loginWithGoogle')
+        const link = store.getters.link
+        window.location.href = link
+    } catch(error) {
+        console.log(error)
+    }
+}
 </script>
 
 <style lang="css" scoped>
