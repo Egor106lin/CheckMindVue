@@ -26,7 +26,7 @@ const routes = [
         component: GroupsManagement
     },
     {
-        path: '/profile_settings',
+        path: '/profile',
         component: ProfileSettings
     },
     {   

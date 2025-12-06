@@ -20,7 +20,7 @@ const CreateTestsStore = {
     actions: {
         async sendTestData({ commit }, testData) {
             try {
-                const response = await api.post('/tests/created_test', testData, {
+                const response = await api.post('/api/tests/created_test', testData, {
                     headers: {
                         'Content-Type': 'application/json'
                     }

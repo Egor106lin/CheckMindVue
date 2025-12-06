@@ -14,7 +14,7 @@
           <router-link class="nav-link text-white" to="/create_tests">{{ $t('components.pageHeader.createTests') }}</router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link text-white" to="/profile_settings">{{ $t('components.pageHeader.profile') }}</router-link>
+          <router-link class="nav-link text-white" to="/profile">{{ $t('components.pageHeader.profile') }}</router-link>
         </li>
       </ul>
     </div>

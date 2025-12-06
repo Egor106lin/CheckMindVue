@@ -15,7 +15,7 @@ const LoginPageStore = {
     actions: {
         async loginWithGoogle({ commit }) {
             try {
-                const response = await api.get('/url/google')
+                const response = await api.get('/api/url/google')
                 console.log('Response data:', response.data)
                 
                 if (response.data) {

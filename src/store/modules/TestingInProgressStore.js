@@ -25,7 +25,7 @@ const TestingInProgress = {
     actions: {
         async getTest({ commit }, payload) {
             try {
-                const response = await api.get('tests/questions_and_options', {
+                const response = await api.get('/api/tests/questions_and_options', {
                     params: {
                         groupID: payload.groupID,
                         testName: payload.testName
@@ -40,7 +40,7 @@ const TestingInProgress = {
         },
         async checkAnswers({ commit }, payload) {
             try {
-                const response = await api.post('tests/check_answers', {
+                const response = await api.post('/api/tests/check_answers', {
                     userAnswers: payload.answers
                 })
                 commit('setAnswers', payload.answers)

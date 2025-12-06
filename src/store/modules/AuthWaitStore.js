@@ -15,7 +15,7 @@ const AuthWaitStore = {
     actions: {
         async sendCode(code) {
             try {
-                const response = await api.post('/auth/google', code)
+                const response = await api.post('/api/auth/google', code)
                 console.log(response.data)
             } catch(error) {
                 console.log(error)

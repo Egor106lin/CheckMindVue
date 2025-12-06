@@ -8,7 +8,6 @@ const GroupsManagementStore = {
         getGroupsData: state => state.groupsData,
     },
     mutations: {
-
         setGroupsData(state, data) {
             state.groupsData = data
         }
@@ -16,7 +15,7 @@ const GroupsManagementStore = {
     actions: {
         async getGroupsData({ commit }) {
             try {
-                const response = await api.get('/groups/get_list')
+                const response = await api.get('/api/groups/get_list')
                 commit('setGroupsData', JSON.parse(response.data.data))
                 return response.data
             } catch (error) {
