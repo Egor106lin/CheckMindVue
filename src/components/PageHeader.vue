@@ -14,7 +14,10 @@
           <router-link class="nav-link text-white" to="/create_tests">{{ $t('components.pageHeader.createTests') }}</router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link text-white" to="/profile">{{ $t('components.pageHeader.profile') }}</router-link>
+            <div class="d-flex align-items-center">
+                <router-link class="nav-link text-white" to="/profile">{{ userName }}</router-link>
+                <router-link to="/profile"><img :src="avatarUrl" alt="Аватар" class="rounded-circle me-2" style="width: 30px; height: 30px;"></router-link>
+            </div>
         </li>
       </ul>
     </div>
@@ -24,8 +27,37 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n';
+import { onBeforeMount, ref } from 'vue'
+import { useStore } from 'vuex';
 
+const store = useStore()
 const $t = useI18n().t
+const userData = ref()
+const loading = ref(true)
+const userName = ref(localStorage.getItem('userName'))
+const avatarUrl = ref(localStorage.getItem('avatarUrl'))
+
+async function loadData() {
+    try {
+        await store.dispatch('getUserData')
+        userData.value = store.getters['getUserData']
+        if (userName.value != userData.value.name) {
+            localStorage.setItem('userName', userData.value.name)
+            userName.value = userData.value.name 
+        }
+        if (avatarUrl.value != userData.value.avatar_url) {
+            localStorage.setItem('avatarUrl', userData.value.avatar_url)
+            avatarUrl.value = userData.value.avatar_url 
+        }
+    } catch(error) {
+        console.log(error)
+    } finally {
+        loading.value = false
+    }
+}
+onBeforeMount(() => {
+    loadData()
+})
 </script>
 
 <style lang="css">

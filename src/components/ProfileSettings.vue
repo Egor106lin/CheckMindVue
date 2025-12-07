@@ -10,29 +10,22 @@
                 <div class="col">
                     <div class="card h-100">
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title"><b>{{ $t('components.profileSettings.userActions.title') }}</b></h5>
-                            <p class="card-text">{{ $t('components.profileSettings.userActions.name') }}: {{ userData.name }}</p>
-                            <p class="card-text">Синхронизирован с {{ userData.provider}}</p>
                             <div class="row">
-                                <div class="col">
-                                    <router-link to="/login">
-                                        <button name="change_name" class="mt-auto btn btn-danger w-100">{{ $t('components.profileSettings.userActions.logout') }}</button>
-                                    </router-link>
+                                <div class="col-9">
+                                    <h5 class="card-title"><b>{{ $t('components.profileSettings.userActions.title') }}</b></h5>
+                                    <p class="card-text">{{ $t('components.profileSettings.userActions.name') }}: {{ userData.name }}</p>
+                                    <p class="card-text">Синхронизирован с {{ userData.provider}}</p>
+                                    <p class="card-text">Email: {{ userData.email }}</p>
+                                    <div class="row">
+                                        <div class="col">
+                                            <router-link to="/login">
+                                                <button name="change_name" class="mt-auto btn btn-danger w-100">{{ $t('components.profileSettings.userActions.logout') }}</button>
+                                            </router-link>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title"><b>{{ $t('components.profileSettings.userActions.userManagement') }}</b></h5>
-                            <p class="card-text">{{ $t('components.profileSettings.userActions.role') }}: {{user ? "Пользователь" : "Администратор"}}</p>
-                            <div class="row">
-                                <div class="col">
-                                    <button name="change_avatar" class="mt-auto btn btn-primary w-100">{{ $t('components.profileSettings.userActions.changePhoto') }}</button>
-                                    <hr>
-                                    <button name="change_name" class="mt-auto btn btn-primary w-100">{{ $t('components.profileSettings.userActions.changeName') }}</button>
+                                <div class="col-3">
+                                    <img :src="userData.avatar_url" class="avatar" height="192px" width="192px"/>
                                 </div>
                             </div>
                         </div>
@@ -44,16 +37,20 @@
                 <div class="col">
                     <div v-if="user" class="card">
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title"><b>{{ $t('components.profileSettings.groupsActions.title') }}</b></h5>
-                            <p class="card-text">{{ $t('components.profileSettings.groupsActions.joinGroup') }}</p>
                             <div class="row">
                                 <div class="col">
-                                    <input class="form-control w-100" type="text" :placeholder="$t('components.profileSettings.groupsActions.groupId')">
-                                </div>
-                                <div class="col">
-                                    <router-link to="/groups">
-                                        <button name="join_group" class="mt-auto btn btn-primary w-100">{{ $t('components.profileSettings.groupsActions.join') }}</button>
-                                    </router-link>
+                                    <h5 class="card-title"><b>{{ $t('components.profileSettings.groupsActions.title') }}</b></h5>
+                                    <p class="card-text">{{ $t('components.profileSettings.groupsActions.joinGroup') }}</p>
+                                    <div class="row">
+                                        <div class="col">
+                                            <input class="form-control w-100" type="text" :placeholder="$t('components.profileSettings.groupsActions.groupId')">
+                                        </div>
+                                        <div class="col">
+                                            <router-link to="/groups">
+                                                <button name="join_group" class="mt-auto btn btn-primary w-100">{{ $t('components.profileSettings.groupsActions.join') }}</button>
+                                            </router-link>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -158,6 +155,11 @@ onMounted(() => {
 .btn-danger {
     background-color: #d33838;
     border-radius: 15px;
+    border: none;
+}
+
+.avatar {
+    border-radius: 20px;
     border: none;
 }
 </style>
