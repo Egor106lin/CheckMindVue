@@ -1,7 +1,10 @@
 <template>
 <nav class="navbar navbar-expand-md sticky-top">
   <div class="container-fluid">
-    <h2><router-link class="navbar-brand text-white" to="/">{{ $t('components.pageHeader.productName') }}</router-link></h2>
+    <div class="d-flex align-items-center">
+      <router-link to="/"><img :src="logo" alt="Логотип" class="rounded-circle me-2"></router-link>
+      <h2><router-link class="navbar-brand text-white" to="/">{{ $t('components.pageHeader.productName') }}</router-link></h2>
+    </div>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
@@ -16,7 +19,7 @@
         <li class="nav-item">
             <div class="d-flex align-items-center">
                 <router-link class="nav-link text-white" to="/profile">{{ userName }}</router-link>
-                <router-link to="/profile"><img :src="avatarUrl" alt="Аватар" class="rounded-circle me-2" style="width: 30px; height: 30px;"></router-link>
+                <router-link to="/profile"><img :src="avatarUrl" alt="Аватар" class="rounded-circle me-2" style="width: 32px; height: 32px;"></router-link>
             </div>
         </li>
       </ul>
@@ -26,6 +29,7 @@
 </template>
 
 <script setup>
+import logo from '@/assets/images/logo_32_32.png'
 import { useI18n } from 'vue-i18n';
 import { onBeforeMount, ref } from 'vue'
 import { useStore } from 'vuex';
