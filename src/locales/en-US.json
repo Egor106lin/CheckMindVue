@@ -14,7 +14,12 @@
             "noTests": "You do not have any tests to take"
         },
         "groupsManagement": {
-            "title": "Your groups"
+            "adminGroups": {
+                "title": "Groups you administer"
+            },
+            "userGroups": {
+                "title": "Groups you are a member of"
+            }
         },
         "createTestsForm": {
             "alert": {

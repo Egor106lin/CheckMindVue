@@ -14,7 +14,12 @@
             "noTests": "У вас нет тестов для прохождения"
         },
         "groupsManagement": {
-            "title": "Ваши группы"
+            "adminGroups": {
+                "title": "Группы, в которых вы являетесь администратором"
+            },
+            "userGroups": {
+                "title": "Группы, в которых вы являетесь участником"
+            }
         },
         "createTestsForm": {
             "alert": {

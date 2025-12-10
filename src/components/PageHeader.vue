@@ -8,13 +8,22 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <router-link class="nav-link text-white" to="/">{{ $t('components.pageHeader.mainPage') }}</router-link>
+          <router-link class="nav-link text-white" to="/">
+            {{ $t('components.pageHeader.mainPage') }}
+            <i class="bi bi-house"></i>
+          </router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link text-white" to="/groups">{{ $t('components.pageHeader.groupsManagement') }}</router-link>
+          <router-link class="nav-link text-white" to="/groups">
+            {{ $t('components.pageHeader.groupsManagement') }}
+            <i class="bi bi-people"></i>
+          </router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link text-white" to="/create_tests">{{ $t('components.pageHeader.createTests') }}</router-link>
+          <router-link class="nav-link text-white" to="/create_tests">
+            {{ $t('components.pageHeader.createTests') }}
+            <i class="bi bi-pen"></i>
+          </router-link>
         </li>
         <li class="nav-item">
             <div class="d-flex align-items-center">
