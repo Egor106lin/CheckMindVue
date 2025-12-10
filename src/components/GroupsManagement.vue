@@ -42,13 +42,13 @@
                         <div class="col-2">
                             <div class="row flex-row-reverse">
                                 <div class="col">
-                                    <button class="btn btn-danger">
+                                    <button class="btn btn-danger" @click="deleteGroup(group.ID)">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
                                 <div class="col">
-                                    <button class="btn btn-danger">
-                                        <i class="bi bi-box-arrow-in-left"></i>
+                                    <button class="btn btn-danger" @click="leaveGroup(group.ID)">
+                                        <i class="bi bi-box-arrow-right"></i>
                                     </button>
                                 </div>
                             </div>
@@ -96,7 +96,7 @@
                             <p>{{ group.ID }}</p>
                         </div>
                         <div class="col-1">
-                            <button class="btn btn-danger">
+                            <button class="btn btn-danger" @click="deleteGroup(group.ID)">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -123,7 +123,7 @@ const adminGroupsData = ref()
 
 function getGroupsData() {
     try {
-        store.dispatch('getGroupsData').then( () => {
+        store.dispatch('getGroupsData').then(() => {
             userGroupsData.value = store.getters['getGroupsData']
             adminGroupsData.value = store.getters['getGroupsData']
         })
@@ -135,6 +135,34 @@ function getGroupsData() {
 onMounted(() => {
     getGroupsData()
 })
+
+function deleteGroup(id) {
+    try {
+        store.dispatch('deleteGroup', id).then(() => {
+            if (store.getters['getCanDeleteGroup']) {
+                // Удалить группу
+            } else {
+                // Не удалять группу
+            }
+        })
+    } catch(error) {
+        // Не удалось удалить группу
+    }
+}
+
+function leaveGroup(id) {
+    try {
+        store.dispatch('leaveGroup', id).then(() => {
+            if (store.getters['getCanLeaveGroup']) {
+                // Покинуть группу
+            } else {
+                // Не покидать группу группу
+            }
+        })
+    } catch(error) {
+        // Не удалось покинуть группу
+    }
+}
 
 </script>
 

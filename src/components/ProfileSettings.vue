@@ -12,14 +12,19 @@
                         <div class="card-body d-flex flex-column">
                             <div class="row">
                                 <div class="col-9">
-                                    <h5 class="card-title"><b>{{ $t('components.profileSettings.userActions.title') }}</b></h5>
+                                    <h5 class="card-title">
+                                        <b>{{ $t('components.profileSettings.userActions.title') }}</b>
+                                    </h5>
                                     <p class="card-text">{{ $t('components.profileSettings.userActions.name') }}: {{ userData.name }}</p>
                                     <p class="card-text">Синхронизирован с {{ userData.provider}}</p>
                                     <p class="card-text">Email: {{ userData.email }}</p>
                                     <div class="row">
                                         <div class="col">
                                             <router-link to="/login">
-                                                <button name="change_name" class="mt-auto btn btn-danger w-100">{{ $t('components.profileSettings.userActions.logout') }}</button>
+                                                <button name="change_name" class="mt-auto btn btn-danger w-100">
+                                                    {{ $t('components.profileSettings.userActions.logout') }}
+                                                    <i class="bi bi-box-arrow-right"></i>
+                                                </button>
                                             </router-link>
                                         </div>
                                     </div>
