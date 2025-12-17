@@ -1,6 +1,30 @@
 <template>
     <PageHeader />
     <div class="container">
+        <div class="card mt-5">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="card-title">Создать группу</h3>
+                        <div class="input-group mt-3">
+                            <input class="form-control" placeholder="Название" />
+                            <button class="btn btn-primary">
+                                <i class="bi bi-forward"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <h3 class="card-title">Присоединиться</h3>
+                        <div class="input-group mt-3">
+                            <input class="form-control" placeholder="ID группы" />
+                            <button class="btn btn-primary">
+                                <i class="bi bi-forward"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div v-if="someGroupsAdmin" class="card mt-5">
             <div class="card-body">
                 <h3 class="card-title mb-3">{{ $t('components.groupsManagement.adminGroups.title') }}</h3>
@@ -40,15 +64,16 @@
                             <p>{{ group.ID }}</p>
                         </div>
                         <div class="col-2">
-                            <div class="row flex-row-reverse">
-                                <div class="col">
-                                    <button class="btn btn-danger" @click="deleteGroup(group.ID)">
-                                        <i class="bi bi-trash"></i>
+                            <div class="row flex-row-rewerse">
+                                <div class="btn-group">
+                                    <button class="btn btn-primary" @click="leaveGroup(group.ID)">
+                                        <i class="bi bi-link-45deg"></i>
                                     </button>
-                                </div>
-                                <div class="col">
                                     <button class="btn btn-danger" @click="leaveGroup(group.ID)">
                                         <i class="bi bi-box-arrow-right"></i>
+                                    </button>
+                                    <button class="btn btn-danger" @click="deleteGroup(group.ID)">
+                                        <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
                             </div>
@@ -73,10 +98,10 @@
                     <div class="col-3">
                         <h5>Название</h5>
                     </div>
-                    <div class="col-3">
+                    <div class="col-2">
                         <h5>ID</h5>
                     </div>
-                    <div class="col-1"></div>
+                    <div class="col-2"></div>
                 </div>
                 <div v-for="group in userGroupsData" :key="group">
                     <div class="row">
@@ -92,13 +117,20 @@
                         <div class="col-3">
                             <p>{{ group.name }}</p>
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <p>{{ group.ID }}</p>
                         </div>
-                        <div class="col-1">
-                            <button class="btn btn-danger" @click="deleteGroup(group.ID)">
-                                <i class="bi bi-trash"></i>
-                            </button>
+                        <div class="col-2">
+                            <div class="row flex-row-rewerse">
+                                <div class="btn-group">
+                                    <button class="btn btn-primary" @click="leaveGroup(group.ID)">
+                                        <i class="bi bi-link-45deg"></i>
+                                    </button>
+                                    <button class="btn btn-danger" @click="deleteGroup(group.ID)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -156,7 +188,7 @@ function leaveGroup(id) {
             if (store.getters['getCanLeaveGroup']) {
                 // Покинуть группу
             } else {
-                // Не покидать группу группу
+                // Не покидать группу
             }
         })
     } catch(error) {
@@ -181,5 +213,17 @@ function leaveGroup(id) {
     background-color: #d33838;
     border-radius: 15px;
     border: none;
+}
+
+.form-control:focus {
+    border: 2px solid #3846D3;
+    border-radius: 20px;
+}
+
+.form-control {
+    outline: none !important;
+    box-shadow: none !important;
+    border-radius: 20px;
+    border: 2px solid #f3f3f3;
 }
 </style>
