@@ -55,21 +55,15 @@
                     </div>
                 </div>
                 <div v-for="option in testCreatedByUser[questionWrittenByUserNow].options" :key="option" class="row">
-                    <div class="row">
-                        <div class="col-1">
-                            <input v-model="option.correct" class="form-check-input large-checkbox" type="checkbox">
-                        </div>
-                        <div class="col-10">
-                            <input v-model="option.title" class="form-control">
-                        </div>
-                        <div class="col-1">
-                            <button
-                                class="btn btn-danger"
-                                :disabled="testCreatedByUser[questionWrittenByUserNow].options.length <= 2"
-                                @click="deleteOption(option)"
-                            >{{ $t('components.createTestsWriter.everyQuestionForm.buttons.deleteOption') }}</button>
-                        </div>
-                        <div class="d-flex justify-content-center"><hr class="mt-2 mb-2 w-50"></div>
+                    <div class="input-group mb-2">
+                        <input v-model="option.correct" class="form-check-input mt-0" type="checkbox" />
+                        <input v-model="option.title" class="form-control" />
+                        <button
+                            class="btn btn-danger"
+                            :disabled="testCreatedByUser[questionWrittenByUserNow].options.length <= 2"
+                            @click="deleteOption(option)"
+                        >{{ $t('components.createTestsWriter.everyQuestionForm.buttons.deleteOption') }}
+                        </button>
                     </div>
                 </div>
                 <div class="row">
@@ -208,11 +202,6 @@ function leaveOnMain() {
 </script>
 
 <style lang="css" scoped>
-.large-checkbox {
-    transform: scale(1.7);
-    opacity: 0.9;
-    cursor: pointer;
-}
 .card {
     border: 2px solid #3846D3;
     border-radius: 20px;
