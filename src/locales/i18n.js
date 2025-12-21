@@ -12,7 +12,7 @@ function loadLocaleMessages() {
   return messages;
 }
 
-const language = ref(localStorage.getItem('locale'))
+const language = ref(localStorage.getItem('locale')) || ref(navigator.language) 
 
 const i18n = createI18n({
   locale: language.value,
