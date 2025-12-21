@@ -5,27 +5,45 @@
             <div class="col">
                 <div v-if="testInProgress" class="card card-body">
                     <div class="row mb-2">
-                        <div :class="questionNow == test?.questionsQuantity ? 'col-6' : 'col-8'">
+                        <div class="col">
                             <h5 class="card-title">
                                 {{ $t('components.testingInProgress.testName') }} <b>"{{ test?.testName }}"</b>
                             </h5>
+                        </div>
+                        <div class="btn-group col-md-auto">
+                            <button
+                                class="btn btn-primary"
+                                v-if="questionNow != 1"
+                                @click="changeQuestion(false)"
+                            >
+                                <i class="bi bi-arrow-left"></i>    
+                                {{ $t('components.testingInProgress.previousQuestion') }}
+                            </button>
+                            <button
+                                class="btn btn-primary"
+                                v-if="questionNow < test?.questionsQuantity"
+                                @click="changeQuestion(true)"
+                            >
+                                {{ $t('components.testingInProgress.nextQuestion') }}
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                            <button
+                                v-if="questionNow == test?.questionsQuantity"
+                                class="btn btn-danger"
+                                :disabled="btnFinishDisabled()"
+                                @click="finishTest()"
+                            >
+                                {{ $t('components.testingInProgress.finishTest') }}
+                                <i class="bi bi-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
                             <h5 class="card-title">
                                 {{ $t('components.testingInProgress.questionNumber') }} 
                                 {{ questionNow }} / {{ test?.questionsQuantity }}
                             </h5>
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-secondary" @click="changeQuestion(false)">Предыдущий вопрос</button>
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-primary" @click="changeQuestion(true)">Следующий вопрос</button>
-                        </div>
-                        <div v-if="questionNow == test?.questionsQuantity" class="col-1">
-                            <button
-                                class="btn btn-danger"
-                                :disabled="btnFinishDisabled()"
-                                @click="finishTest()"
-                            >Завершить</button>
                         </div>
                     </div>
                     <hr>
