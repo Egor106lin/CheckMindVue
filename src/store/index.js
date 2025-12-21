@@ -6,6 +6,7 @@ import MainPageStore from './modules/MainPageStore';
 import ProfileSettingsStore from './modules/ProfileSettingsStore';
 import TestingInProgressStore from './modules/TestingInProgressStore';
 import GroupsManagementStore from './modules/GroupsManagementStore';
+import MembersManagementStore from './modules/MembersManagementStore'
 
 const store = new Vuex.Store({
   state: {},
@@ -18,6 +19,7 @@ const store = new Vuex.Store({
     profileSettings: ProfileSettingsStore,
     testingInProgress: TestingInProgressStore,
     groupsManagement: GroupsManagementStore,
+    MembersManagement: MembersManagementStore
   },
 })
 
