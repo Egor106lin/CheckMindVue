@@ -11,9 +11,44 @@
                         <div class="card-body d-flex flex-column">
                             <div class="row">
                                 <div class="col-9">
-                                    <h5 class="card-title">
-                                        <b>{{ $t('components.profileSettings.userActions.title') }}</b>
-                                    </h5>
+                                    <div class="row flex-row-reverse">
+                                        <div class="col-md-auto">
+                                            <div class="dropdown dropstart">
+                                                <button
+                                                    class="btn btn-primary dropdown-toggle"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-expanded="false"
+                                                >
+                                                    <i class="bi bi-translate"></i>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                <li>
+                                                    <button 
+                                                    class="dropdown-item" 
+                                                    type="button"
+                                                    @click="selectedLocale = 'ru-RU'; changeLanguage()"
+                                                    >
+                                                    Ru
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button 
+                                                    class="dropdown-item" 
+                                                    type="button"
+                                                    @click="selectedLocale = 'en-EN'; changeLanguage()"
+                                                    >
+                                                    En
+                                                    </button>
+                                                </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <h5 class="card-title">
+                                                <b>{{ $t('components.profileSettings.userActions.title') }}</b>
+                                            </h5>
+                                        </div>
+                                    </div>
                                     <p class="card-text">{{ $t('components.profileSettings.userActions.name') }}: {{ userData.name }}</p>
                                     <p class="card-text">Синхронизирован с {{ userData.provider}}</p>
                                     <p class="card-text">Email: {{ userData.email }}</p>
@@ -60,6 +95,15 @@ async function loadData() {
     } finally {
         loading.value = false
     }
+}
+
+const locale = useI18n().locale
+
+const selectedLocale = ref(locale.value)
+
+const changeLanguage = () => {
+    locale.value = selectedLocale.value
+    localStorage.setItem('locale', selectedLocale.value)
 }
 
 onMounted(() => {

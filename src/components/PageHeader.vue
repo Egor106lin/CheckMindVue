@@ -1,40 +1,45 @@
 <template>
-<nav class="navbar navbar-expand-md sticky-top">
-  <div class="container-fluid">
-    <div class="d-flex align-items-center">
-      <router-link to="/"><img :src="logo" alt="Логотип" class="rounded-circle me-2"></router-link>
-      <h2><router-link class="navbar-brand text-white" to="/">{{ $t('components.pageHeader.productName') }}</router-link></h2>
+  <nav class="navbar navbar-expand-md sticky-top">
+    <div class="container-fluid">
+      <div class="d-flex align-items-center">
+        <router-link to="/"><img :src="logo" alt="Логотип" class="rounded-circle me-2"></router-link>
+        <h2><router-link class="navbar-brand text-white" to="/">{{ $t('components.pageHeader.productName') }}</router-link></h2>
+      </div>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+              data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <router-link class="nav-link text-white" to="/">
+              {{ $t('components.pageHeader.mainPage') }}
+              <i class="bi bi-house"></i>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link text-white" to="/groups">
+              {{ $t('components.pageHeader.groupsManagement') }}
+              <i class="bi bi-people"></i>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link text-white" to="/create_tests">
+              {{ $t('components.pageHeader.createTests') }}
+              <i class="bi bi-pen"></i>
+            </router-link>
+          </li>
+          <li class="nav-item">
+              <div class="d-flex align-items-center">
+                  <router-link class="nav-link text-white" to="/profile">{{ userName }}</router-link>
+                  <router-link to="/profile"><img :src="avatarUrl" alt="Аватар" class="rounded-circle me-2" style="width: 32px; height: 32px;"></router-link>
+              </div>
+          </li>
+        </ul>
+      </div>
     </div>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <router-link class="nav-link text-white" to="/">
-            {{ $t('components.pageHeader.mainPage') }}
-            <i class="bi bi-house"></i>
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link text-white" to="/groups">
-            {{ $t('components.pageHeader.groupsManagement') }}
-            <i class="bi bi-people"></i>
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link text-white" to="/create_tests">
-            {{ $t('components.pageHeader.createTests') }}
-            <i class="bi bi-pen"></i>
-          </router-link>
-        </li>
-        <li class="nav-item">
-            <div class="d-flex align-items-center">
-                <router-link class="nav-link text-white" to="/profile">{{ userName }}</router-link>
-                <router-link to="/profile"><img :src="avatarUrl" alt="Аватар" class="rounded-circle me-2" style="width: 32px; height: 32px;"></router-link>
-            </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+  </nav>
 </template>
 
 <script setup>
@@ -68,6 +73,7 @@ async function loadData() {
         loading.value = false
     }
 }
+
 onBeforeMount(() => {
     loadData()
 })
