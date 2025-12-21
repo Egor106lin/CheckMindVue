@@ -1,7 +1,7 @@
 <template>
     <PageHeader />
-    <div class="container">
-        <div class="row mt-4">
+    <div class="container mt-3">
+        <div class="row">
             <div
                 :class="canCreateTestsForm.value ? 'col-4' : 'col'"
             >

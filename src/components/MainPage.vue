@@ -1,9 +1,9 @@
 <template>
     <PageHeader />
-    <div class="container">
-        <div class="row zone mb-3 mt-3">
+    <div class="container mt-3">
+        <div class="row zone mb-3">
             <div class="col">
-                <div class="card card-body mt-2 mb-2">
+                <div class="card card-body mb-2">
                     <h2 class="card-title">CheckMind</h2>
                     <div>
                         <p>Инфа о проекте</p>

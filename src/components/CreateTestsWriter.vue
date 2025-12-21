@@ -111,7 +111,6 @@ const questionWrittenByUserNow = ref()
 
 onBeforeMount(() => {
     let questionWrittenByUserNowLS = localStorage.getItem('questionWrittenByUserNow')
-    console.log(questionWrittenByUserNowLS)
     if (questionWrittenByUserNowLS != null) {
         questionWrittenByUserNow.value = JSON.parse(questionWrittenByUserNowLS)
     } else {
@@ -153,8 +152,6 @@ function deleteOption(option) {
 }
 
 function disableNextQuestionButton() {
-    console.log(testCreatedByUser.value)
-    console.log(questionWrittenByUserNow.value)
     if (questionWrittenByUserNow.value + 1 >= testData.questions_quantity) {
         return true
     } else if (

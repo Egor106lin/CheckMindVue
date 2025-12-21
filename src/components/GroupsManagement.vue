@@ -1,7 +1,7 @@
 <template>
     <PageHeader />
-    <div class="container">
-        <div class="card mt-5">
+    <div class="container mt-3">
+        <div class="card">
             <div class="card-body">
                 <div class="row">
                     <div class="col">
@@ -25,7 +25,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="someGroupsAdmin" class="card mt-5">
+        <div v-if="someGroupsAdmin" class="card mt-3">
             <div class="card-body">
                 <h3 class="card-title mb-3">{{ $t('components.groupsManagement.adminGroups.title') }}</h3>
                 <div class="row">
@@ -82,7 +82,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="someGroupsUser" class="card mt-5">
+        <div v-if="someGroupsUser" class="card mt-3">
             <div class="card-body">
                 <h3 class="card-title mb-3">{{ $t('components.groupsManagement.userGroups.title') }}</h3>
                 <div class="row">

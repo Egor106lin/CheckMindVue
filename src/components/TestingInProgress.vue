@@ -1,7 +1,7 @@
 <template>
     <PageHeader />
-    <div class="container">
-        <div class="row mt-5">
+    <div class="container mt-3">
+        <div class="row">
             <div class="col">
                 <div v-if="testInProgress" class="card card-body">
                     <div class="row mb-2">
@@ -152,7 +152,6 @@ async function finishTest() {
     try {
         await store.dispatch('checkAnswers', { answers: answers.value }).then( () => {
             result.value = store.getters.result
-            console.log(result.value)   
         })
     } catch (error) {
         console.error('Ошибка:', error)
