@@ -42,7 +42,7 @@
                         </div>
                     </div>
                     <div class="btn-group w-100">
-                        <div class="btn btn-primary">
+                        <div class="btn btn-primary" @click="takeTheTest()">
                             Редактировать
                         </div>
                         <div class="btn btn-secondary">
@@ -60,7 +60,7 @@
 
 <script setup>
 //import { useI18n } from 'vue-i18n';
-//import router from '@/router/routes'
+import router from '@/router/routes'
 import { ref } from 'vue'
 import PageHeader from './PageHeader.vue';
 
@@ -68,9 +68,9 @@ import PageHeader from './PageHeader.vue';
 
 const groups = ref([[2, 2, 2], [2], [2, 2, 2], [2, 2, 2]])
 
-// function takeTheTest() {
-//     router.push('/testing/123456789/Тестдляотладки')
-// }
+function takeTheTest() {
+    router.push('/testing/123456789/Тестдляотладки')
+}
 </script>
 
 <style lang="css" scoped>
