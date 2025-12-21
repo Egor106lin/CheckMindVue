@@ -1,20 +1,11 @@
 <template>
     <PageHeader />
     <div class="container">
-        <div v-if="user">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title">{{ $t('components.createTestsForm.alert.alertNotAdmin') }}</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="row mt-4">
             <div
                 :class="canCreateTestsForm.value ? 'col-4' : 'col'"
             >
-                <div v-if="!user">
+                <div>
                     <div class="col">
                         <div class="card">
                             <div class="card-body d-flex flex-column">
@@ -75,21 +66,31 @@
             </div>
         </div>
     </div>
-    <button @click="user = !user">user/admin</button>
 </template>
 
 <script setup>
 import { useI18n } from 'vue-i18n';
 import useVuelidate from '@vuelidate/core';
 import { numeric, required, minValue, maxValue } from '@vuelidate/validators';
-import { ref, computed, reactive } from 'vue';
+import { ref, computed, reactive, onBeforeMount } from 'vue';
 import createTestsWriter from './CreateTestsWriter.vue';
 import router from '@/router/routes';
 import PageHeader from './PageHeader.vue';
 
 const $t = useI18n().t
-const user = ref(false)
 let canCreateTestsForm = ref(true)
+
+onBeforeMount(() => {
+    const formData = localStorage.getItem('formData')
+    if (formData != null) {
+        const testParams = JSON.parse(formData)
+        state.test_name = testParams.test_name
+        state.test_description = testParams.test_description
+        state.group_id = testParams.group_id
+        state.questions_quantity = testParams.questions_quantity
+        canCreateTestsForm.value = false
+    }
+})
 
 let state = reactive({
     test_name: '',

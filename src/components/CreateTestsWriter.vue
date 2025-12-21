@@ -95,30 +95,48 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n';
-import { ref, defineEmits } from 'vue';
+import { ref, defineEmits, onBeforeMount } from 'vue';
 import { useStore } from 'vuex';
 
 const store = useStore()
 
 const $t = useI18n().t
 const testInProgress = ref(true)
+const testCreatedByUser = ref()
 
 const emit = defineEmits(['leaveOnMain'])
-
 const testData = JSON.parse(localStorage.getItem('formData') || null)
-const testCreatedByUser = ref(Array.from({ length: testData.questions_quantity }).map(() => ({
-    question: '',
-    options: [
-        { title: '', correct: false},
-        { title: '', correct: false}
-    ]
-})));
+const questionWrittenByUserNow = ref()
 
-const questionWrittenByUserNow = ref(0)
+
+onBeforeMount(() => {
+    let questionWrittenByUserNowLS = localStorage.getItem('questionWrittenByUserNow')
+    console.log(questionWrittenByUserNowLS)
+    if (questionWrittenByUserNowLS != null) {
+        questionWrittenByUserNow.value = JSON.parse(questionWrittenByUserNowLS)
+    } else {
+        questionWrittenByUserNow.value = 0
+    }
+    let testCreatedByUserLS = localStorage.getItem('testCreatedByUser')
+    if (testCreatedByUserLS != null) {
+        testCreatedByUser.value = JSON.parse(testCreatedByUserLS)
+    } else {
+        testCreatedByUser.value = Array.from({ length: testData.questions_quantity }).map(() => ({
+            question: '',
+            options: [
+                { title: '', correct: false},
+                { title: '', correct: false}
+            ]
+        }));
+    }
+})
+
+
 
 function nextQuestion() {
     localStorage.setItem('testCreatedByUser', JSON.stringify(testCreatedByUser.value))
     questionWrittenByUserNow.value++
+    localStorage.setItem('questionWrittenByUserNow', JSON.stringify(questionWrittenByUserNow.value))
 }
 
 function previousQuestion() {
@@ -135,6 +153,8 @@ function deleteOption(option) {
 }
 
 function disableNextQuestionButton() {
+    console.log(testCreatedByUser.value)
+    console.log(questionWrittenByUserNow.value)
     if (questionWrittenByUserNow.value + 1 >= testData.questions_quantity) {
         return true
     } else if (
@@ -197,6 +217,7 @@ async function saveTest() {
 function leaveOnMain() {
     localStorage.removeItem('testCreatedByUser')
     localStorage.removeItem('formData')
+    localStorage.removeItem('questionWrittenByUserNow')
     emit('leaveOnMain')
 }
 </script>
