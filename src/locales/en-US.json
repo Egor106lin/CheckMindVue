@@ -14,11 +14,29 @@
             "noTests": "You do not have any tests to take"
         },
         "groupsManagement": {
+            "newGroup": {
+                "create": {
+                    "title": "Create group",
+                    "placeholder": "Group name"
+                },
+                "join": {
+                    "title": "Join group",
+                    "placeholder": "Group ID"
+                }
+            },
             "adminGroups": {
-                "title": "Groups you administer"
+                "title": "Groups you are an administrator of"
             },
             "userGroups": {
                 "title": "Groups you are a member of"
+            },
+            "columns": {
+                "№": "№",
+                "owner": "Owner",
+                "members": "Members",
+                "name": "Group name",
+                "ID": "ID",
+                "actions": "Actions"
             }
         },
         "createTestsForm": {
@@ -36,12 +54,12 @@
         "createTestsWriter": {
             "everyQuestionForm": {
                 "questionNumber": "Question",
-                "rule1": "This is the test creation window. The + and - buttons allow you to add and remove answer options. Minimum 2 questions required, maximum - 10. There can be any number of correct answer options. The arrow buttons allow navigation between questions. It is impossible to proceed to the next question until the current one meets the requirements, but you can always go back to previous questions.",
+                "rule1": "There can be from 2 to 10 answer options, with 1 or more correct. You can't move on to the next question until the current one is filled in, but you can always go back.",
                 "questionTitle": "Question title:",
                 "answerOptions": "Answer options (mark correct by checkbox):",
                 "buttons": {
-                    "previousButton": "<- Previous question",
-                    "nextButton": "Next question ->",
+                    "previousButton": "Previous question",
+                    "nextButton": "Next question",
                     "addOption": "Add option",
                     "deleteOption": "-",
                     "saveTest": "Save"
@@ -59,8 +77,9 @@
         "testingInProgress": {
             "questionNumber": "Question number",
             "testName": "Test:",
-            "nextQuestion": "Next question",
-            "previousQuestion": "Previous question",
+            "nextQuestion": "Next",
+            "previousQuestion": "Back",
+            "finishTest": "Finish",
             "rightAnswer": "Right",
             "wrongAnswer": "Wrong"
         },

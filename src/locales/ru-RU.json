@@ -14,11 +14,29 @@
             "noTests": "У вас нет тестов для прохождения"
         },
         "groupsManagement": {
+            "newGroup": {
+                "create": {
+                    "title": "Создать группу",
+                    "placeholder": "Название группы"
+                },
+                "join": {
+                    "title": "Присоединиться к группе",
+                    "placeholder": "ID группы"
+                }
+            },
             "adminGroups": {
-                "title": "Группы, в которых вы являетесь администратором"
+                "title": "Группы, в которых вы администратор"
             },
             "userGroups": {
-                "title": "Группы, в которых вы являетесь участником"
+                "title": "Группы, в которых вы участник"
+            },
+            "columns": {
+                "№": "№",
+                "owner": "Владелец",
+                "members": "Участники",
+                "name": "Название группы",
+                "ID": "ID",
+                "actions": "Действия"
             }
         },
         "createTestsForm": {
@@ -40,8 +58,8 @@
                 "questionTitle": "Текст вопроса:",
                 "answerOptions": "Варианты ответа (отметьте галочками верные):",
                 "buttons": {
-                    "previousButton": "<- Предыдущий вопрос",
-                    "nextButton": "Следующий вопрос ->",
+                    "previousButton": "Предыдущий вопрос",
+                    "nextButton": "Следующий вопрос",
                     "addOption": "Добавить вариант",
                     "deleteOption": "-",
                     "saveTest": "Сохранить"
@@ -59,8 +77,11 @@
         "testingInProgress": {
             "questionNumber": "Вопрос номер",
             "testName": "Тест:",
-            "nextQuestion": "Следующий вопрос",
-            "previousQuestion": "Предыдущий вопрос"
+            "nextQuestion": "Далее",
+            "previousQuestion": "Назад",
+            "finishTest": "Завершить",
+            "rightAnswer": "Верно",
+            "wrongAnswer": "Неверно"
         },
         "profileSettings": {
             "userActions": {
