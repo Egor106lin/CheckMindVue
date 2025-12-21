@@ -1,7 +1,7 @@
 <template>
     <PageHeader />
     <div class="container mt-3">
-        <div class="row zone mb-3">
+        <div class="row mb-4 zone">
             <div class="col">
                 <div class="card card-body mb-2">
                     <h2 class="card-title">CheckMind</h2>
