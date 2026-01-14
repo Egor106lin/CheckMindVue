@@ -75,17 +75,16 @@
                     <div class="row">
                         <h5>Ваш результат: <b>{{ result?.result }} / {{ result?.questionsQuantity }}</b></h5>
                     </div>
-                    <div v-for="question in result?.mistakes" :key="question">
-                        <div class="row">
-                            <div class="col-8">
-                                <p>{{ question?.question }}</p>
-                            </div>
-                            <div class="col-4" v-if="question?.correct">
-                                <p>{{ $t('components.testingInProgress.rightAnswer') }}</p>
-                            </div>
-                            <div class="col-4" v-else-if="!question?.correct">
-                                <p>{{ $t('components.testingInProgress.wrongAnswer') }}</p>
-                            </div>
+                    <ElTable :data="tableData" class="rounded-5 mt-3 el-text el-text--large">
+                        <ElTableColumn prop="question" label="Вопрос"/>
+                        <ElTableColumn prop="right" label="Правильность ответа"/>
+                        <ElTableColumn prop="points" label="Баллы"/>
+                    </ElTable>
+                    <div class="row mt-3">
+                        <div class="col">
+                            <button class="btn btn-primary" @click="pushOnMain()">
+                                На главную
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -98,7 +97,9 @@
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { onBeforeMount, ref } from 'vue';
-import { useRoute } from 'vue-router'
+import router from '@/router/routes'
+
+import { ElTable, ElTableColumn } from 'element-plus';
 import PageHeader from './PageHeader.vue';
 
 const $t = useI18n().t
@@ -108,13 +109,28 @@ const test = ref()
 const answers = ref()
 const result = ref()
 
-const router = useRoute()
-const groupIDFromUrl = router.params.groupID
-const testNameFromUrl = router.params.testName
+const groupIDFromUrl = router.currentRoute.value.params.groupID
+const testNameFromUrl = router.currentRoute.value.params.testName
 
 const testInProgress = ref(true)
 const questionNow = ref(1)
-
+const tableData = ref([
+    {
+        question: "1",
+        right: true,
+        points: 1
+    },
+    {
+        question: "2",
+        right: false,
+        points: 0
+    },
+    {
+        question: "3",
+        right: true,
+        points: 1
+    }
+])
 
 onBeforeMount(() => {
     const questionNowLocalStorage = localStorage.getItem('questionNow')
@@ -194,6 +210,10 @@ function btnFinishDisabled() {
         }
     });
     return res.value
+}
+
+function pushOnMain() {
+    router.push('/')
 }
 </script>
 
