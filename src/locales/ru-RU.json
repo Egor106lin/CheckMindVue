@@ -87,17 +87,11 @@
             "userActions": {
                 "title": "О пользователе",
                 "userManagement": "Действия",
-                "name": "Имя",
-                "sirname": "Фамилия",
-                "role": "Роль",
-                "roles": {
-                    "user": "Пользователь",
-                    "admin": "Администратор"
-                },
-                "changePhoto": "Изменить фото",
-                "changeName": "Изменить имя",
-                "changePassword": "Изменить пароль",
-                "logout": "Выйти"
+                "name": "Имя:",
+                "email": "Почта:",
+                "sync": "Синхронизировано с",
+                "logout": "Выйти",
+                "deleteAccount": "Удалить аккаунт"
             },
             "groupsActions": {
                 "title": "Действия с группами",

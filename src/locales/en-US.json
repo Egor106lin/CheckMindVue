@@ -87,17 +87,11 @@
             "userActions": {
                 "title": "About user",
                 "userManagement": "Actions",
-                "name": "Name",
-                "sirname": "Sirname",
-                "role": "Role",
-                "roles": {
-                    "user": "User",
-                    "admin": "Administrator"
-                },
-                "changePhoto": "Change photo",
-                "changeName": "Change name",
-                "changePassword": "Change password",
-                "logout": "Logout"
+                "name": "Name:",
+                "email": "Email:",
+                "sync": "Sync with",
+                "logout": "Logout",
+                "deleteAccount": "Delete account"
             },
             "groupsActions": {
                 "title": "Groups actions",

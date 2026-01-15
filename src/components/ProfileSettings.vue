@@ -49,10 +49,10 @@
                                             </h5>
                                         </div>
                                     </div>
-                                    <p class="card-text">{{ $t('components.profileSettings.userActions.name') }}: {{ userData.name }}</p>
-                                    <p class="card-text">Синхронизирован с {{ userData.provider}}</p>
-                                    <p class="card-text">Email: {{ userData.email }}</p>
-                                    <div class="row">
+                                    <p class="card-text">{{ $t('components.profileSettings.userActions.name') }} {{ userData.name }}</p>
+                                    <p class="card-text">{{ $t('components.profileSettings.userActions.email') }} {{ userData.email }}</p>
+                                    <p class="card-text">{{ $t('components.profileSettings.userActions.sync') }} {{ userData.provider}}</p>
+                                    <!-- <div class="row">
                                         <div class="col">
                                             <router-link to="/login">
                                                 <button name="change_name" class="mt-auto btn btn-danger w-100">
@@ -60,6 +60,16 @@
                                                     <i class="bi bi-box-arrow-right"></i>
                                                 </button>
                                             </router-link>
+                                        </div>
+                                    </div> -->
+                                    <div class="btn-group">
+                                        <div class="btn btn-danger" @click="logout()">
+                                            <i class="bi bi-box-arrow-right"></i>
+                                            {{ $t('components.profileSettings.userActions.logout') }}
+                                        </div>
+                                        <div class="btn btn-light" @click="deleteAccount()">
+                                            <i class="bi bi-person-x"></i>
+                                            {{ $t('components.profileSettings.userActions.deleteAccount') }}
                                         </div>
                                     </div>
                                 </div>
@@ -71,6 +81,13 @@
                     </div>
                 </div>
             </div>
+            <ModalConfirmDeleteAccount
+                v-model="isModalVisible"
+                :username="userData.name"
+                :email="userData.email"
+                @confirm="handleConfirmDelete"
+                @cancel="handleCancel"
+            />
         </div>
     </div>
 </template>
@@ -80,11 +97,14 @@ import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n';
 import PageHeader from './PageHeader.vue';
 import { useStore } from 'vuex';
+import ModalConfirmDeleteAccount from './ModalConfirmDeleteAccount.vue';
+import router from '@/router/routes';
 
 const store = useStore()
 const $t = useI18n().t
 const userData = ref()
 const loading = ref(true)
+const isModalVisible = ref(false)
 
 async function loadData() {
     try {
@@ -104,6 +124,24 @@ const selectedLocale = ref(locale.value)
 const changeLanguage = () => {
     locale.value = selectedLocale.value
     localStorage.setItem('locale', selectedLocale.value)
+}
+
+function logout() {
+    router.push('/login')
+}
+
+function deleteAccount() {
+    isModalVisible.value = true
+}
+
+function handleConfirmDelete() {
+    console.log('account deleted')
+    isModalVisible.value = false
+}
+
+function handleCancel() {
+    console.log('modal closed')
+    isModalVisible.value = false
 }
 
 onMounted(() => {
@@ -143,6 +181,11 @@ onMounted(() => {
 
 .btn-danger {
     background-color: #d33838;
+    border-radius: 15px;
+    border: none;
+}
+
+.btn-light {
     border-radius: 15px;
     border: none;
 }
