@@ -3,23 +3,13 @@ import api from '@/store/api.js'
 const GroupsManagementStore = {
     state: {
         groupsData: null,
-        canDeleteGroup: null,
-        canLeaveGroup: null
     },
     getters: {
         getGroupsData: state => state.groupsData,
-        getCanDeleteGroup: state => state.canDeleteGroup,
-        getCanLeaveGroup: state => state.canLeaveGroup,
     },
     mutations: {
         setGroupsData(state, data) {
             state.groupsData = data
-        },
-        setCanDeleteGroup(state, data) {
-            state.canDeleteGroup = data
-        },
-        setCanLeaveGroup(state, data) {
-            state.canLeaveGroup = data
         },
     },
     actions: {
@@ -32,30 +22,41 @@ const GroupsManagementStore = {
                 console.log(error)
             }
         },
-        async deleteGroup({ commit }, id) {
+        async deleteGroup(context, id) {
             try {
-                const response = await api.post('/api/groups/delete', id, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                commit('setCanDeleteGroup', response.data)
+                const response = await api.post('/api/groups/delete', id)
+                console.log(response.data)
             } catch (error) {
                 console.log(error)
             }
         },
-        async leaveGroup({ commit }, id) {
+        async leaveGroup(context, id) {
             try {
-                const response = await api.post('/api/groups/leave', id, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                commit('setCanLeaveGroup', response.data)
+                const response = await api.post('/api/groups/leave', id)
+                console.log(response.data)
             } catch (error) {
                 console.log(error)
             }
-        }
+        },
+        async createGroup(context, title) {
+            console.log(title)
+            try {
+                const response = await api.post('/api/groups/create', {
+                    group_title: title
+                })
+                console.log(response.data)
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        async joinGroup(context, id) {
+            try {
+                const response = await api.post('/api/groups/join', id)
+                console.log(response.data)
+            } catch (error) {
+                console.log(error)
+            }
+        },
     }
 }
 

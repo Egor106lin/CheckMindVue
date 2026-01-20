@@ -14,8 +14,9 @@
                                 <div class="input-group mt-3">
                                     <input
                                         class="form-control"
+                                        v-model="groupToCreate"
                                         :placeholder="$t('components.groupsManagement.newGroup.create.placeholder')" />
-                                    <button class="btn btn-primary">
+                                    <button class="btn btn-primary" @click="createGroup(groupToCreate)">
                                         <i class="bi bi-forward"></i>
                                     </button>
                                 </div>
@@ -25,8 +26,9 @@
                                 <div class="input-group mt-3">
                                     <input
                                         class="form-control"
+                                        v-model="groupToJoin"
                                         :placeholder="$t('components.groupsManagement.newGroup.create.placeholder')" />
-                                    <button class="btn btn-primary">
+                                    <button class="btn btn-primary" @click="joinGroup(groupToJoin)">
                                         <i class="bi bi-forward"></i>
                                     </button>
                                 </div>
@@ -197,6 +199,8 @@ const someGroupsUser = ref(true)
 const $t = useI18n().t
 const store = useStore()
 const isUserManagementOpened = ref(false)
+const groupToCreate = ref()
+const groupToJoin = ref()
 
 const userGroupsData = ref()
 const adminGroupsData = ref()
@@ -233,6 +237,29 @@ function deleteGroup(id) {
 function leaveGroup(id) {
     try {
         store.dispatch('leaveGroup', id).then(() => {
+            if (store.getters['getCanLeaveGroup']) {
+                // Покинуть группу
+            } else {
+                // Не покидать группу
+            }
+        })
+    } catch(error) {
+        // Не удалось покинуть группу
+    }
+}
+
+async function createGroup(title) {
+    try {
+        console.log(title)
+        await store.dispatch('createGroup', title)
+    } catch(error) {
+        // Не удалось покинуть группу
+    }
+}
+
+function joinGroup(id) {
+    try {
+        store.dispatch('joinGroup', id).then(() => {
             if (store.getters['getCanLeaveGroup']) {
                 // Покинуть группу
             } else {
