@@ -76,7 +76,7 @@
                                             <p>{{ group.group_size }}</p>
                                         </div>
                                         <div class="col-md-auto pt-0 pb-0">
-                                            <button class="btn btn-secondary-sm pt-0 pb-0" @click="isUserManagementOpened = !isUserManagementOpened">
+                                            <button class="btn btn-secondary-sm pt-0 pb-0" @click="openMembersManager(group, true)">
                                                 <i class="bi bi-caret-down"></i>
                                             </button>
                                         </div>
@@ -147,7 +147,10 @@
                                             <p>{{ group.group_size }}</p>
                                         </div>
                                         <div class="col-md-auto pt-0 pb-0">
-                                            <button class="btn btn-secondary-sm pt-0 pb-0" @click="isUserManagementOpened = !isUserManagementOpened">
+                                            <button
+                                                class="btn btn-secondary-sm pt-0 pb-0"
+                                                @click="openMembersManager(group, false)"
+                                            >
                                                 <i class="bi bi-caret-down"></i>
                                             </button>
                                         </div>
@@ -166,7 +169,7 @@
                                                 <i class="bi bi-link-45deg"></i>
                                             </button>
                                             <button class="btn btn-danger" @click="deleteGroup(group.ID)">
-                                                <i class="bi bi-trash"></i>
+                                                <i class="bi bi-box-arrow-right"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -180,7 +183,11 @@
                 class="col"
                 v-if="isUserManagementOpened"
             >
-                <MembersManagement />
+                <MembersManagement
+                    :groupName="membersOfGroupToWatchData.groupName"
+                    :isAdmin="membersOfGroupToWatchData.isAdmin"
+                    @cancel="isUserManagementOpened = false"
+                />
             </div>
         </div>
         
@@ -201,6 +208,10 @@ const store = useStore()
 const isUserManagementOpened = ref(false)
 const groupToCreate = ref()
 const groupToJoin = ref()
+const membersOfGroupToWatchData = ref({
+    groupName: '',
+    isAdmin: '',
+})
 
 const userGroupsData = ref()
 const adminGroupsData = ref()
@@ -219,6 +230,19 @@ function getGroupsData() {
 onMounted(() => {
     getGroupsData()
 })
+
+function openMembersManager(groupData, isAdmin) {
+    isUserManagementOpened.value = true
+    if (isUserManagementOpened.value) {
+        membersOfGroupToWatchData.value.groupName = groupData.name
+        membersOfGroupToWatchData.value.isAdmin = isAdmin
+    } else {
+        membersOfGroupToWatchData.value = {
+            groupName: '',
+            isAdmin: '',
+        }
+    }
+}
 
 function deleteGroup(id) {
     try {

@@ -39,6 +39,13 @@
                 "actions": "Действия"
             }
         },
+        "membersManagement": {
+            "title": "Участники группы",
+            "makeAdmin": "Сделать администратором",
+            "№": "№",
+            "admin": "Администратор",
+            "name": "Имя"
+        },
         "createTestsForm": {
             "alert": {
                 "alertNotAdmin": "Создавать тесты может только администратор :("

@@ -39,6 +39,13 @@
                 "actions": "Actions"
             }
         },
+        "membersManagement": {
+            "title": "Members of group",
+            "makeAdmin": "Make as admin",
+            "№": "№",
+            "admin": "Administrator",
+            "name": "Name"
+        },
         "createTestsForm": {
             "alert": {
                 "alertNotAdmin": "Tests can be created by administrator only :("

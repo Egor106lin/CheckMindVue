@@ -1,22 +1,37 @@
 <template>
     <div class="card zone mb-2">
         <div class="card-body">
-            <div class="card-title">
-                <h3>Участники группы АБВ</h3>
+            <div class="row">
+                <div class="col-11">
+                    <div class="card-title">
+                        <h3>{{ $t('components.membersManagement.title') }} "{{ groupName }}"</h3>
+                    </div>
+                </div>
+                <div class="col-1">
+                    <button class="btn btn-light rounded-5" @click="emit('cancel')">
+                        <i class="bi bi-x-circle"></i>
+                    </button>
+                </div>
             </div>
             <ElTable :data="tableData" class="rounded-5 mt-3">
-                <ElTableColumn prop="number" label="№" sortable />
-                <ElTableColumn prop="date" label="Дата"/>
-                <ElTableColumn prop="name" label="Имя" />
-                <ElTableColumn fixed="right" align="center" prop="admin">
+                <ElTableColumn prop="number" :label="$t('components.membersManagement.№')" sortable />
+                <ElTableColumn prop="admin" :label="$t('components.membersManagement.admin')">
+                    <template #default="scope">
+                        <div v-if="scope.row.admin">
+                            <i class="bi bi-check-lg"></i>
+                        </div>
+                    </template>
+                </ElTableColumn>
+                <ElTableColumn prop="name" :label="$t('components.membersManagement.name')" />
+                <ElTableColumn v-if="isAdmin" fixed="right" align="center" prop="admin">
                     <template #default="scope">
                         <div class="btn-group">
                             <button
-                                v-if="scope.row.admin == 'True'"
+                                v-if="!scope.row.admin && isAdmin"
                                 class="btn btn-light"
                                 @click="handleDelete(scope.row)"
                             >
-                                Сделать администратором
+                                {{ $t('components.membersManagement.makeAdmin') }}
                             </button>
                             <button
                                 class="btn btn-danger"
@@ -33,38 +48,43 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onBeforeMount, defineProps, defineEmits } from 'vue'
 import { ElTable, ElTableColumn } from 'element-plus';
+import { useStore } from 'vuex';
+import { useI18n } from 'vue-i18n';
 
+const $t = useI18n().t
+const store = useStore()
+const tableData = ref()
 
-const tableData = ref([
-  {
-    number: 1,
-    date: '2016-05-03',
-    name: 'Том',
-    address: 'ул. Грув, 189, Лос-',
-    admin: 'True'
-  },
-  {
-    number: 2,
-    date: '2016-05-04',
-    name: 'Том',
-    address: 'ул. Грув, 189, Лос-Анджелес',
-  },
-  {
-    number: 3,
-    date: '2016-05-05',
-    name: 'Том',
-    address: 'ул. Грув, 189, Лос-Анджелес',
-    admin: 'True'
-  },
-  {
-    number: 4,
-    date: '2016-05-06',
-    name: 'Том',
-    address: 'ул. Грув, 189, Лос-Анджелес',
-  }
+// eslint-disable-next-line
+const props = defineProps({
+    groupName: {
+        type: String,
+        required: true
+    },
+    isAdmin: {
+        type: Boolean,
+        required: true
+    }
+})
+
+const emit = defineEmits([
+    'cancel'
 ])
+
+onBeforeMount(async () => {
+    try {
+        await store.dispatch('getMembers', {
+            groupID: 43,
+        })
+        tableData.value = store.getters.members
+    } catch (error) {
+        console.error('Ошибка:', error)
+    }
+    console.log(props.groupName)
+})
+
 </script>
 
 <style lang="css" scoped>
