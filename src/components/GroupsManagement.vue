@@ -16,7 +16,11 @@
                                         class="form-control"
                                         v-model="groupToCreate"
                                         :placeholder="$t('components.groupsManagement.newGroup.create.placeholder')" />
-                                    <button class="btn btn-primary" @click="createGroup(groupToCreate)">
+                                    <button
+                                        class="btn btn-primary"
+                                        :disabled="groupToCreate == undefined || groupToCreate == ''"
+                                        @click="createGroup(groupToCreate)"
+                                    >
                                         <i class="bi bi-forward"></i>
                                     </button>
                                 </div>
@@ -28,7 +32,11 @@
                                         class="form-control"
                                         v-model="groupToJoin"
                                         :placeholder="$t('components.groupsManagement.newGroup.create.placeholder')" />
-                                    <button class="btn btn-primary" @click="joinGroup(groupToJoin)">
+                                    <button
+                                        class="btn btn-primary"
+                                        :disabled="groupToJoin == undefined || groupToJoin == ''"
+                                        @click="joinGroup(groupToJoin)"
+                                    >
                                         <i class="bi bi-forward"></i>
                                     </button>
                                 </div>
@@ -190,12 +198,22 @@
                 />
             </div>
         </div>
-        
+        <div class="toast-container position-fixed top-0 end-0 p-3">
+            <BToast
+                v-model="isToastActive"
+                :title="status == 'success' ? 'Успешно' : 'Ошибка'"
+                :variant="status"
+                solid
+            >
+                {{ message }}
+            </BToast>
+        </div>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { BToast } from 'bootstrap-vue-next';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import PageHeader from './PageHeader.vue';
@@ -203,11 +221,14 @@ import MembersManagement from './MembersManagement.vue';
 
 const someGroupsAdmin = ref(true)
 const someGroupsUser = ref(true)
+const isToastActive = ref(false)
 const $t = useI18n().t
 const store = useStore()
 const isUserManagementOpened = ref(false)
-const groupToCreate = ref()
-const groupToJoin = ref()
+const groupToCreate = ref('')
+const groupToJoin = ref('')
+const status = ref()
+const message = ref()
 const membersOfGroupToWatchData = ref({
     groupName: '',
     isAdmin: '',
@@ -273,25 +294,45 @@ function leaveGroup(id) {
 }
 
 async function createGroup(title) {
+    status.value = ''
+    message.value = ''
     try {
-        console.log(title)
         await store.dispatch('createGroup', title)
+        groupToCreate.value = ''
+        status.value = store.getters['getStatus']
+        message.value = store.getters['getMessage']
     } catch(error) {
-        // Не удалось покинуть группу
+        // Не удалось создать группу
+    } finally {
+        changeToastVisible()
     }
 }
 
-function joinGroup(id) {
+async function joinGroup(id) {
+    status.value = ''
+    message.value = ''
     try {
-        store.dispatch('joinGroup', id).then(() => {
-            if (store.getters['getCanLeaveGroup']) {
-                // Покинуть группу
-            } else {
-                // Не покидать группу
-            }
-        })
+        await store.dispatch('joinGroup', id)
+        groupToJoin.value = ''
+        status.value = store.getters['getStatus']
+        message.value = store.getters['getMessage']
     } catch(error) {
-        // Не удалось покинуть группу
+        // Не удалось присоединиться к группе
+    } finally {
+        changeToastVisible()
+    }
+}
+
+function changeToastVisible() {
+    if (status.value != undefined && message.value != undefined) {
+        isToastActive.value = true
+        setTimeout(() => {
+            isToastActive.value = false
+        }, 3000)
+    }
+    if (!isToastActive.value) {
+        status.value = ''
+        message.value = ''
     }
 }
 

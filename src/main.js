@@ -4,7 +4,7 @@ import router from './router/routes.js'
 import store from './store'
 import i18n from './locales/i18n';
 import ElementPlus from 'element-plus';
-import {createBootstrap} from 'bootstrap-vue-next'
+import { createBootstrap } from 'bootstrap-vue-next'
 import { useVuelidate } from '@vuelidate/core';
 
 import App from './App.vue'
