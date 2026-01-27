@@ -243,6 +243,12 @@ async function getGroupsData() {
             userGroupsData.value = store.getters.getUserGroupsData
             adminGroupsData.value = store.getters.getAdminGroupsData
         })
+        userGroupsData.value.forEach((group, index) => {
+            group.number = index + 1
+        })
+        adminGroupsData.value.forEach((group, index) => {
+            group.number = index + 1
+        })
     } catch (error) {
         console.error('Ошибка:', error)
     }
