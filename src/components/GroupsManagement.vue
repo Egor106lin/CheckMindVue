@@ -67,7 +67,7 @@
                                 <h5>{{ $t('components.groupsManagement.columns.actions') }}</h5>
                             </div>
                         </div>
-                        <div v-for="group in adminGroupsData" :key="group">
+                        <div v-for="(group, index) in adminGroupsData" :key="group.ID || index">
                             <div
                                 class="row"
                                 :class="isUserManagementOpened ? 'fs-6' : 'fs-5'"
@@ -81,7 +81,7 @@
                                 <div class="col-2 table-element">
                                     <div class="row">
                                         <div class="col-6">
-                                            <p>{{ group.group_size }}</p>
+                                            <p>{{ group.size }}</p>
                                         </div>
                                         <div class="col-md-auto pt-0 pb-0">
                                             <button class="btn btn-secondary-sm pt-0 pb-0" @click="openMembersManager(group, true)">
@@ -94,7 +94,7 @@
                                     <p>{{ group.name }}</p>
                                 </div>
                                 <div class="col-2 table-element">
-                                    <p>{{ group.ID }}</p>
+                                    <p>{{ group.id }}</p>
                                 </div>
                                 <div class="col-2 table-element">
                                     <div class="row flex-row-rewerse">
@@ -105,7 +105,7 @@
                                             <button class="btn btn-danger" @click="leaveGroup(group.ID)">
                                                 <i class="bi bi-box-arrow-right"></i>
                                             </button>
-                                            <button class="btn btn-danger" @click="deleteGroup(group.ID)">
+                                            <button class="btn btn-danger" @click="deleteGroup(group.ID); console.log(group.id)">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </div>
@@ -138,7 +138,7 @@
                                 <h5>{{ $t('components.groupsManagement.columns.actions') }}</h5>
                             </div>
                         </div>
-                        <div v-for="group in userGroupsData" :key="group">
+                        <div v-for="group in userGroupsData" :key="group.id">
                             <div 
                                 class="row row-table"
                                 :class="isUserManagementOpened ? 'fs-6' : 'fs-5'"
@@ -152,7 +152,7 @@
                                 <div class="col-2 table-element">
                                     <div class="row">
                                         <div class="col-6">
-                                            <p>{{ group.group_size }}</p>
+                                            <p>{{ group.size }}</p>
                                         </div>
                                         <div class="col-md-auto pt-0 pb-0">
                                             <button
@@ -219,8 +219,8 @@ import { useStore } from 'vuex';
 import PageHeader from './PageHeader.vue';
 import MembersManagement from './MembersManagement.vue';
 
-const someGroupsAdmin = ref(true)
-const someGroupsUser = ref(true)
+const someGroupsAdmin = ref(false)
+const someGroupsUser = ref(false)
 const isToastActive = ref(false)
 const $t = useI18n().t
 const store = useStore()
@@ -234,17 +234,27 @@ const membersOfGroupToWatchData = ref({
     isAdmin: '',
 })
 
-const userGroupsData = ref()
-const adminGroupsData = ref()
+const userGroupsData = ref([])
+const adminGroupsData = ref([])
 
-function getGroupsData() {
+async function getGroupsData() {
     try {
-        store.dispatch('getGroupsData').then(() => {
-            userGroupsData.value = store.getters['getGroupsData']
-            adminGroupsData.value = store.getters['getGroupsData']
+        await store.dispatch('getGroupsData').then(() => {
+            userGroupsData.value = store.getters.getUserGroupsData
+            adminGroupsData.value = store.getters.getAdminGroupsData
         })
     } catch (error) {
         console.error('Ошибка:', error)
+    }
+    if (adminGroupsData.value.length == 0) {
+        someGroupsAdmin.value = false
+    } else {
+        someGroupsAdmin.value = true
+    }
+    if (userGroupsData.value.length == 0) {
+        someGroupsUser.value = false
+    } else {
+        someGroupsUser.value = true
     }
 }
 
@@ -253,6 +263,7 @@ onMounted(() => {
 })
 
 function openMembersManager(groupData, isAdmin) {
+    console.log("group data:", groupData)
     isUserManagementOpened.value = true
     if (isUserManagementOpened.value) {
         membersOfGroupToWatchData.value.groupName = groupData.name
@@ -305,6 +316,7 @@ async function createGroup(title) {
         // Не удалось создать группу
     } finally {
         changeToastVisible()
+        getGroupsData()
     }
 }
 

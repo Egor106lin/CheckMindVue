@@ -2,18 +2,23 @@ import api from '@/store/api.js'
 
 const GroupsManagementStore = {
     state: {
-        groupsData: null,
+        adminGroupsData: null,
+        userGroupsData: null,
         status: null,
         message: null
     },
     getters: {
-        getGroupsData: state => state.groupsData,
+        getAdminGroupsData: state => state.adminGroupsData,
+        getUserGroupsData: state => state.userGroupsData,
         getStatus: state => state.status,
         getMessage: state => state.message
     },
     mutations: {
-        setGroupsData(state, data) {
-            state.groupsData = data
+        setAdminGroupsData(state, data) {
+            state.adminGroupsData = data
+        },
+        setUserGroupsData(state, data) {
+            state.userGroupsData = data
         },
         setStatus(state, status) {
             state.status = status
@@ -26,8 +31,9 @@ const GroupsManagementStore = {
         async getGroupsData({ commit }) {
             try {
                 const response = await api.get('/api/groups/get_list')
-                commit('setGroupsData', JSON.parse(response.data.data))
-                return response.data
+                commit('setAdminGroupsData', response.data.adminGroupsData)
+                commit('setUserGroupsData', response.data.userGroupsData)
+                console.log(response.data)
             } catch (error) {
                 console.log(error)
             }
