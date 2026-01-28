@@ -33,7 +33,6 @@ const GroupsManagementStore = {
                 const response = await api.get('/api/groups/get_list')
                 commit('setAdminGroupsData', response.data.adminGroupsData)
                 commit('setUserGroupsData', response.data.userGroupsData)
-                console.log(response.data)
             } catch (error) {
                 console.log(error)
             }

@@ -13,7 +13,7 @@
         </div>
         <div class="row mb-4 zone" v-for="group in groups" :key="group">
             <div class="row mb-2 mt-2">
-                <h4 class="col ml-5">{{ group.group_name }} ({{ group.role }})</h4>
+                <h4 class="col ml-5">{{ group.name }} ({{ group.role }})</h4>
                 <div
                     class="col-md-auto d-flex justify-content-end"
                 >
@@ -38,7 +38,7 @@
             <div class="col-4 mb-2" v-for="test in group.tests.slice(group.indexForFirstTest, group.indexForLastTest)" :key="test">
                 <div class="card card-body">
                     <h5 class="card-title">{{ test.test_name }}</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">{{ test.questions_quantity }}</h6>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">{{ test.questions_quantity }} вопроса</h6>
                     <p v-if="test.test_description != ''" class="card-text">{{ test.test_description}}</p>
                     <p v-else class="card-text">Нет описания</p>
                     <div class="row flex-row-rewerse">
@@ -69,151 +69,28 @@
 <script setup>
 //import { useI18n } from 'vue-i18n';
 import router from '@/router/routes'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import PageHeader from './PageHeader.vue';
+import { useStore } from 'vuex';
 
+
+const store = useStore()
 //const $t = useI18n().t
+const groups = ref()
 
-const groups = ref(
-    [
-        {
-            group_name: 'Group 1',
-            role: 'Administrator',
-            tests: [
-                {
-                    test_name: 'Test 1',
-                    test_description: 'Description 1',
-                    questions_quantity: 10,
-                    points: 30
-                },
-                {
-                    test_name: 'Test 2',
-                    test_description: 'Description 2',
-                    questions_quantity: 7,
-                    points: 18
-                },
-                {
-                    test_name: 'Test 3',
-                    test_description: 'Description 3',
-                    questions_quantity: 12,
-                    points: 25
-                },
-                {
-                    test_name: 'Test 4',
-                    test_description: 'Description 4',
-                    questions_quantity: 4,
-                    points: 15
-                },
-                {
-                    test_name: 'Test 5',
-                    test_description: 'Description 5',
-                    questions_quantity: 9,
-                    points: 22
-                },
-                {
-                    test_name: 'Test 6',
-                    test_description: 'Description 6',
-                    questions_quantity: 15,
-                    points: 29
-                },
-                {
-                    test_name: 'Test 7',
-                    test_description: 'Description 7',
-                    questions_quantity: 5,
-                    points: 12
-                },
-                {
-                    test_name: 'Test 8',
-                    test_description: 'Description 8',
-                    questions_quantity: 11,
-                    points: 27
-                },
-                {
-                    test_name: 'Test 9',
-                    test_description: 'Description 9',
-                    questions_quantity: 3,
-                    points: 10
-                },
-                {
-                    test_name: 'Test 10',
-                    test_description: 'Description 10',
-                    questions_quantity: 14,
-                    points: 31
-                }
-            ],
-            indexForFirstTest: 0,
-            indexForLastTest: 3
-        },
-        {
-            group_name: 'Group 2',
-            role: 'User',
-            tests: [
-                {
-                    test_name: 'Test 1',
-                    test_description: 'Description 1',
-                    questions_quantity: 10,
-                    points: 30
-                },
-                {
-                    test_name: 'Test 2',
-                    test_description: 'Description 2',
-                    questions_quantity: 7,
-                    points: 18
-                },
-                {
-                    test_name: 'Test 3',
-                    test_description: 'Description 3',
-                    questions_quantity: 12,
-                    points: 25
-                },
-                {
-                    test_name: 'Test 4',
-                    test_description: 'Description 4',
-                    questions_quantity: 4,
-                    points: 15
-                },
-                {
-                    test_name: 'Test 5',
-                    test_description: 'Description 5',
-                    questions_quantity: 9,
-                    points: 22
-                },
-                {
-                    test_name: 'Test 6',
-                    test_description: 'Description 6',
-                    questions_quantity: 15,
-                    points: 29
-                },
-                {
-                    test_name: 'Test 7',
-                    test_description: 'Description 7',
-                    questions_quantity: 5,
-                    points: 12
-                },
-                {
-                    test_name: 'Test 8',
-                    test_description: 'Description 8',
-                    questions_quantity: 11,
-                    points: 27
-                },
-                {
-                    test_name: 'Test 9',
-                    test_description: 'Description 9',
-                    questions_quantity: 3,
-                    points: 10
-                },
-                {
-                    test_name: 'Test 10',
-                    test_description: 'Description 10',
-                    questions_quantity: 14,
-                    points: 31
-                }
-            ],
-            indexForFirstTest: 0,
-            indexForLastTest: 3
-        }
-    ]
-)
+async function getGroupsData() {
+    try {
+        await store.dispatch('getGroupsWithTests').then(() => {
+            groups.value = store.getters.getGroupsWithTests
+        })
+    } catch (error) {
+        console.error('Ошибка:', error)
+    }
+}
+
+onMounted(() => {
+    getGroupsData()
+})
 
 function takeTheTest() {
     router.push('/testing/123456789/Тестдляотладки')
