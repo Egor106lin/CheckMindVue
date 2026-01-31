@@ -8,10 +8,18 @@
             "profile": "Profile"
         },
         "mainPage": {
-            "headerInGroup": "Tests suggested to you by the group administrator",
-            "startTest": "Take the test",
-            "headerNotInGroup": "Join the group in the profile tab and start taking tests!",
-            "noTests": "You do not have any tests to take"
+            "checkMind": "CheckMind",
+            "admin": "(Admin)",
+            "user": "(User)",
+            "testsQuantity": "Tests quantity:",
+            "noTests": "No tests have been created for this group",
+            "test": {
+                "questions": "Questions:",
+                "noDescription": "No description",
+                "edit": "Edit",
+                "take": "Take the test",
+                "create": "Create test"
+            }
         },
         "groupsManagement": {
             "newGroup": {

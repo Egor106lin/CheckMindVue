@@ -4,17 +4,18 @@
         <div class="row mb-4 zone">
             <div class="col">
                 <div class="card card-body mb-2">
-                    <h2 class="card-title">CheckMind</h2>
+                    <h2 class="card-title">{{ $t('components.mainPage.checkMind') }}</h2>
                     <div>
                         <p>Инфа о проекте</p>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row mb-4 zone" v-for="group in groups" :key="group">
-            <div class="row mb-2 mt-2">
-                <h4 class="col ml-5">{{ group.name }} ({{ group.role }})</h4>
+        <div class="card card-nf card-body row mb-4 zone" v-for="group in groups" :key="group">
+            <div class="row mt-2">
+                <h4 class="card-title col ml-5">{{ group.name }} ({{ group.role }})</h4>
                 <div
+                    v-if="group.tests.length > 3"
                     class="col-md-auto d-flex justify-content-end"
                 >
                     <div class="btn-group">
@@ -35,31 +36,51 @@
                     </div>
                 </div>
             </div>
-            <div class="col-4 mb-2" v-for="test in group.tests.slice(group.indexForFirstTest, group.indexForLastTest)" :key="test">
-                <div class="card card-body">
-                    <h5 class="card-title">{{ test.test_name }}</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">{{ test.questions_quantity }} вопроса</h6>
-                    <p v-if="test.test_description != ''" class="card-text">{{ test.test_description}}</p>
-                    <p v-else class="card-text">Нет описания</p>
-                    <div class="row flex-row-rewerse">
-                        <div class="col-md-auto">
-                            <i class="bi bi-trophy"></i>
+            <div class="row mb-2">
+                <h6 v-if="group.tests.length > 0" class="col card-subtitle text-body-secondary">{{ $t('components.mainPage.testsQuantity') }} {{ group.tests.length }}</h6>
+                <h6 v-else class="col card-subtitle text-body-secondary">{{ $t('components.mainPage.noTests') }}</h6>
+            </div>
+            <div v-if="group.tests.length > 0" class="row">
+                <div
+                    class="col-4 mb-2"
+                    v-for="test in group.tests.slice(group.indexForFirstTest, group.indexForLastTest)"
+                    :key="test"
+                >
+                    <div class="card card-body">
+                        <h5 class="card-title">{{ test.test_name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">{{ $t('components.mainPage.test.questions') }} {{ test.questions_quantity }}</h6>
+                        <p v-if="test.test_description != ''" class="card-text">{{ test.test_description}}</p>
+                        <p v-else class="card-text">{{ $t('components.mainPage.test.noDescription') }}</p>
+                        <div class="row flex-row-rewerse">
+                            <div class="col-md-auto">
+                                <i class="bi bi-trophy"></i>
+                            </div>
+                            <div class="col-md-auto">
+                                <p>{{ test.points }}</p>
+                            </div>
                         </div>
-                        <div class="col-md-auto">
-                            <p>{{ test.points }}</p>
+                        <div class="btn-group w-100">
+                            <div class="btn btn-primary" @click="takeTheTest()">
+                                {{ $t('components.mainPage.test.edit') }}
+                            </div>
+                            <div class="btn btn-secondary">
+                                <i class="bi bi-archive"></i>
+                            </div>
+                            <div class="btn btn-danger">
+                                <i class="bi bi-trash"></i>
+                            </div>
                         </div>
                     </div>
-                    <div class="btn-group w-100">
-                        <div class="btn btn-primary" @click="takeTheTest()">
-                            Редактировать
-                        </div>
-                        <div class="btn btn-secondary">
-                            <i class="bi bi-archive"></i>
-                        </div>
-                        <div class="btn btn-danger">
-                            <i class="bi bi-trash"></i>
-                        </div>
-                    </div>
+                </div>
+            </div>
+            <div v-else class="row mt-2 mb-2">
+                <div class="col">
+                    <button
+                        class="btn btn-light"
+                        @click="router.push('/create_tests')"
+                    >
+                        {{ $t('components.mainPage.test.create') }}
+                    </button>
                 </div>
             </div>
         </div>
@@ -67,7 +88,7 @@
 </template>
 
 <script setup>
-//import { useI18n } from 'vue-i18n';
+import { useI18n } from 'vue-i18n';
 import router from '@/router/routes'
 import { ref, onMounted } from 'vue'
 import PageHeader from './PageHeader.vue';
@@ -75,7 +96,7 @@ import { useStore } from 'vuex';
 
 
 const store = useStore()
-//const $t = useI18n().t
+const $t = useI18n().t
 const groups = ref()
 
 async function getGroupsData() {
@@ -138,10 +159,19 @@ function isBtnShowPreviousTestsDisabled(indexForFirstTest, indexForLastTest) {
     border: none;
 }
 
+.btn-light {
+    border-radius: 15px;
+    border: none;
+}
+
 .zone {
     border-radius: 20px;
     box-shadow: 10px 5px 5px #d1d1d1;
 }
 
+.card-nf {
+    border: none;
+    border-radius: 20px;
+}
 </style>
 
