@@ -31,7 +31,7 @@
                                     <input
                                         class="form-control"
                                         v-model="groupToJoin"
-                                        :placeholder="$t('components.groupsManagement.newGroup.create.placeholder')" />
+                                        :placeholder="$t('components.groupsManagement.newGroup.join.placeholder')" />
                                     <button
                                         class="btn btn-primary"
                                         :disabled="groupToJoin == undefined || groupToJoin == ''"
