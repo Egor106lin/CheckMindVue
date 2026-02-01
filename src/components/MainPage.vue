@@ -13,7 +13,8 @@
         </div>
         <div class="card card-nf card-body row mb-4 zone" v-for="group in groups" :key="group">
             <div class="row mt-2">
-                <h4 class="card-title col ml-5">{{ group.name }} ({{ group.role }})</h4>
+                <h4 v-if="group.role == 'Admin'" class="card-title col ml-5">{{ group.name }} {{ $t('components.mainPage.admin') }}</h4>
+                <h4 v-else-if="group.role == 'User'" class="card-title col ml-5">{{ group.name }} {{ $t('components.mainPage.user') }}</h4>
                 <div
                     v-if="group.tests.length > 3"
                     class="col-md-auto d-flex justify-content-end"
@@ -59,7 +60,10 @@
                                 <p>{{ test.points }}</p>
                             </div>
                         </div>
-                        <div class="btn-group w-100">
+                        <div
+                            v-if="group.role == 'Admin'"
+                            class="btn-group w-100"
+                        >
                             <div class="btn btn-primary" @click="takeTheTest()">
                                 {{ $t('components.mainPage.test.edit') }}
                             </div>
@@ -68,6 +72,13 @@
                             </div>
                             <div class="btn btn-danger">
                                 <i class="bi bi-trash"></i>
+                            </div>
+                        </div>
+                        <div
+                            v-else-if="group.role == 'User'"
+                        >
+                            <div class="btn btn-primary w-100" @click="takeTheTest()">
+                                {{ $t('components.mainPage.test.take') }}
                             </div>
                         </div>
                     </div>
