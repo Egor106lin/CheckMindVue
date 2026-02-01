@@ -171,16 +171,13 @@
                                     <p>{{ group.name }}</p>
                                 </div>
                                 <div class="col-2 table-element">
-                                    <p>{{ group.ID }}</p>
+                                    <p>{{ group.id }}</p>
                                 </div>
                                 <div class="col-2 table-element">
                                     <div class="row flex-row-rewerse">
                                         <div class="btn-group">
-                                            <button class="btn btn-primary" @click="leaveGroup(group.ID)">
+                                            <button class="btn btn-primary" @click="leaveGroup(group.id)">
                                                 <i class="bi bi-link-45deg"></i>
-                                            </button>
-                                            <button class="btn btn-danger" @click="deleteGroup(group.ID)">
-                                                <i class="bi bi-box-arrow-right"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -200,6 +197,10 @@
                     @cancel="isUserManagementOpened = false"
                 />
             </div>
+            <QRCodeComponent
+                v-model="openQR"
+                :qrCodeUrl="qrCodeUrl"
+            />
         </div>
     </div>
 </template>
@@ -209,8 +210,10 @@ import { ref, onMounted } from 'vue';
 import { showSuccess, showError } from '@/utils/notifications'
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
+import QRCode from 'qrcode'
 import PageHeader from './PageHeader.vue';
 import MembersManagement from './MembersManagement.vue';
+import QRCodeComponent from './QRCode.vue';
 
 const someGroupsAdmin = ref(false)
 const someGroupsUser = ref(false)
@@ -218,6 +221,8 @@ const $t = useI18n().t
 const store = useStore()
 const isUserManagementOpened = ref(false)
 const inviteUrl = ref('')
+const qrCodeUrl = ref('')
+const openQR = ref(false)
 const groupToCreate = ref('')
 const groupToJoin = ref('')
 const status = ref()
@@ -275,13 +280,26 @@ function openMembersManager(groupData, isAdmin) {
     }
 }
 
+async function generateInviteQRCode(id) {
+    try {
+        await store.dispatch('getInviteUrl', id)
+        inviteUrl.value = store.getters['getInviteUrl']
+        QRCode.toDataURL(inviteUrl.value).then(generatedQrDataUrl => {
+            qrCodeUrl.value = generatedQrDataUrl
+        })
+        openQR.value = true
+    } catch (error) {
+        openQR.value = false
+        showError($t('toasts.error.unknownProblem'))
+    }
+}
+
 async function generateInviteLink(id) {
     try {
         await store.dispatch('getInviteUrl', id)
         inviteUrl.value = store.getters['getInviteUrl']
         copyToClipboard()
     } catch (error) {
-        console.log(error)
         showError($t('toasts.error.unknownProblem'))
     }
 }
