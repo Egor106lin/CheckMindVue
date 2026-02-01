@@ -4,12 +4,14 @@ const GroupsManagementStore = {
     state: {
         adminGroupsData: null,
         userGroupsData: null,
+        inviteUrl: null,
         status: null,
         message: null
     },
     getters: {
         getAdminGroupsData: state => state.adminGroupsData,
         getUserGroupsData: state => state.userGroupsData,
+        getInviteUrl: state => state.inviteUrl,
         getStatus: state => state.status,
         getMessage: state => state.message
     },
@@ -19,6 +21,9 @@ const GroupsManagementStore = {
         },
         setUserGroupsData(state, data) {
             state.userGroupsData = data
+        },
+        setInviteUrl(state, inviteUrl) {
+            state.inviteUrl = inviteUrl
         },
         setStatus(state, status) {
             state.status = status
@@ -35,6 +40,14 @@ const GroupsManagementStore = {
                 commit('setUserGroupsData', response.data.userGroupsData)
             } catch (error) {
                 console.log(error)
+            }
+        },
+        async getInviteUrl({ commit }, id) {
+            try {
+                const response = await api.get(`api/invite/generate/${id}`)
+                commit('setInviteUrl', response.data.invite_url)
+            } catch (error) {
+                commit('setInviteUrl', '')
             }
         },
         async deleteGroup({ commit }, id) {

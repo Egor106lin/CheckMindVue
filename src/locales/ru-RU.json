@@ -126,5 +126,13 @@
                 "btnCreateTests": "Создать тест!"
             }
         }
+    },
+    "toasts": {
+        "success": {
+            "linkCopied": "Ссылка скопированна в буфер обмена"
+        },
+        "error": {
+            "unknownProblem": "Что-то пошло не так"
+        }
     }
 }

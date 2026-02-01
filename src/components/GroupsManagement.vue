@@ -99,13 +99,16 @@
                                 <div class="col-2 table-element">
                                     <div class="row flex-row-rewerse">
                                         <div class="btn-group">
-                                            <button class="btn btn-primary" @click="leaveGroup(group.ID)">
+                                            <button class="btn btn-primary" @click="generateInviteLink(group.id)">
                                                 <i class="bi bi-link-45deg"></i>
                                             </button>
-                                            <button class="btn btn-danger" @click="leaveGroup(group.ID)">
+                                            <button class="btn btn-primary" @click="generateInviteQRCode(group.id)">
+                                                <i class="bi bi-qr-code"></i>
+                                            </button>
+                                            <button class="btn btn-danger" @click="leaveGroup(group.id)">
                                                 <i class="bi bi-box-arrow-right"></i>
                                             </button>
-                                            <button class="btn btn-danger" @click="deleteGroup(group.ID); console.log(group.id)">
+                                            <button class="btn btn-danger" @click="deleteGroup(group.id)">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </div>
@@ -198,22 +201,12 @@
                 />
             </div>
         </div>
-        <div class="toast-container position-fixed top-0 end-0 p-3">
-            <BToast
-                v-model="isToastActive"
-                :title="status == 'success' ? 'Успешно' : 'Ошибка'"
-                :variant="status"
-                solid
-            >
-                {{ message }}
-            </BToast>
-        </div>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { BToast } from 'bootstrap-vue-next';
+import { showSuccess, showError } from '@/utils/notifications'
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import PageHeader from './PageHeader.vue';
@@ -221,10 +214,10 @@ import MembersManagement from './MembersManagement.vue';
 
 const someGroupsAdmin = ref(false)
 const someGroupsUser = ref(false)
-const isToastActive = ref(false)
 const $t = useI18n().t
 const store = useStore()
 const isUserManagementOpened = ref(false)
+const inviteUrl = ref('')
 const groupToCreate = ref('')
 const groupToJoin = ref('')
 const status = ref()
@@ -282,6 +275,22 @@ function openMembersManager(groupData, isAdmin) {
     }
 }
 
+async function generateInviteLink(id) {
+    try {
+        await store.dispatch('getInviteUrl', id)
+        inviteUrl.value = store.getters['getInviteUrl']
+        copyToClipboard()
+    } catch (error) {
+        console.log(error)
+        showError($t('toasts.error.unknownProblem'))
+    }
+}
+
+function copyToClipboard() {
+    navigator.clipboard.writeText(inviteUrl.value)
+    showSuccess($t('toasts.success.linkCopied'))
+}
+
 function deleteGroup(id) {
     try {
         store.dispatch('deleteGroup', id).then(() => {
@@ -318,10 +327,10 @@ async function createGroup(title) {
         groupToCreate.value = ''
         status.value = store.getters['getStatus']
         message.value = store.getters['getMessage']
+        showSuccess(message.value)
     } catch(error) {
-        // Не удалось создать группу
+        showError(message.value)
     } finally {
-        changeToastVisible()
         getGroupsData()
     }
 }
@@ -336,21 +345,6 @@ async function joinGroup(id) {
         message.value = store.getters['getMessage']
     } catch(error) {
         // Не удалось присоединиться к группе
-    } finally {
-        changeToastVisible()
-    }
-}
-
-function changeToastVisible() {
-    if (status.value != undefined && message.value != undefined) {
-        isToastActive.value = true
-        setTimeout(() => {
-            isToastActive.value = false
-        }, 3000)
-    }
-    if (!isToastActive.value) {
-        status.value = ''
-        message.value = ''
     }
 }
 

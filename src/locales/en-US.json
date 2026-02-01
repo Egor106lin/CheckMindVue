@@ -126,5 +126,13 @@
                 "btnCreateTests": "Create test!"
             }
         }
+    },
+    "toasts": {
+        "success": {
+            "linkCopied": "The link has been copied to the clipboard"
+        },
+        "error": {
+            "unknownProblem": "Something went wrong"
+        }
     }
 }
