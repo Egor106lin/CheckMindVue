@@ -54,6 +54,17 @@
             "admin": "Administrator",
             "name": "Name"
         },
+        "acceptInvite": {
+            "title": "Group invitation",
+            "youWereInvited": "You have been added to the group",
+            "invitedBy": "You were invited by the group administrator",
+            "email": "Email:",
+            "home": "Go to Home"
+        },
+        "qrCode": {
+            "title": "QR code for invitation",
+            "scanForQuickAccess": "Scan for quick access"
+        },
         "createTestsForm": {
             "alert": {
                 "alertNotAdmin": "Tests can be created by administrator only :("

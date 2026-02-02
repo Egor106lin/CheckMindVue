@@ -3,14 +3,14 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">QR-код для приглашения</h5>
+                    <h5 class="modal-title">{{ $t('components.qrCode.title') }}</h5>
                     <button type="button" class="btn-close" aria-label="Close" @click="cancel()"></button>
                 </div>
                 <div class="modal-body">
                     <img :src="qrCodeUrl" alt="QR Code" class="qr-image">
                 </div>
                 <div class="modal-footer">
-                    <p><small>Отсканируйте для быстрого перехода</small></p>
+                    <p><small>{{ $t('components.qrCode.scanForQuickAccess') }}</small></p>
                 </div>
             </div>
         </div>
@@ -19,7 +19,9 @@
 
 <script setup>
 import { defineProps, defineEmits } from 'vue';
+import { useI18n } from 'vue-i18n';
 
+const $t = useI18n().t
 const props = defineProps({
     modelValue: {
         type: Boolean,

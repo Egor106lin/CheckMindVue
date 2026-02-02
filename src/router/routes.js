@@ -6,6 +6,7 @@ import MainPage from '@/components/MainPage.vue'
 import GroupsManagement from '@/components/GroupsManagement.vue'
 import CreatTestsForm from '@/components/CreatTestsForm.vue'
 import TestingInProgress from '@/components/TestingInProgress.vue'
+import AcceptInvite from '@/components/AcceptInvite.vue'
 
 const routes = [
     {
@@ -19,6 +20,10 @@ const routes = [
     {
         path: '/groups',
         component: GroupsManagement
+    },
+    {
+        path: '/join',
+        component: AcceptInvite
     },
     {
         path: '/profile',

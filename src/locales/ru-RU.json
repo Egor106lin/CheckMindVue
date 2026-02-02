@@ -54,6 +54,17 @@
             "admin": "Администратор",
             "name": "Имя"
         },
+        "acceptInvite": {
+            "title": "Приглашение в группу",
+            "youWereInvited": "Вы были добавлены в группу",
+            "invitedBy": "Вас пригласил администратор группы",
+            "email": "Email:",
+            "home": "На главную"
+        },
+        "qrCode": {
+            "title": "QR-код для приглашения",
+            "scanForQuickAccess": "Отсканируйте для быстрого перехода"
+        },
         "createTestsForm": {
             "alert": {
                 "alertNotAdmin": "Создавать тесты может только администратор :("

@@ -84,7 +84,7 @@
                     </div>
                 </div>
             </div>
-            <div v-else class="row mt-2 mb-2">
+            <div v-else-if="group.tests.length == 0 && group.role == 'Admin'" class="row mt-2 mb-2">
                 <div class="col">
                     <button
                         class="btn btn-light"
