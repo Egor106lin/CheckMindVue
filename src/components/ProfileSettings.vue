@@ -127,7 +127,11 @@ const changeLanguage = () => {
 }
 
 function logout() {
+    const locale  = localStorage.getItem('locale')
+    store.dispatch('leave')
     router.push('/login')
+    localStorage.clear()
+    localStorage.setItem('locale', locale)
 }
 
 function deleteAccount() {

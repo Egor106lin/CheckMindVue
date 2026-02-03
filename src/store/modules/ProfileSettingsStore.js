@@ -18,7 +18,14 @@ const ProfileSettingsStore = {
                 const response = await api.get('/api/profile/user_data')
                 commit('setUserData', response.data)
             } catch(error) {
-                console.error('error in store:', error)
+                console.log('ошибка')
+            }
+        },
+        async leave() {
+            try {
+                await api.get('/api/profile/leave')
+            } catch(error) {
+                console.log('ошибка')
             }
         }
     }
