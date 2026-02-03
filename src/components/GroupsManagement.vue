@@ -176,8 +176,8 @@
                                 <div class="col-2 table-element">
                                     <div class="row flex-row-rewerse">
                                         <div class="btn-group">
-                                            <button class="btn btn-primary" @click="leaveGroup(group.id)">
-                                                <i class="bi bi-link-45deg"></i>
+                                            <button class="btn btn-danger" @click="leaveGroup(group.id)">
+                                                <i class="bi bi-box-arrow-right"></i>
                                             </button>
                                         </div>
                                     </div>
