@@ -64,7 +64,7 @@
                             v-if="group.role == 'Admin'"
                             class="btn-group w-100"
                         >
-                            <div class="btn btn-primary" @click="takeTheTest()">
+                            <div class="btn btn-primary" @click="takeTheTest(test.id)">
                                 {{ $t('components.mainPage.test.edit') }}
                             </div>
                             <div class="btn btn-secondary">
@@ -77,7 +77,7 @@
                         <div
                             v-else-if="group.role == 'User'"
                         >
-                            <div class="btn btn-primary w-100" @click="takeTheTest()">
+                            <div class="btn btn-primary w-100" @click="takeTheTest(test.id)">
                                 {{ $t('components.mainPage.test.take') }}
                             </div>
                         </div>
@@ -124,8 +124,13 @@ onMounted(() => {
     getGroupsData()
 })
 
-function takeTheTest() {
-    router.push('/testing/123456789/Тестдляотладки')
+function takeTheTest(testID) {
+    router.push({
+        path: '/testing',
+        query: { 
+            test_id: testID
+        }
+    })
 }
 
 function isBtnShowNextTestsDisabled(testsList, indexForFirstTest, indexForLastTest) {

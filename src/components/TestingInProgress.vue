@@ -110,7 +110,6 @@ const answers = ref()
 const result = ref()
 
 const groupIDFromUrl = router.currentRoute.value.params.groupID
-const testNameFromUrl = router.currentRoute.value.params.testName
 
 const testInProgress = ref(true)
 const questionNow = ref(1)
@@ -145,8 +144,7 @@ onBeforeMount(() => {
 async function getTestAndAnswers() {
     try {
         await store.dispatch('getTest', {
-            groupID: groupIDFromUrl,
-            testName: testNameFromUrl
+            testID: groupIDFromUrl
         })
         test.value = store.getters.test
 

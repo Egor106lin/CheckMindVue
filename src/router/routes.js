@@ -34,7 +34,7 @@ const routes = [
         component: CreatTestsForm
     },
     {   
-        path: '/testing/:groupID/:testName',
+        path: '/testing',
         component: TestingInProgress
     }
 ]
