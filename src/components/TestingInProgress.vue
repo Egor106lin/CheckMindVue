@@ -109,7 +109,7 @@ const test = ref()
 const answers = ref()
 const result = ref()
 
-const groupIDFromUrl = router.currentRoute.value.params.groupID
+const groupIDFromUrl = router.currentRoute.value.query['test_id']
 
 const testInProgress = ref(true)
 const questionNow = ref(1)

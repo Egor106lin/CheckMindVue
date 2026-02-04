@@ -30,7 +30,7 @@ const TestingInProgress = {
                         test_id: payload.testID
                     },
                 })
-                const testJSON = JSON.parse(response.data.data)
+                const testJSON = response.data.data
                 console.log(testJSON)
                 commit('setTest', testJSON)
             } catch(error) {
