@@ -40,10 +40,11 @@ const TestingInProgress = {
         async checkAnswers({ commit }, payload) {
             try {
                 const response = await api.post('/api/tests/check_answers', {
-                    userAnswers: payload.answers
+                    user_answers: payload.answers,
+                    test_id: payload.testID
                 })
                 commit('setAnswers', payload.answers)
-                commit('setResult', JSON.parse(response.data.data))
+                commit('setResult', response.data)
             } catch (error) {
                 console.log(error)
             }

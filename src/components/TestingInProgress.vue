@@ -52,13 +52,13 @@
                             <h3>{{ test?.questionsAndOptions[questionNow - 1]?.question }}</h3>
                         </div>
                     </div>
-                    <div v-for="option in test?.questionsAndOptions[questionNow - 1]?.options" :key="option">
+                    <div v-for="(option, optionIndex) in test?.questionsAndOptions[questionNow - 1]?.options" :key="optionIndex">
                         <div class="row">
                             <div class="col-1">
                                 <input
                                     class="form-check-input large-checkbox"
                                     type="checkbox"
-                                    :value="option.title"
+                                    :value="optionIndex"
                                     v-model="answers[questionNow - 1].options"
                                 >
                             </div>
@@ -68,17 +68,19 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="!testInProgress" class="card card-body">
+                <div v-if="!testInProgress && testResult" class="card card-body">
                     <div class="row">
-                        <h3 class="card-title">Тест <b>"{{ result?.testName }}"</b> пройден!</h3>
+                        <h3 class="card-title">Тест <b>"{{ testResult.testName }}"</b> пройден!</h3>
                     </div>
                     <div class="row">
-                        <h5>Ваш результат: <b>{{ result?.result }} / {{ result?.questionsQuantity }}</b></h5>
+                        <h5>Ваш результат: <b>{{ testResult.userScore }} / {{ testResult.maxScore }}</b></h5>
                     </div>
-                    <ElTable :data="tableData" class="rounded-5 mt-3 el-text el-text--large">
+                    <ElTable :data="testResult.detailedResults" class="rounded-5 mt-3 el-text el-text--large">
                         <ElTableColumn prop="question" label="Вопрос"/>
-                        <ElTableColumn prop="right" label="Правильность ответа"/>
-                        <ElTableColumn prop="points" label="Баллы"/>
+                        <ElTableColumn prop="userAnswers" label="Выбранные ответы"/>
+                        <ElTableColumn prop="correctAnswers" label="Правильные ответы"/>
+                        <ElTableColumn prop="pointsEarned" label="Набранные баллы"/>
+                        <ElTableColumn prop="maxPoints" label="Максимум баллов"/>
                     </ElTable>
                     <div class="row mt-3">
                         <div class="col">
@@ -98,7 +100,6 @@ import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { onBeforeMount, ref } from 'vue';
 import router from '@/router/routes'
-
 import { ElTable, ElTableColumn } from 'element-plus';
 import PageHeader from './PageHeader.vue';
 
@@ -107,36 +108,19 @@ const store = useStore()
 
 const test = ref()
 const answers = ref()
-const result = ref()
+const testResult = ref(null)
 
 const groupIDFromUrl = router.currentRoute.value.query['test_id']
 
 const testInProgress = ref(true)
 const questionNow = ref(1)
-const tableData = ref([
-    {
-        question: "1",
-        right: true,
-        points: 1
-    },
-    {
-        question: "2",
-        right: false,
-        points: 0
-    },
-    {
-        question: "3",
-        right: true,
-        points: 1
-    }
-])
 
 onBeforeMount(() => {
     const questionNowLocalStorage = localStorage.getItem('questionNow')
     if (questionNowLocalStorage == null) {
         questionNow.value = 1
     } else {
-        questionNow.value = questionNowLocalStorage
+        questionNow.value = parseInt(questionNowLocalStorage)
     }
     getTestAndAnswers()
 })
@@ -164,7 +148,7 @@ async function getTestAndAnswers() {
 
 function changeQuestion(next = true) {
     localStorage.setItem('answers', JSON.stringify(answers.value))
-    localStorage.setItem('questionNow', questionNow.value)
+    localStorage.setItem('questionNow', questionNow.value.toString())
     if (next) {
         if (questionNow.value < test.value.questionsQuantity) {
             questionNow.value++
@@ -181,23 +165,28 @@ function changeQuestion(next = true) {
 }
 
 async function finishTest() {
-    try {
-        await store.dispatch('checkAnswers', { answers: answers.value }).then( () => {
-            result.value = store.getters.result
+    try {      
+        const answersForBackend = []
+        answers.value.forEach((answer, index) => {
+            const questionText = test.value.questionsAndOptions[index]?.question || `Вопрос ${index + 1}`
+            answersForBackend.push({
+                question: questionText,
+                answers: answer.options
+            })
         })
+        await store.dispatch('checkAnswers', { 
+            answers: answersForBackend, 
+            testID: test.value.testID 
+        })
+        
+        testResult.value = store.getters.result
+        testInProgress.value = false
+        localStorage.removeItem('answers')
+        localStorage.removeItem('questionNow')
     } catch (error) {
-        console.error('Ошибка:', error)
+        console.error('Ошибка при завершении теста:', error)
+        throw error
     }
-    testInProgress.value = false
-    answers.value.forEach((answer, index) => {
-        if (test.value.questionsAndOptions[index]?.question) {
-            answer.question = test.value.questionsAndOptions[index].question;
-        }
-    });
-    answers.value.unshift({ groupID: test.value.groupID })
-    answers.value.unshift({ testName: test.value.testName })
-    localStorage.removeItem('answers')
-    localStorage.removeItem('questionNow')
 }
 
 function btnFinishDisabled() {
