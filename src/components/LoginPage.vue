@@ -1,31 +1,33 @@
 <template>
-    <div class="container">
-        <div class="card mt-3">
-            <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col text-center">
-                        <h1>CheckMind</h1>
+    <div class="background">
+        <div class="container">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col text-center">
+                            <h1>CheckMind</h1>
+                        </div>
                     </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col text-center">
-                        <button class="btn btn-primary" @click="loginWithGoogle()">
-                            <h5>Зайти с Google</h5>
-                        </button>
+                    <div class="row mb-3">
+                        <div class="col text-center">
+                            <button class="btn btn-primary" @click="loginWithGoogle()">
+                                <h5>Зайти с Google</h5>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col text-center">
-                        <button class="btn btn-primary">
-                            <h5>Зайти с VK</h5>
-                        </button>
+                    <div class="row mb-3">
+                        <div class="col text-center">
+                            <button class="btn btn-primary">
+                                <h5>Зайти с VK</h5>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col text-center">
-                        <button class="btn btn-primary">
-                            <h5>Зайти с Яндекс</h5>
-                        </button>
+                    <div class="row mb-3">
+                        <div class="col text-center">
+                            <button class="btn btn-primary">
+                                <h5>Зайти с Яндекс</h5>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -54,8 +56,11 @@ async function loginWithGoogle() {
     border-radius: 20px;
 }
 
-.container {
+.background {
+    margin: 0;
     padding-top: 15%;
+    min-height: 100vh;
+    background-image: url('/src/assets/images/background_dark.svg') !important;
 }
 
 .btn-primary {

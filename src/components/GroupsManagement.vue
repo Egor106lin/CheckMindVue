@@ -25,22 +25,6 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="col">
-                                <h3 class="card-title">{{ $t('components.groupsManagement.newGroup.join.title') }}</h3>
-                                <div class="input-group mt-3">
-                                    <input
-                                        class="form-control"
-                                        v-model="groupToJoin"
-                                        :placeholder="$t('components.groupsManagement.newGroup.join.placeholder')" />
-                                    <button
-                                        class="btn btn-primary"
-                                        :disabled="groupToJoin == undefined || groupToJoin == ''"
-                                        @click="joinGroup(groupToJoin)"
-                                    >
-                                        <i class="bi bi-forward"></i>
-                                    </button>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -224,7 +208,6 @@ const inviteUrl = ref('')
 const qrCodeUrl = ref('')
 const openQR = ref(false)
 const groupToCreate = ref('')
-const groupToJoin = ref('')
 const status = ref()
 const message = ref()
 const membersOfGroupToWatchData = ref({
@@ -350,19 +333,6 @@ async function createGroup(title) {
         showError(message.value)
     } finally {
         getGroupsData()
-    }
-}
-
-async function joinGroup(id) {
-    status.value = ''
-    message.value = ''
-    try {
-        await store.dispatch('joinGroup', id)
-        groupToJoin.value = ''
-        status.value = store.getters['getStatus']
-        message.value = store.getters['getMessage']
-    } catch(error) {
-        // Не удалось присоединиться к группе
     }
 }
 
