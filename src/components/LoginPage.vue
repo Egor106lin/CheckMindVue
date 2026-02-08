@@ -5,7 +5,9 @@
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col text-center">
-                            <h1>CheckMind</h1>
+                            <div class="blue mx-auto">
+                                <h1>CheckMind</h1>
+                            </div>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -52,8 +54,9 @@ async function loginWithGoogle() {
 
 <style lang="css" scoped>
 .card {
-    border: 2px solid #3846D3;
-    border-radius: 20px;
+    border: 4px solid #3846D3;
+    border-radius: 35px;
+    box-shadow: 7px 5px 16px 1px #3846D3;
 }
 
 .background {
@@ -70,6 +73,14 @@ async function loginWithGoogle() {
 }
 
 h1 {
-    color: #3846D3;
+    color: #ffff;
+    user-select: none;
+}
+
+.blue {
+    background-color: #3846D3;
+    border-radius: 30px;
+    padding: 3px;
+    max-width: 70%;
 }
 </style>

@@ -1,28 +1,34 @@
 <template>
     <PageHeader />
-    <div class="container mt-3">
+    <div class="container mt-3 px-md-3 px-2">
         <div class="row mb-4 zone">
-            <div class="col">
+            <div class="col-12">
                 <div class="card card-body mb-2">
                     <h2 class="card-title">{{ $t('components.mainPage.checkMind') }}</h2>
                     <div>
-                        <p>Инфа о проекте</p>
+                        <p class="mb-0">Инфа о проекте</p>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card card-nf card-body row mb-4 zone" v-for="group in groups" :key="group">
-            <div class="row mt-2">
-                <h4 v-if="group.role == 'Admin'" class="card-title col ml-5">{{ group.name }} {{ $t('components.mainPage.admin') }}</h4>
-                <h4 v-else-if="group.role == 'User'" class="card-title col ml-5">{{ group.name }} {{ $t('components.mainPage.user') }}</h4>
+        <div class="card card-nf card-body mb-4 zone" v-for="group in groups" :key="group">
+            <div class="row mt-2 align-items-center">
+                <div class="col-12 col-md-8">
+                    <h4 v-if="group.role == 'Admin'" class="card-title mb-0">
+                        {{ group.name }} {{ $t('components.mainPage.admin') }}
+                    </h4>
+                    <h4 v-else-if="group.role == 'User'" class="card-title mb-0">
+                        {{ group.name }} {{ $t('components.mainPage.user') }}
+                    </h4>
+                </div>
                 <div
                     v-if="group.tests.length > 3"
-                    class="col-md-auto d-flex justify-content-end"
+                    class="col-12 col-md-4 mt-2 mt-md-0 d-flex justify-content-start justify-content-md-end"
                 >
-                    <div class="btn-group">
+                    <div class="btn-group btn-group-sm">
                         <button
                             class="btn btn-primary"
-                            :disabled="isBtnShowPreviousTestsDisabled(group.indexForFirstTest, group.indexForLastTest)"
+                            :disabled="isBtnShowPreviousTestsDisabled(group.indexForFirstTest)"
                             @click="group.indexForFirstTest -= 3; group.indexForLastTest -= 3"
                         >
                             <i class="bi bi-arrow-left"></i>
@@ -30,7 +36,7 @@
                         <button
                             class="btn btn-primary"
                             :disabled="isBtnShowNextTestsDisabled(group.tests, group.indexForFirstTest, group.indexForLastTest)"
-                            @click="group.indexForFirstTest += 3; group.indexForLastTest += 3; console.log(group.tests.slice(group.indexForFirstTest, group.indexForLastTest))"
+                            @click="group.indexForFirstTest += 3; group.indexForLastTest += 3"
                         >
                             <i class="bi bi-arrow-right"></i>
                         </button>
@@ -38,56 +44,65 @@
                 </div>
             </div>
             <div class="row mb-2">
-                <h6 v-if="group.tests.length > 0" class="col card-subtitle text-body-secondary">{{ $t('components.mainPage.testsQuantity') }} {{ group.tests.length }}</h6>
-                <h6 v-else class="col card-subtitle text-body-secondary">{{ $t('components.mainPage.noTests') }}</h6>
+                <div class="col-12">
+                    <h6 v-if="group.tests.length > 0" class="card-subtitle text-body-secondary">
+                        {{ $t('components.mainPage.testsQuantity') }} {{ group.tests.length }}
+                    </h6>
+                    <h6 v-else class="card-subtitle text-body-secondary">
+                        {{ $t('components.mainPage.noTests') }}
+                    </h6>
+                </div>
             </div>
-            <div v-if="group.tests.length > 0" class="row">
+            <div v-if="group.tests.length > 0" class="row g-2">
                 <div
-                    class="col-4 mb-2"
+                    class="col-12 col-sm-6 col-lg-4 mb-2"
                     v-for="test in group.tests.slice(group.indexForFirstTest, group.indexForLastTest)"
-                    :key="test"
+                    :key="test.id"
                 >
-                    <div class="card card-body">
+                    <div class="card card-test card-body h-100">
                         <h5 class="card-title">{{ test.test_name }}</h5>
-                        <h6 class="card-subtitle mb-2 text-body-secondary">{{ $t('components.mainPage.test.questions') }} {{ test.questions_quantity }}</h6>
-                        <p v-if="test.test_description != ''" class="card-text">{{ test.test_description}}</p>
-                        <p v-else class="card-text">{{ $t('components.mainPage.test.noDescription') }}</p>
-                        <div class="row flex-row-rewerse">
-                            <div class="col-md-auto">
-                                <i class="bi bi-trophy"></i>
-                            </div>
-                            <div class="col-md-auto">
-                                <p>{{ test.points }}</p>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">
+                            {{ $t('components.mainPage.test.questions') }} {{ test.questions_quantity }}
+                        </h6>
+                        <p v-if="test.test_description != ''" class="card-text mb-2 text-truncate-2">
+                            {{ test.test_description}}
+                        </p>
+                        <p v-else class="card-text mb-2 text-muted">
+                            {{ $t('components.mainPage.test.noDescription') }}
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-trophy me-1"></i>
+                                <span>{{ test.points }}</span>
                             </div>
                         </div>
-                        <div
-                            v-if="group.role == 'Admin'"
-                            class="btn-group w-100"
-                        >
-                            <div class="btn btn-primary" @click="takeTheTest(test.id)">
+                        
+                        <!-- Для админских тестов -->
+                        <div v-if="group.role == 'Admin'" class="d-flex gap-1">
+                            <button class="btn btn-primary flex-fill" @click="takeTheTest(test.id)">
                                 {{ $t('components.mainPage.test.edit') }}
-                            </div>
-                            <div class="btn btn-secondary">
+                            </button>
+                            <button class="btn btn-secondary" style="min-width: 44px">
                                 <i class="bi bi-archive"></i>
-                            </div>
-                            <div class="btn btn-danger">
+                            </button>
+                            <button class="btn btn-danger" style="min-width: 44px">
                                 <i class="bi bi-trash"></i>
-                            </div>
+                            </button>
                         </div>
-                        <div
-                            v-else-if="group.role == 'User'"
-                        >
-                            <div class="btn btn-primary w-100" @click="takeTheTest(test.id)">
+                        
+                        <!-- Для пользовательских тестов -->
+                        <div v-else-if="group.role == 'User'">
+                            <button class="btn btn-primary w-100" @click="takeTheTest(test.id)">
                                 {{ $t('components.mainPage.test.take') }}
-                            </div>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
             <div v-else-if="group.tests.length == 0 && group.role == 'Admin'" class="row mt-2 mb-2">
-                <div class="col">
+                <div class="col-12">
                     <button
-                        class="btn btn-light"
+                        class="btn btn-light w-100 w-md-auto"
                         @click="router.push('/create_tests')"
                     >
                         {{ $t('components.mainPage.test.create') }}
@@ -104,7 +119,6 @@ import router from '@/router/routes'
 import { ref, onMounted } from 'vue'
 import PageHeader from './PageHeader.vue';
 import { useStore } from 'vuex';
-
 
 const store = useStore()
 const $t = useI18n().t
@@ -134,21 +148,12 @@ function takeTheTest(testID) {
 }
 
 function isBtnShowNextTestsDisabled(testsList, indexForFirstTest, indexForLastTest) {
-    if (testsList.slice(indexForFirstTest + 3, indexForLastTest + 3).length != 0) {
-        return false
-    } else {
-        return true
-    }
+    return testsList.slice(indexForFirstTest + 3, indexForLastTest + 3).length === 0;
 }
 
-function isBtnShowPreviousTestsDisabled(indexForFirstTest, indexForLastTest) {
-    if (indexForFirstTest >= 3 || indexForLastTest >= 6) {
-        return false
-    } else {
-        return true
-    }
+function isBtnShowPreviousTestsDisabled(indexForFirstTest) {
+    return indexForFirstTest < 3;
 }
-
 </script>
 
 <style lang="css" scoped>
@@ -157,11 +162,22 @@ function isBtnShowPreviousTestsDisabled(indexForFirstTest, indexForLastTest) {
     border-radius: 20px;
 }
 
+.card-test:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+}
+
 .btn-primary {
     border-radius: 15px;
     border: 2px solid #3846D3;
     background-color: #ffffff;
     color: #3846D3;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #3846D3;
+    color: #ffffff;
 }
 
 .btn-danger {
@@ -189,5 +205,127 @@ function isBtnShowPreviousTestsDisabled(indexForFirstTest, indexForLastTest) {
     border: none;
     border-radius: 20px;
 }
-</style>
 
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Медиазапросы для мобильных */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    
+    .zone {
+        box-shadow: 5px 3px 3px #d1d1d1;
+    }
+    
+    .card {
+        border-radius: 15px;
+    }
+    
+    .btn-primary, .btn-secondary, .btn-danger, .btn-light {
+        min-height: 44px;
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    /* Кнопки в карточке теста для админа на мобильных */
+    .card .d-flex.gap-1 {
+        flex-wrap: nowrap;
+    }
+    
+    .card .btn-primary.flex-fill {
+        flex: 1;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+    
+    .card .btn-secondary,
+    .card .btn-danger {
+        flex: 0 0 auto;
+        width: 44px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    
+    .btn-group-sm .btn {
+        min-height: 36px;
+        padding: 6px 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .card {
+        border-radius: 12px;
+    }
+    
+    .zone {
+        border-radius: 15px;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    h4 {
+        font-size: 1.25rem;
+    }
+    
+    h5 {
+        font-size: 1.1rem;
+    }
+    
+    h6 {
+        font-size: 1rem;
+    }
+    
+    p, span {
+        font-size: 0.95rem;
+    }
+    
+    /* На очень маленьких экранах уменьшаем кнопки */
+    .card .btn-primary.flex-fill {
+        font-size: 0.85rem;
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+}
+
+@media (max-width: 400px) {
+    /* На очень маленьких экранах делаем иконки кнопок без текста */
+    .card .btn-primary.flex-fill {
+        flex: 0 0 auto;
+        width: 44px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    
+    .card .btn-primary.flex-fill::after {
+        content: none;
+    }
+    
+    .card .btn-primary.flex-fill span {
+        display: none;
+    }
+    
+    .card .btn-primary.flex-fill::before {
+        content: "✏️";
+        font-size: 1.1rem;
+    }
+    
+    /* Альтернативно можно использовать иконки Bootstrap */
+    .card .btn-primary.flex-fill i.bi-pencil {
+        display: inline-block;
+    }
+}
+</style>

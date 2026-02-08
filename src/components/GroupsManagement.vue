@@ -28,142 +28,286 @@
                         </div>
                     </div>
                 </div>
+                
                 <div v-if="someGroupsAdmin" class="card zone mt-3">
                     <div class="card-body">
                         <h3 class="card-title mb-3">{{ $t('components.groupsManagement.adminGroups.title') }}</h3>
-                        <div class="row">
-                            <div class="col-1">
-                                <h5>{{ $t('components.groupsManagement.columns.№') }}</h5>
-                            </div>
-                            <div class="col-2">
-                                <h5>{{ $t('components.groupsManagement.columns.owner') }}</h5>
-                            </div>
-                            <div class="col-2">
-                                <h5>{{ $t('components.groupsManagement.columns.members') }}</h5>
-                            </div>
-                            <div class="col-3">
-                                <h5>{{ $t('components.groupsManagement.columns.name') }}</h5>
-                            </div>
-                            <div class="col-2">
-                                <h5>{{ $t('components.groupsManagement.columns.ID') }}</h5>
-                            </div>
-                            <div class="col-2">
-                                <h5>{{ $t('components.groupsManagement.columns.actions') }}</h5>
-                            </div>
-                        </div>
-                        <div v-for="(group, index) in adminGroupsData" :key="group.ID || index">
-                            <div
-                                class="row"
-                                :class="isUserManagementOpened ? 'fs-6' : 'fs-5'"
+                        
+                        <div class="d-none d-md-block">
+                            <el-table
+                                :data="adminGroupsData"
+                                style="width: 100%"
+                                :header-cell-style="{ backgroundColor: '#f8f9fa', color: '#495057' }"
                             >
-                                <div class="col-1 table-element">
-                                    <p>{{ group.number }}</p>
-                                </div>
-                                <div class="col-2 table-element">
-                                    <p>{{ group.owner }}</p>
-                                </div>
-                                <div class="col-2 table-element">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <p>{{ group.size }}</p>
-                                        </div>
-                                        <div class="col-md-auto pt-0 pb-0">
-                                            <button class="btn btn-secondary-sm pt-0 pb-0" @click="openMembersManager(group, true)">
-                                                <i class="bi bi-caret-down"></i>
+                                <el-table-column
+                                    prop="number"
+                                    :label="$t('components.groupsManagement.columns.№')"
+                                    width="80"
+                                >
+                                </el-table-column>
+                                
+                                <el-table-column
+                                    prop="owner"
+                                    :label="$t('components.groupsManagement.columns.owner')"
+                                    min-width="120"
+                                >
+                                </el-table-column>
+                                
+                                <el-table-column
+                                    :label="$t('components.groupsManagement.columns.members')"
+                                    min-width="140"
+                                >
+                                    <template #default="scope">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <span>{{ scope.row.size }}</span>
+                                            <button 
+                                                class="btn btn-sm btn-outline-primary ms-2"
+                                                @click="openMembersManager(scope.row, true)"
+                                            >
+                                                <i class="bi bi-people"></i>
                                             </button>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-3 table-element">
-                                    <p>{{ group.name }}</p>
-                                </div>
-                                <div class="col-2 table-element">
-                                    <p>{{ group.id }}</p>
-                                </div>
-                                <div class="col-2 table-element">
-                                    <div class="row flex-row-rewerse">
-                                        <div class="btn-group">
-                                            <button class="btn btn-primary" @click="generateInviteLink(group.id)">
+                                    </template>
+                                </el-table-column>
+                                
+                                <el-table-column
+                                    prop="name"
+                                    :label="$t('components.groupsManagement.columns.name')"
+                                    min-width="180"
+                                >
+                                </el-table-column>
+                                
+                                <el-table-column
+                                    prop="id"
+                                    :label="$t('components.groupsManagement.columns.ID')"
+                                    min-width="120"
+                                >
+                                </el-table-column>
+                                
+                                <el-table-column
+                                    :label="$t('components.groupsManagement.columns.actions')"
+                                    min-width="220"
+                                >
+                                    <template #default="scope">
+                                        <div class="d-flex flex-wrap gap-1">
+                                            <button 
+                                                class="btn btn-sm btn-primary"
+                                                @click="generateInviteLink(scope.row.id)"
+                                                :title="$t('components.groupsManagement.actions.inviteLink')"
+                                            >
                                                 <i class="bi bi-link-45deg"></i>
                                             </button>
-                                            <button class="btn btn-primary" @click="generateInviteQRCode(group.id)">
+                                            <button 
+                                                class="btn btn-sm btn-primary"
+                                                @click="generateInviteQRCode(scope.row.id)"
+                                                :title="$t('components.groupsManagement.actions.qrCode')"
+                                            >
                                                 <i class="bi bi-qr-code"></i>
                                             </button>
-                                            <button class="btn btn-danger" @click="leaveGroup(group.id)">
+                                            <button 
+                                                class="btn btn-sm btn-outline-danger"
+                                                @click="leaveGroup(scope.row.id)"
+                                                :title="$t('components.groupsManagement.actions.leave')"
+                                            >
                                                 <i class="bi bi-box-arrow-right"></i>
                                             </button>
-                                            <button class="btn btn-danger" @click="deleteGroup(group.id)">
+                                            <button 
+                                                class="btn btn-sm btn-danger"
+                                                @click="deleteGroup(scope.row.id)"
+                                                :title="$t('components.groupsManagement.actions.delete')"
+                                            >
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </div>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </div>
+                        
+                        <div class="d-md-none">
+                            <div 
+                                v-for="group in adminGroupsData" 
+                                :key="group.id"
+                                class="card mb-3"
+                            >
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="card-title mb-0">{{ group.name }}</h5>
+                                        <span class="badge bg-primary">#{{ group.number }}</span>
+                                    </div>
+                                    
+                                    <div class="mb-2">
+                                        <small class="text-muted">{{ $t('components.groupsManagement.columns.owner') }}:</small>
+                                        <p class="mb-1">{{ group.owner }}</p>
+                                    </div>
+                                    
+                                    <div class="mb-2">
+                                        <small class="text-muted">{{ $t('components.groupsManagement.columns.members') }}:</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>{{ group.size }}</span>
+                                            <button 
+                                                class="btn btn-sm btn-outline-primary"
+                                                @click="openMembersManager(group, true)"
+                                            >
+                                                <i class="bi bi-people"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <small class="text-muted">{{ $t('components.groupsManagement.columns.ID') }}:</small>
+                                        <p class="mb-0 font-monospace small">{{ group.id }}</p>
+                                    </div>
+                                    
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <button 
+                                            class="btn btn-sm btn-primary flex-fill"
+                                            @click="generateInviteLink(group.id)"
+                                        >
+                                            <i class="bi bi-link-45deg me-1"></i>
+                                            <span class="d-none d-sm-inline">{{ $t('components.groupsManagement.actions.link') }}</span>
+                                        </button>
+                                        <button 
+                                            class="btn btn-sm btn-primary flex-fill"
+                                            @click="generateInviteQRCode(group.id)"
+                                        >
+                                            <i class="bi bi-qr-code me-1"></i>
+                                            <span class="d-none d-sm-inline">{{ $t('components.groupsManagement.actions.qr') }}</span>
+                                        </button>
+                                        <button 
+                                            class="btn btn-sm btn-outline-danger flex-fill"
+                                            @click="leaveGroup(group.id)"
+                                        >
+                                            <i class="bi bi-box-arrow-right me-1"></i>
+                                            <span class="d-none d-sm-inline">{{ $t('components.groupsManagement.actions.leave') }}</span>
+                                        </button>
+                                        <button 
+                                            class="btn btn-sm btn-danger flex-fill"
+                                            @click="deleteGroup(group.id)"
+                                        >
+                                            <i class="bi bi-trash me-1"></i>
+                                            <span class="d-none d-sm-inline">{{ $t('components.groupsManagement.actions.delete') }}</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
                 <div v-if="someGroupsUser" class="card zone mt-3">
                     <div class="card-body">
                         <h3 class="card-title mb-3">{{ $t('components.groupsManagement.userGroups.title') }}</h3>
-                        <div class="row">
-                            <div class="col-1">
-                                <h5>{{ $t('components.groupsManagement.columns.№') }}</h5>
-                            </div>
-                            <div class="col-2">
-                                <h5>{{ $t('components.groupsManagement.columns.owner') }}</h5>
-                            </div>
-                            <div class="col-2">
-                                <h5>{{ $t('components.groupsManagement.columns.members') }}</h5>
-                            </div>
-                            <div class="col-3">
-                                <h5>{{ $t('components.groupsManagement.columns.name') }}</h5>
-                            </div>
-                            <div class="col-2">
-                                <h5>{{ $t('components.groupsManagement.columns.ID') }}</h5>
-                            </div>
-                            <div class="col-2">
-                                <h5>{{ $t('components.groupsManagement.columns.actions') }}</h5>
-                            </div>
-                        </div>
-                        <div v-for="group in userGroupsData" :key="group.id">
-                            <div 
-                                class="row row-table"
-                                :class="isUserManagementOpened ? 'fs-6' : 'fs-5'"
+                        
+                        <div class="d-none d-md-block">
+                            <el-table
+                                :data="userGroupsData"
+                                style="width: 100%"
+                                :header-cell-style="{ backgroundColor: '#f8f9fa', color: '#495057' }"
                             >
-                                <div class="col-1 table-element">
-                                    <p>{{ group.number }}</p>
-                                </div>
-                                <div class="col-2 table-element">
-                                    <p>{{ group.owner }}</p>
-                                </div>
-                                <div class="col-2 table-element">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <p>{{ group.size }}</p>
+                                <el-table-column
+                                    prop="number"
+                                    :label="$t('components.groupsManagement.columns.№')"
+                                    width="80"
+                                >
+                                </el-table-column>
+                                
+                                <el-table-column
+                                    prop="owner"
+                                    :label="$t('components.groupsManagement.columns.owner')"
+                                    min-width="120"
+                                >
+                                </el-table-column>
+                                
+                                <el-table-column
+                                    :label="$t('components.groupsManagement.columns.members')"
+                                    min-width="140"
+                                >
+                                    <template #default="scope">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <span>{{ scope.row.size }}</span>
+                                            <button 
+                                                class="btn btn-sm btn-outline-primary ms-2"
+                                                @click="openMembersManager(scope.row, false)"
+                                            >
+                                                <i class="bi bi-people"></i>
+                                            </button>
                                         </div>
-                                        <div class="col-md-auto pt-0 pb-0">
-                                            <button
-                                                class="btn btn-secondary-sm pt-0 pb-0"
+                                    </template>
+                                </el-table-column>
+                                
+                                <el-table-column
+                                    prop="name"
+                                    :label="$t('components.groupsManagement.columns.name')"
+                                    min-width="180"
+                                >
+                                </el-table-column>
+                                
+                                <el-table-column
+                                    prop="id"
+                                    :label="$t('components.groupsManagement.columns.ID')"
+                                    min-width="120"
+                                >
+                                </el-table-column>
+                                
+                                <el-table-column
+                                    :label="$t('components.groupsManagement.columns.actions')"
+                                    min-width="100"
+                                >
+                                    <template #default="scope">
+                                        <button 
+                                            class="btn btn-sm btn-outline-danger"
+                                            @click="leaveGroup(scope.row.id)"
+                                        >
+                                            <i class="bi bi-box-arrow-right"></i>
+                                        </button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </div>
+                        
+                        <div class="d-md-none">
+                            <div 
+                                v-for="group in userGroupsData" 
+                                :key="group.id"
+                                class="card mb-3"
+                            >
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="card-title mb-0">{{ group.name }}</h5>
+                                        <span class="badge bg-primary">#{{ group.number }}</span>
+                                    </div>
+                                    
+                                    <div class="mb-2">
+                                        <small class="text-muted">{{ $t('components.groupsManagement.columns.owner') }}:</small>
+                                        <p class="mb-1">{{ group.owner }}</p>
+                                    </div>
+                                    
+                                    <div class="mb-2">
+                                        <small class="text-muted">{{ $t('components.groupsManagement.columns.members') }}:</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>{{ group.size }}</span>
+                                            <button 
+                                                class="btn btn-sm btn-outline-primary"
                                                 @click="openMembersManager(group, false)"
                                             >
-                                                <i class="bi bi-caret-down"></i>
+                                                <i class="bi bi-people"></i>
                                             </button>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-3 table-element">
-                                    <p>{{ group.name }}</p>
-                                </div>
-                                <div class="col-2 table-element">
-                                    <p>{{ group.id }}</p>
-                                </div>
-                                <div class="col-2 table-element">
-                                    <div class="row flex-row-rewerse">
-                                        <div class="btn-group">
-                                            <button class="btn btn-danger" @click="leaveGroup(group.id)">
-                                                <i class="bi bi-box-arrow-right"></i>
-                                            </button>
-                                        </div>
+                                    
+                                    <div class="mb-3">
+                                        <small class="text-muted">{{ $t('components.groupsManagement.columns.ID') }}:</small>
+                                        <p class="mb-0 font-monospace small">{{ group.id }}</p>
+                                    </div>
+                                    
+                                    <div class="d-flex">
+                                        <button 
+                                            class="btn btn-outline-danger w-100"
+                                            @click="leaveGroup(group.id)"
+                                        >
+                                            <i class="bi bi-box-arrow-right me-1"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -171,6 +315,7 @@
                     </div>
                 </div>
             </div>
+            
             <div
                 class="col"
                 v-if="isUserManagementOpened"
@@ -181,6 +326,7 @@
                     @cancel="isUserManagementOpened = false"
                 />
             </div>
+            
             <QRCodeComponent
                 v-model="openQR"
                 :qrCodeUrl="qrCodeUrl"
@@ -250,7 +396,6 @@ onMounted(() => {
 })
 
 function openMembersManager(groupData, isAdmin) {
-    console.log("group data:", groupData)
     isUserManagementOpened.value = true
     if (isUserManagementOpened.value) {
         membersOfGroupToWatchData.value.groupName = groupData.name
@@ -335,7 +480,6 @@ async function createGroup(title) {
         getGroupsData()
     }
 }
-
 </script>
 
 <style lang="css" scoped>
@@ -344,14 +488,22 @@ async function createGroup(title) {
     border-radius: 20px;
 }
 
-.table-element {
-    align-self: center;
-}
-
 .btn-primary {
     border-radius: 15px;
     background-color: #3846D3;
     border: none;
+}
+
+.btn-outline-primary {
+    border-radius: 15px;
+    border: 2px solid #3846D3;
+    color: #3846D3;
+    background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3846D3;
+    color: white;
 }
 
 .btn-danger {
@@ -360,11 +512,16 @@ async function createGroup(title) {
     border: none;
 }
 
-.btn-secondary {
-    border-radius: 5px;
-    border: 2px solid #3846D3;
-    background-color: #ffffff;
-    color: #3846D3;
+.btn-outline-danger {
+    border-radius: 15px;
+    border: 2px solid #d33838;
+    color: #d33838;
+    background-color: transparent;
+}
+
+.btn-outline-danger:hover {
+    background-color: #d33838;
+    color: white;
 }
 
 .form-control:focus {
@@ -381,5 +538,48 @@ async function createGroup(title) {
 
 .zone {
     box-shadow: 10px 5px 5px #d1d1d1;
+}
+
+:deep(.el-table) {
+    --el-table-border-color: #dee2e6;
+    --el-table-header-bg-color: #f8f9fa;
+    --el-table-text-color: #495057;
+    --el-table-row-hover-bg-color: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+:deep(.el-table__header) {
+    background-color: #f8f9fa;
+}
+
+:deep(.el-table__cell) {
+    padding: 12px 0;
+    vertical-align: middle;
+}
+
+:deep(.el-table th.el-table__cell) {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .zone {
+        box-shadow: 5px 3px 3px #d1d1d1;
+    }
+    
+    .card {
+        border-radius: 15px;
+    }
+    
+    .btn-primary, .btn-outline-primary, .btn-danger, .btn-outline-danger {
+        min-height: 44px;
+        padding: 8px 12px;
+    }
+    
+    .btn-sm {
+        min-height: 36px;
+        padding: 6px 10px;
+    }
 }
 </style>

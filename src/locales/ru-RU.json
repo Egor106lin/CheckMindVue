@@ -110,8 +110,8 @@
             "wrongAnswer": "Неверно"
         },
         "profileSettings": {
+            "title": "О пользователе",
             "userActions": {
-                "title": "О пользователе",
                 "userManagement": "Действия",
                 "name": "Имя:",
                 "email": "Почта:",

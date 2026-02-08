@@ -110,8 +110,8 @@
             "wrongAnswer": "Wrong"
         },
         "profileSettings": {
+            "title": "About user",
             "userActions": {
-                "title": "About user",
                 "userManagement": "Actions",
                 "name": "Name:",
                 "email": "Email:",
