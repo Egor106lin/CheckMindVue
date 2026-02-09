@@ -1,48 +1,50 @@
 <template>
-    <div class="card zone mb-2">
+    <div class="card">
         <div class="card-body">
-            <div class="row">
-                <div class="col-11">
-                    <div class="card-title">
-                        <h3>{{ $t('components.membersManagement.title') }} "{{ groupName }}"</h3>
-                    </div>
+            <div class="row align-items-center mb-3">
+                <div class="col-10 col-md-11">
+                    <h3 class="card-title mb-0">{{ $t('components.membersManagement.title') }} "{{ groupName }}"</h3>
                 </div>
-                <div class="col-1">
-                    <button class="btn btn-light rounded-5" @click="emit('cancel')">
-                        <i class="bi bi-x-circle"></i>
+                <div class="col-2 col-md-1 text-end">
+                    <button class="btn btn-light rounded-circle" @click="emit('cancel')">
+                        <i class="bi bi-x-lg"></i>
                     </button>
                 </div>
             </div>
-            <ElTable :data="tableData" class="rounded-5 mt-3">
-                <ElTableColumn prop="number" :label="$t('components.membersManagement.№')" sortable />
-                <ElTableColumn prop="admin" :label="$t('components.membersManagement.admin')">
-                    <template #default="scope">
-                        <div v-if="scope.row.admin">
-                            <i class="bi bi-check-lg"></i>
-                        </div>
-                    </template>
-                </ElTableColumn>
-                <ElTableColumn prop="name" :label="$t('components.membersManagement.name')" />
-                <ElTableColumn v-if="isAdmin" fixed="right" align="center" prop="admin">
-                    <template #default="scope">
-                        <div class="btn-group">
-                            <button
-                                v-if="!scope.row.admin && isAdmin"
-                                class="btn btn-light"
-                                @click="handleDelete(scope.row)"
-                            >
-                                {{ $t('components.membersManagement.makeAdmin') }}
-                            </button>
-                            <button
-                                class="btn btn-danger"
-                                @click="handleDelete(scope.row)"
-                            >
-                                <i class="bi bi-person-dash"></i>
-                            </button>
-                        </div>
-                    </template>
-                </ElTableColumn>
-            </ElTable>
+            
+            <div class="table-responsive">
+                <ElTable :data="tableData" class="rounded-5">
+                    <ElTableColumn prop="number" :label="$t('components.membersManagement.№')" sortable width="80" />
+                    <ElTableColumn prop="admin" :label="$t('components.membersManagement.admin')" width="150">
+                        <template #default="scope">
+                            <div v-if="scope.row.admin">
+                                <i class="bi bi-check-lg text-success"></i>
+                            </div>
+                        </template>
+                    </ElTableColumn>
+                    <ElTableColumn prop="name" :label="$t('components.membersManagement.name')" />
+                    <ElTableColumn v-if="isAdmin" fixed="right" align="center" prop="actions" width="200">
+                        <template #default="scope">
+                            <div class="d-flex gap-2">
+                                <button
+                                    v-if="!scope.row.admin && isAdmin"
+                                    class="btn btn-outline-primary btn-sm"
+                                    @click="handleMakeAdmin(scope.row)"
+                                >
+                                    <i class="bi bi-person-check me-1"></i>
+                                    {{ $t('components.membersManagement.makeAdmin') }}
+                                </button>
+                                <button
+                                    class="btn btn-outline-danger btn-sm"
+                                    @click="handleDelete(scope.row)"
+                                >
+                                    <i class="bi bi-person-dash"></i>
+                                </button>
+                            </div>
+                        </template>
+                    </ElTableColumn>
+                </ElTable>
+            </div>
         </div>
     </div>
 </template>
@@ -69,9 +71,7 @@ const props = defineProps({
     }
 })
 
-const emit = defineEmits([
-    'cancel'
-])
+const emit = defineEmits(['cancel'])
 
 onBeforeMount(async () => {
     try {
@@ -82,29 +82,84 @@ onBeforeMount(async () => {
     } catch (error) {
         console.error('Ошибка:', error)
     }
-    console.log(props.groupName)
 })
 
+function handleMakeAdmin(member) {
+    console.log('Make admin:', member)
+}
+
+function handleDelete(member) {
+    console.log('Delete member:', member)
+}
 </script>
 
 <style lang="css" scoped>
-.btn-primary {
-    border-radius: 15px;
-    background-color: #3846D3;
-    border: none;
+.card {
+    border: none !important;
+    border-radius: 20px;
 }
-.btn-danger {
-    background-color: #d33838;
-    border-radius: 15px;
-    border: none;
+
+.btn-outline-primary {
+    border-radius: 12px;
+    border: 2px solid #3846D3;
+    color: #3846D3;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3846D3;
+    color: white;
+}
+
+.btn-outline-danger {
+    border-radius: 12px;
+    border: 2px solid #dc3545;
+    color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
 }
 
 .btn-light {
-    border-radius: 15px;
-    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dee2e6;
 }
 
-.zone {
-    box-shadow: 10px 5px 5px #d1d1d1;
+:deep(.el-table) {
+    --el-table-border-color: #dee2e6;
+    --el-table-header-bg-color: #f8f9fa;
+    --el-table-text-color: #495057;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .card {
+        border-radius: 16px;
+    }
+    
+    .btn-outline-primary span {
+        display: none;
+    }
+    
+    .btn-outline-primary i {
+        margin-right: 0 !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .card {
+        border-radius: 14px;
+    }
+    
+    h3 {
+        font-size: 1.3rem;
+    }
 }
 </style>

@@ -214,7 +214,7 @@ onMounted(() => {
 
 .zone {
     border-radius: 20px;
-    box-shadow: 10px 5px 5px #d1d1d1;
+    box-shadow: 10px 5px 5px #858383;
 }
 
 .btn-primary {
@@ -258,7 +258,7 @@ onMounted(() => {
     }
     
     .zone {
-        box-shadow: 5px 3px 3px #d1d1d1;
+        box-shadow: 5px 3px 3px #858383;
     }
     
     .card {

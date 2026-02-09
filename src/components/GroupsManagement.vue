@@ -1,11 +1,8 @@
 <template>
     <PageHeader />
-    <div
-        class="mt-3"
-        :class="isUserManagementOpened ? 'container-fluid' : 'container'"
-    >
+    <div class="container mt-3 px-md-3 px-2">
         <div class="row">
-            <div class="col">
+            <div class="col-12">
                 <div class="card zone">
                     <div class="card-body">
                         <div class="row">
@@ -315,23 +312,20 @@
                     </div>
                 </div>
             </div>
-            
-            <div
-                class="col"
-                v-if="isUserManagementOpened"
-            >
+        </div>
+        <div v-if="isUserManagementOpened" class="modal-overlay" @click.self="isUserManagementOpened = false">
+            <div class="modal-content">
                 <MembersManagement
                     :groupName="membersOfGroupToWatchData.groupName"
                     :isAdmin="membersOfGroupToWatchData.isAdmin"
                     @cancel="isUserManagementOpened = false"
                 />
             </div>
-            
-            <QRCodeComponent
-                v-model="openQR"
-                :qrCodeUrl="qrCodeUrl"
-            />
         </div>
+        <QRCodeComponent
+            v-model="openQR"
+            :qrCodeUrl="qrCodeUrl"
+        />
     </div>
 </template>
 
@@ -397,15 +391,8 @@ onMounted(() => {
 
 function openMembersManager(groupData, isAdmin) {
     isUserManagementOpened.value = true
-    if (isUserManagementOpened.value) {
-        membersOfGroupToWatchData.value.groupName = groupData.name
-        membersOfGroupToWatchData.value.isAdmin = isAdmin
-    } else {
-        membersOfGroupToWatchData.value = {
-            groupName: '',
-            isAdmin: '',
-        }
-    }
+    membersOfGroupToWatchData.value.groupName = groupData.name
+    membersOfGroupToWatchData.value.isAdmin = isAdmin
 }
 
 async function generateInviteQRCode(id) {
@@ -447,7 +434,7 @@ function deleteGroup(id) {
             }
         })
     } catch(error) {
-        // Не удалось удалить группу
+        console.log(error)
     }
 }
 
@@ -537,7 +524,43 @@ async function createGroup(title) {
 }
 
 .zone {
-    box-shadow: 10px 5px 5px #d1d1d1;
+    box-shadow: 10px 5px 5px #858383;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 :deep(.el-table) {
@@ -565,7 +588,7 @@ async function createGroup(title) {
 
 @media (max-width: 768px) {
     .zone {
-        box-shadow: 5px 3px 3px #d1d1d1;
+        box-shadow: 5px 3px 3px #858383;
     }
     
     .card {
@@ -580,6 +603,22 @@ async function createGroup(title) {
     .btn-sm {
         min-height: 36px;
         padding: 6px 10px;
+    }
+    
+    .modal-overlay {
+        padding: 10px;
+    }
+    
+    .modal-content {
+        max-height: 95vh;
+        border-radius: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .modal-content {
+        max-height: 98vh;
+        border-radius: 12px;
     }
 }
 </style>

@@ -145,5 +145,11 @@
         "error": {
             "unknownProblem": "Something went wrong"
         }
+    },
+    "validation": {
+        "required": "",
+        "numeric": "",
+        "minValue": "",
+        "maxValue": ""
     }
 }

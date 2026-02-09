@@ -1,10 +1,10 @@
 <template>
     <PageHeader />
     <div class="container mt-3 px-md-3 px-2">
-        <div class="row mb-4 zone">
+        <div class="row mb-4">
             <div class="col-12">
-                <div class="card card-body mb-2">
-                    <h2 class="card-title">{{ $t('components.mainPage.checkMind') }}</h2>
+                <div class="card card-nf card-body mb-2 zone">
+                    <h1 class="card-title">{{ $t('components.mainPage.checkMind') }}</h1>
                     <div>
                         <p class="mb-0">Инфа о проекте</p>
                     </div>
@@ -45,10 +45,10 @@
             </div>
             <div class="row mb-2">
                 <div class="col-12">
-                    <h6 v-if="group.tests.length > 0" class="card-subtitle text-body-secondary">
+                    <h6 v-if="group.tests.length > 0" class="card-subtitle text-body-secondary mt-1">
                         {{ $t('components.mainPage.testsQuantity') }} {{ group.tests.length }}
                     </h6>
-                    <h6 v-else class="card-subtitle text-body-secondary">
+                    <h6 v-else class="card-subtitle text-body-secondary mt-1">
                         {{ $t('components.mainPage.noTests') }}
                     </h6>
                 </div>
@@ -102,7 +102,7 @@
             <div v-else-if="group.tests.length == 0 && group.role == 'Admin'" class="row mt-2 mb-2">
                 <div class="col-12">
                     <button
-                        class="btn btn-light w-100 w-md-auto"
+                        class="btn btn-light w-md-auto"
                         @click="router.push('/create_tests')"
                     >
                         {{ $t('components.mainPage.test.create') }}
@@ -198,7 +198,7 @@ function isBtnShowPreviousTestsDisabled(indexForFirstTest) {
 
 .zone {
     border-radius: 20px;
-    box-shadow: 10px 5px 5px #d1d1d1;
+    box-shadow: 10px 5px 5px #858383;
 }
 
 .card-nf {
@@ -208,13 +208,11 @@ function isBtnShowPreviousTestsDisabled(indexForFirstTest) {
 
 .text-truncate-2 {
     display: -webkit-box;
-    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* Медиазапросы для мобильных */
 @media (max-width: 768px) {
     .container {
         padding-left: 12px;
@@ -222,7 +220,7 @@ function isBtnShowPreviousTestsDisabled(indexForFirstTest) {
     }
     
     .zone {
-        box-shadow: 5px 3px 3px #d1d1d1;
+        box-shadow: 5px 3px 3px #858383;
     }
     
     .card {

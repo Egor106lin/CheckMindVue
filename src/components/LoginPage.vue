@@ -54,22 +54,26 @@ async function loginWithGoogle() {
 
 <style lang="css" scoped>
 .card {
-    border: 4px solid #3846D3;
     border-radius: 35px;
     box-shadow: 7px 5px 16px 1px #3846D3;
+    background: none;
 }
 
 .background {
     margin: 0;
     padding-top: 15%;
     min-height: 100vh;
-    background-image: url('/src/assets/images/background_dark.svg') !important;
+    background-image: url('/src/assets/images/background_light.svg') !important;
 }
 
 .btn-primary {
     background-color: #3846D3;
     border-radius: 15px;
-    border: 2px solid #ffff;
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
 }
 
 h1 {
@@ -78,7 +82,7 @@ h1 {
 }
 
 .blue {
-    background-color: #3846D3;
+    background-image: url('/src/assets/images/background_light.svg');
     border-radius: 30px;
     padding: 3px;
     max-width: 70%;

@@ -1,90 +1,138 @@
 <template>
     <PageHeader />
-    <div class="container mt-3">
+    <div class="container mt-3 px-md-3 px-2">
         <div class="row">
-            <div class="col">
-                <div v-if="testInProgress" class="card card-body">
-                    <div class="row mb-2">
-                        <div class="col">
-                            <h5 class="card-title">
+            <div class="col-12">
+                <div v-if="testInProgress" class="card card-body zone">
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-12 col-md-8 mb-3 mb-md-0">
+                            <h5 class="card-title mb-0">
                                 {{ $t('components.testingInProgress.testName') }} <b>"{{ test?.testName }}"</b>
                             </h5>
                         </div>
-                        <div class="btn-group col-md-auto">
-                            <button
-                                class="btn btn-primary"
-                                v-if="questionNow != 1"
-                                @click="changeQuestion(false)"
-                            >
-                                <i class="bi bi-arrow-left"></i>    
-                                {{ $t('components.testingInProgress.previousQuestion') }}
-                            </button>
-                            <button
-                                class="btn btn-primary"
-                                v-if="questionNow < test?.questionsQuantity"
-                                @click="changeQuestion(true)"
-                            >
-                                {{ $t('components.testingInProgress.nextQuestion') }}
-                                <i class="bi bi-arrow-right"></i>
-                            </button>
-                            <button
-                                v-if="questionNow == test?.questionsQuantity"
-                                class="btn btn-danger"
-                                :disabled="btnFinishDisabled()"
-                                @click="finishTest()"
-                            >
-                                {{ $t('components.testingInProgress.finishTest') }}
-                                <i class="bi bi-check"></i>
-                            </button>
+                        <div class="col-12 col-md-4">
+                            <div class="d-flex flex-wrap gap-2 justify-content-start justify-content-md-end">
+                                <button
+                                    class="btn btn-primary desktop-btn"
+                                    v-if="questionNow != 1"
+                                    @click="changeQuestion(false)"
+                                >
+                                    <i class="bi bi-arrow-left"></i>
+                                    <span class="ms-1">{{ $t('components.testingInProgress.previousQuestion') }}</span>
+                                </button>
+                                <button
+                                    class="btn btn-primary desktop-btn"
+                                    v-if="questionNow < test?.questionsQuantity"
+                                    @click="changeQuestion(true)"
+                                >
+                                    <span class="me-1">{{ $t('components.testingInProgress.nextQuestion') }}</span>
+                                    <i class="bi bi-arrow-right"></i>
+                                </button>
+                                <button
+                                    v-if="questionNow == test?.questionsQuantity"
+                                    class="btn btn-danger desktop-btn"
+                                    :disabled="btnFinishDisabled()"
+                                    @click="finishTest()"
+                                >
+                                    <i class="bi bi-check"></i>
+                                    <span class="ms-1">{{ $t('components.testingInProgress.finishTest') }}</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <h5 class="card-title">
+                    
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <h5 class="card-subtitle text-body-secondary">
                                 {{ $t('components.testingInProgress.questionNumber') }} 
                                 {{ questionNow }} / {{ test?.questionsQuantity }}
                             </h5>
                         </div>
                     </div>
+                    
                     <hr>
-                    <div class="row mb-2">
-                        <div class="col">
-                            <h3>{{ test?.questionsAndOptions[questionNow - 1]?.question }}</h3>
+                    
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h4 class="mb-3">{{ test?.questionsAndOptions[questionNow - 1]?.question }}</h4>
                         </div>
                     </div>
-                    <div v-for="(option, optionIndex) in test?.questionsAndOptions[questionNow - 1]?.options" :key="optionIndex">
-                        <div class="row">
+                    
+                    <div v-for="(option, optionIndex) in test?.questionsAndOptions[questionNow - 1]?.options" :key="optionIndex" class="mb-3">
+                        <div class="row align-items-center option-row">
                             <div class="col-1">
                                 <input
                                     class="form-check-input large-checkbox"
                                     type="checkbox"
                                     :value="optionIndex"
                                     v-model="answers[questionNow - 1].options"
+                                    :id="'option-' + questionNow + '-' + optionIndex"
                                 >
                             </div>
                             <div class="col-11">
-                                <p>{{ option.title }}</p>
+                                <label :for="'option-' + questionNow + '-' + optionIndex" class="option-label w-100 mb-0">
+                                    {{ option.title }}
+                                </label>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div v-if="!testInProgress && testResult" class="card card-body">
-                    <div class="row">
-                        <h3 class="card-title">Тест <b>"{{ testResult.testName }}"</b> пройден!</h3>
+                
+                <div v-if="!testInProgress && testResult" class="card card-body zone">
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <h3 class="card-title">Тест <b>"{{ testResult.testName }}"</b> пройден!</h3>
+                        </div>
                     </div>
-                    <div class="row">
-                        <h5>Ваш результат: <b>{{ testResult.userScore }} / {{ testResult.maxScore }}</b></h5>
+                    
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h5>Ваш результат: <b>{{ testResult.userScore }} / {{ testResult.maxScore }}</b></h5>
+                        </div>
                     </div>
-                    <ElTable :data="testResult.detailedResults" class="rounded-5 mt-3 el-text el-text--large">
-                        <ElTableColumn prop="question" label="Вопрос"/>
-                        <ElTableColumn prop="userAnswers" label="Выбранные ответы"/>
-                        <ElTableColumn prop="correctAnswers" label="Правильные ответы"/>
-                        <ElTableColumn prop="pointsEarned" label="Набранные баллы"/>
-                        <ElTableColumn prop="maxPoints" label="Максимум баллов"/>
-                    </ElTable>
-                    <div class="row mt-3">
-                        <div class="col">
-                            <button class="btn btn-primary" @click="pushOnMain()">
+                    
+                    <!-- Десктопная таблица -->
+                    <div class="d-none d-md-block">
+                        <ElTable :data="testResult.detailedResults" class="rounded-5 mt-3">
+                            <ElTableColumn prop="question" label="Вопрос" width="200"/>
+                            <ElTableColumn prop="userAnswers" label="Выбранные ответы"/>
+                            <ElTableColumn prop="correctAnswers" label="Правильные ответы"/>
+                            <ElTableColumn prop="pointsEarned" label="Набранные баллы" width="140"/>
+                            <ElTableColumn prop="maxPoints" label="Максимум баллов" width="140"/>
+                        </ElTable>
+                    </div>
+                    
+                    <!-- Мобильные карточки -->
+                    <div class="d-md-none">
+                        <div v-for="(result, index) in testResult.detailedResults" :key="index" class="card mb-3">
+                            <div class="card-body">
+                                <h6 class="card-title mb-2">Вопрос {{ index + 1 }}</h6>
+                                <p class="small text-muted mb-2">{{ result.question }}</p>
+                                
+                                <div class="row small mb-2">
+                                    <div class="col-6">
+                                        <p class="mb-1"><strong>Выбрано:</strong></p>
+                                        <p class="mb-0">{{ result.userAnswers || '—' }}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="mb-1"><strong>Правильно:</strong></p>
+                                        <p class="mb-0">{{ result.correctAnswers || '—' }}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="row small">
+                                    <div class="col-6">
+                                        <p class="mb-1"><strong>Баллы:</strong></p>
+                                        <p class="mb-0">{{ result.pointsEarned }} / {{ result.maxPoints }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <button class="btn btn-primary w-100 w-md-auto px-4" @click="pushOnMain()">
                                 На главную
                             </button>
                         </div>
@@ -205,38 +253,19 @@ function pushOnMain() {
 </script>
 
 <style lang="css" scoped>
-
-.large-checkbox {
-    transform: scale(1.3);
-    opacity: 0.9;
-    cursor: pointer;
+.zone {
+    border-radius: 20px;
+    box-shadow: 10px 5px 5px #858383;
 }
+
 .card {
     border: 2px solid #3846D3;
     border-radius: 20px;
 }
 
-.form-control:focus {
-    border: 2px solid #3846D3;
-    border-radius: 20px;
-}
-
-.form-control {
-    outline: none !important;
-    box-shadow: none !important;
-    border-radius: 20px;
-    border: 2px solid #f3f3f3;
-}
-
 .btn-primary {
+    border-radius: 15px;
     background-color: #3846D3;
-    border-radius: 15px;
-    border: none;
-}
-
-.btn-secondary {
-    background-color: #232b86;
-    border-radius: 15px;
     border: none;
 }
 
@@ -246,4 +275,171 @@ function pushOnMain() {
     border: none;
 }
 
+.large-checkbox {
+    transform: scale(1.3);
+    opacity: 0.9;
+    cursor: pointer;
+}
+
+.option-row:hover {
+    background-color: rgba(56, 70, 211, 0.05);
+    border-radius: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.option-label {
+    cursor: pointer;
+    padding: 10px 0;
+    display: block;
+}
+
+.desktop-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+:deep(.el-table) {
+    --el-table-border-color: #dee2e6;
+    --el-table-header-bg-color: #f8f9fa;
+    --el-table-text-color: #495057;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+:deep(.el-table th.el-table__cell) {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    
+    .zone {
+        box-shadow: 5px 3px 3px #d1d1d1;
+        border-radius: 16px;
+    }
+    
+    .card {
+        border-radius: 16px;
+    }
+    
+    .btn-primary, .btn-danger {
+        min-height: 44px;
+        padding: 10px 16px;
+        font-size: 0.95rem;
+    }
+    
+    .desktop-btn {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        min-height: 40px;
+    }
+    
+    .large-checkbox {
+        transform: scale(1.5);
+    }
+    
+    .option-label {
+        padding: 12px 0;
+        font-size: 1rem;
+    }
+    
+    h4 {
+        font-size: 1.3rem;
+    }
+    
+    h5 {
+        font-size: 1.1rem;
+    }
+    
+    .desktop-btn span {
+        display: none;
+    }
+    
+    .desktop-btn i {
+        margin: 0 !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .d-flex.flex-wrap.gap-2 {
+        gap: 12px !important;
+    }
+    
+    .desktop-btn {
+        padding: 12px 24px;
+        font-size: 1.05rem;
+        min-height: 50px;
+    }
+    
+    .desktop-btn span {
+        display: inline;
+    }
+    
+    .desktop-btn i {
+        display: inline;
+    }
+}
+
+@media (max-width: 576px) {
+    .card {
+        border-radius: 14px;
+    }
+    
+    .zone {
+        border-radius: 14px;
+    }
+    
+    h3 {
+        font-size: 1.4rem;
+    }
+    
+    h4 {
+        font-size: 1.2rem;
+    }
+    
+    .btn-primary, .btn-danger {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    
+    .d-flex.flex-wrap.gap-2 {
+        gap: 8px !important;
+    }
+    
+    .large-checkbox {
+        transform: scale(1.6);
+    }
+    
+    .option-label {
+        font-size: 1.05rem;
+        padding: 14px 0;
+    }
+}
+
+@media (max-width: 400px) {
+    .col-11 {
+        padding-left: 10px;
+    }
+    
+    .large-checkbox {
+        transform: scale(1.7);
+    }
+    
+    .option-label {
+        font-size: 1.1rem;
+    }
+    
+    .desktop-btn {
+        padding: 10px 14px;
+        min-height: 44px;
+    }
+}
 </style>
