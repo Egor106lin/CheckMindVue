@@ -9,8 +9,11 @@
         },
         "mainPage": {
             "checkMind": "CheckMind",
-            "admin": "(Admin)",
-            "user": "(User)",
+            "description1": "Welcome to CheckMind, your digital knowledge platform. This is a non-profit project created to bring people together in learning.",
+            "description2": "Create thematic groups in which you can easily create fascinating tests with different types of questions and instantly share them with your group. For the participants, this is an opportunity to test themselves, learn something new and see their progress.",
+            "description3": "The simple and intuitive interface works on any device. There is nothing superfluous here — just clear objectives and clear results.",
+            "admin": "Admin",
+            "user": "User",
             "testsQuantity": "Tests quantity:",
             "noTests": "No tests have been created for this group",
             "test": {

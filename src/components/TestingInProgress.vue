@@ -5,39 +5,37 @@
             <div class="col-12">
                 <div v-if="testInProgress" class="card card-body zone">
                     <div class="row mb-3 align-items-center">
-                        <div class="col-12 col-md-8 mb-3 mb-md-0">
+                        <div class="col-6 col-md-8">
                             <h5 class="card-title mb-0">
                                 {{ $t('components.testingInProgress.testName') }} <b>"{{ test?.testName }}"</b>
                             </h5>
                         </div>
-                        <div class="col-12 col-md-4">
-                            <div class="d-flex flex-wrap gap-2 justify-content-start justify-content-md-end">
-                                <button
-                                    class="btn btn-primary desktop-btn"
-                                    v-if="questionNow != 1"
-                                    @click="changeQuestion(false)"
-                                >
-                                    <i class="bi bi-arrow-left"></i>
-                                    <span class="ms-1">{{ $t('components.testingInProgress.previousQuestion') }}</span>
-                                </button>
-                                <button
-                                    class="btn btn-primary desktop-btn"
-                                    v-if="questionNow < test?.questionsQuantity"
-                                    @click="changeQuestion(true)"
-                                >
-                                    <span class="me-1">{{ $t('components.testingInProgress.nextQuestion') }}</span>
-                                    <i class="bi bi-arrow-right"></i>
-                                </button>
-                                <button
-                                    v-if="questionNow == test?.questionsQuantity"
-                                    class="btn btn-danger desktop-btn"
-                                    :disabled="btnFinishDisabled()"
-                                    @click="finishTest()"
-                                >
-                                    <i class="bi bi-check"></i>
-                                    <span class="ms-1">{{ $t('components.testingInProgress.finishTest') }}</span>
-                                </button>
-                            </div>
+                        <div class="col-6 col-md-4 text-end">
+                            <button
+                                class="btn btn-primary desktop-btn"
+                                v-if="questionNow != 1"
+                                @click="changeQuestion(false)"
+                            >
+                                <i class="bi bi-arrow-left"></i>
+                                <span class="ms-1 d-none d-md-inline">{{ $t('components.testingInProgress.previousQuestion') }}</span>
+                            </button>
+                            <button
+                                class="btn btn-primary desktop-btn"
+                                v-if="questionNow < test?.questionsQuantity"
+                                @click="changeQuestion(true)"
+                            >
+                                <span class="me-1 d-none d-md-inline">{{ $t('components.testingInProgress.nextQuestion') }}</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                            <button
+                                v-if="questionNow == test?.questionsQuantity"
+                                class="btn btn-danger desktop-btn"
+                                :disabled="btnFinishDisabled()"
+                                @click="finishTest()"
+                            >
+                                <i class="bi bi-check"></i>
+                                <span class="ms-1 d-none d-md-inline">{{ $t('components.testingInProgress.finishTest') }}</span>
+                            </button>
                         </div>
                     </div>
                     
@@ -90,8 +88,6 @@
                             <h5>Ваш результат: <b>{{ testResult.userScore }} / {{ testResult.maxScore }}</b></h5>
                         </div>
                     </div>
-                    
-                    <!-- Десктопная таблица -->
                     <div class="d-none d-md-block">
                         <ElTable :data="testResult.detailedResults" class="rounded-5 mt-3">
                             <ElTableColumn prop="question" label="Вопрос" width="200"/>
@@ -101,8 +97,6 @@
                             <ElTableColumn prop="maxPoints" label="Максимум баллов" width="140"/>
                         </ElTable>
                     </div>
-                    
-                    <!-- Мобильные карточки -->
                     <div class="d-md-none">
                         <div v-for="(result, index) in testResult.detailedResults" :key="index" class="card mb-3">
                             <div class="card-body">
@@ -315,6 +309,14 @@ function pushOnMain() {
     font-weight: 600;
 }
 
+.text-end {
+    text-align: right !important;
+}
+
+.d-flex.flex-wrap.gap-2.justify-content-end {
+    justify-content: flex-end !important;
+}
+
 @media (max-width: 768px) {
     .container {
         padding-left: 12px;
@@ -337,9 +339,10 @@ function pushOnMain() {
     }
     
     .desktop-btn {
-        padding: 8px 12px;
+        padding: 8px 10px;
         font-size: 0.9rem;
         min-height: 40px;
+        min-width: 40px;
     }
     
     .large-checkbox {
@@ -366,25 +369,22 @@ function pushOnMain() {
     .desktop-btn i {
         margin: 0 !important;
     }
-}
-
-@media (min-width: 769px) {
-    .d-flex.flex-wrap.gap-2 {
-        gap: 12px !important;
+    
+    .col-6.text-end {
+        padding-left: 5px;
+        padding-right: 5px;
     }
     
-    .desktop-btn {
-        padding: 12px 24px;
-        font-size: 1.05rem;
-        min-height: 50px;
+    .col-6:first-child {
+        padding-left: 12px;
+        padding-right: 5px;
     }
     
-    .desktop-btn span {
-        display: inline;
-    }
-    
-    .desktop-btn i {
-        display: inline;
+    .card-title {
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
 
@@ -405,15 +405,6 @@ function pushOnMain() {
         font-size: 1.2rem;
     }
     
-    .btn-primary, .btn-danger {
-        width: 100%;
-        margin-bottom: 8px;
-    }
-    
-    .d-flex.flex-wrap.gap-2 {
-        gap: 8px !important;
-    }
-    
     .large-checkbox {
         transform: scale(1.6);
     }
@@ -421,6 +412,16 @@ function pushOnMain() {
     .option-label {
         font-size: 1.05rem;
         padding: 14px 0;
+    }
+    
+    .desktop-btn {
+        padding: 6px 8px;
+        min-height: 36px;
+        min-width: 36px;
+    }
+    
+    .d-flex.flex-wrap.gap-2.justify-content-end {
+        gap: 6px !important;
     }
 }
 
@@ -438,8 +439,23 @@ function pushOnMain() {
     }
     
     .desktop-btn {
-        padding: 10px 14px;
-        min-height: 44px;
+        padding: 5px 6px;
+        min-height: 34px;
+        min-width: 34px;
+    }
+    
+    .col-6.text-end {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+    
+    .col-6:first-child {
+        padding-left: 12px;
+        padding-right: 2px;
+    }
+    
+    .card-title {
+        font-size: 0.9rem;
     }
 }
 </style>

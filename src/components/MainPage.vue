@@ -6,20 +6,39 @@
                 <div class="card card-nf card-body mb-2 zone">
                     <h1 class="card-title">{{ $t('components.mainPage.checkMind') }}</h1>
                     <div>
-                        <p class="mb-0">Инфа о проекте</p>
+                        <p>{{ $t('components.mainPage.description1') }}</p>
+                        <p>{{ $t('components.mainPage.description2') }}</p>
+                        <p>{{ $t('components.mainPage.description3') }}</p>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div v-if="groups.length == 0" class="row mb-4">
+            <div class="col-12">
+                <div class="card card-nf card-body mb-2 zone">
+                    <div>
+                        <p>Начните работу с создания групп!</p>
+                    </div>
+                    <button class="btn btn-primary" @click="router.push('/groups')">Начать</button>
                 </div>
             </div>
         </div>
         <div class="card card-nf card-body mb-4 zone" v-for="group in groups" :key="group">
             <div class="row mt-2 align-items-center">
                 <div class="col-12 col-md-8">
-                    <h4 v-if="group.role == 'Admin'" class="card-title mb-0">
-                        {{ group.name }} {{ $t('components.mainPage.admin') }}
-                    </h4>
-                    <h4 v-else-if="group.role == 'User'" class="card-title mb-0">
-                        {{ group.name }} {{ $t('components.mainPage.user') }}
-                    </h4>
+                    <div class="d-flex align-items-center flex-wrap">
+                        <h4 class="card-title mb-0 me-3">{{ group.name }}</h4>
+                        <div class="d-flex align-items-center">
+                            <span v-if="group.role == 'Admin'" class="badge bg-primary d-flex align-items-center">
+                                <i class="bi bi-shield-check me-1"></i>
+                                <span>{{ $t('components.mainPage.admin') }}</span>
+                            </span>
+                            <span v-else-if="group.role == 'User'" class="badge bg-secondary d-flex align-items-center">
+                                <i class="bi bi-person me-1"></i>
+                                <span>{{ $t('components.mainPage.user') }}</span>
+                            </span>
+                        </div>
+                    </div>
                 </div>
                 <div
                     v-if="group.tests.length > 3"
@@ -82,10 +101,10 @@
                             <button class="btn btn-primary flex-fill" @click="takeTheTest(test.id)">
                                 {{ $t('components.mainPage.test.edit') }}
                             </button>
-                            <button class="btn btn-secondary" style="min-width: 44px">
+                            <button class="btn btn-secondary" style="min-width: 44px" :title="$t('components.mainPage.test.archive')">
                                 <i class="bi bi-archive"></i>
                             </button>
-                            <button class="btn btn-danger" style="min-width: 44px">
+                            <button class="btn btn-danger" style="min-width: 44px" :title="$t('components.mainPage.test.delete')">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -122,7 +141,7 @@ import { useStore } from 'vuex';
 
 const store = useStore()
 const $t = useI18n().t
-const groups = ref()
+const groups = ref([])
 
 async function getGroupsData() {
     try {
@@ -206,6 +225,22 @@ function isBtnShowPreviousTestsDisabled(indexForFirstTest) {
     border-radius: 20px;
 }
 
+.badge {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-weight: 500;
+    line-height: 1.2;
+    height: fit-content;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.bg-primary {
+    background-color: #3846D3 !important;
+}
+
 .text-truncate-2 {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -233,7 +268,6 @@ function isBtnShowPreviousTestsDisabled(indexForFirstTest) {
         font-size: 0.9rem;
     }
     
-    /* Кнопки в карточке теста для админа на мобильных */
     .card .d-flex.gap-1 {
         flex-wrap: nowrap;
     }
@@ -291,7 +325,11 @@ function isBtnShowPreviousTestsDisabled(indexForFirstTest) {
         font-size: 0.95rem;
     }
     
-    /* На очень маленьких экранах уменьшаем кнопки */
+    .badge {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+    }
+    
     .card .btn-primary.flex-fill {
         font-size: 0.85rem;
         padding-left: 6px;
@@ -300,30 +338,16 @@ function isBtnShowPreviousTestsDisabled(indexForFirstTest) {
 }
 
 @media (max-width: 400px) {
-    /* На очень маленьких экранах делаем иконки кнопок без текста */
     .card .btn-primary.flex-fill {
-        flex: 0 0 auto;
-        width: 44px;
-        padding-left: 0;
-        padding-right: 0;
-    }
-    
-    .card .btn-primary.flex-fill::after {
-        content: none;
+        flex: 1;
+        width: auto;
+        padding-left: 8px;
+        padding-right: 8px;
     }
     
     .card .btn-primary.flex-fill span {
-        display: none;
-    }
-    
-    .card .btn-primary.flex-fill::before {
-        content: "✏️";
-        font-size: 1.1rem;
-    }
-    
-    /* Альтернативно можно использовать иконки Bootstrap */
-    .card .btn-primary.flex-fill i.bi-pencil {
-        display: inline-block;
+        display: inline;
+        font-size: 0.8rem;
     }
 }
 </style>
