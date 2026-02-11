@@ -95,21 +95,17 @@
                                 <span>{{ test.points }}</span>
                             </div>
                         </div>
-                        
-                        <!-- Для админских тестов -->
                         <div v-if="group.role == 'Admin'" class="d-flex gap-1">
                             <button class="btn btn-primary flex-fill" @click="takeTheTest(test.id)">
                                 {{ $t('components.mainPage.test.edit') }}
                             </button>
-                            <button class="btn btn-secondary" style="min-width: 44px" :title="$t('components.mainPage.test.archive')">
+                            <button class="btn btn-secondary" style="min-width: 44px" :title="$t('components.mainPage.test.archive')" @click="archiveTest(test.id)">
                                 <i class="bi bi-archive"></i>
                             </button>
-                            <button class="btn btn-danger" style="min-width: 44px" :title="$t('components.mainPage.test.delete')">
+                            <button class="btn btn-danger" style="min-width: 44px" :title="$t('components.mainPage.test.delete')" @click="deleteTest(test.id)">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
-                        
-                        <!-- Для пользовательских тестов -->
                         <div v-else-if="group.role == 'User'">
                             <button class="btn btn-primary w-100" @click="takeTheTest(test.id)">
                                 {{ $t('components.mainPage.test.take') }}
@@ -138,6 +134,7 @@ import router from '@/router/routes'
 import { ref, onMounted } from 'vue'
 import PageHeader from './PageHeader.vue';
 import { useStore } from 'vuex';
+import { showError, showSuccess } from '@/utils/notifications';
 
 const store = useStore()
 const $t = useI18n().t
@@ -173,6 +170,32 @@ function isBtnShowNextTestsDisabled(testsList, indexForFirstTest, indexForLastTe
 function isBtnShowPreviousTestsDisabled(indexForFirstTest) {
     return indexForFirstTest < 3;
 }
+
+async function deleteTest(testID) {
+    try {
+        await store.dispatch('deleteTest', {
+            testID: testID
+        })
+        getGroupsData()
+        const status = store.getters['getDeleteTestStatus']
+        status == 'success' ? showSuccess($t('toasts.success.testDeleted')) : showError($t('toasts.error.testDeletedError'))
+    } catch(error) {
+        showError($t('toasts.error.unknownError'))
+    }
+}
+
+async function archiveTest(testID) {
+    try {
+        await store.dispatch('archiveTest', {
+            testID: testID
+        })
+        const status = store.getters['getArchiveTestStatus']
+        status == 'success' ? showSuccess($t('toasts.success.testDeleted')) : showError($t('toasts.error.testDeletedError'))
+    } catch(error) {
+        showError($t('toasts.error.unknownError'))
+    }
+}
+
 </script>
 
 <style lang="css" scoped>

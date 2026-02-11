@@ -21,7 +21,9 @@
                 "noDescription": "No description",
                 "edit": "Edit",
                 "take": "Take the test",
-                "create": "Create test"
+                "create": "Create test",
+                "archive": "Archive test (users won't see it)",
+                "delete": "Delete this test"
             }
         },
         "groupsManagement": {
@@ -152,13 +154,15 @@
             "linkCopied": "The link has been copied to the clipboard",
             "groupCreated": "Group was created",
             "groupDeleted": "Group was deleted",
-            "groupLeaved": "Group was leaved"
+            "groupLeaved": "Group was leaved",
+            "testDeleted": "Test was deleted"
         },
         "error": {
             "unknownProblem": "Something went wrong",
             "groupCreatedError": "Something went wrong - group was not created",
             "groupDeletedError": "Something went wrong - group was not deleted",
-            "groupLeavedError": "Something went wrong - group was not leaved"
+            "groupLeavedError": "Something went wrong - group was not leaved",
+            "testDeletedError": "Something went wrong - test was not deleted"
         }
     },
     "validation": {
