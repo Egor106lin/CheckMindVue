@@ -151,11 +151,14 @@
         "success": {
             "linkCopied": "The link has been copied to the clipboard",
             "groupCreated": "Group was created",
-            "groupDeleted": "Group was deleted"
+            "groupDeleted": "Group was deleted",
+            "groupLeaved": "Group was leaved"
         },
         "error": {
             "unknownProblem": "Something went wrong",
-            "groupDeleted": "Something went wrong - group was not deleted"
+            "groupCreatedError": "Something went wrong - group was not created",
+            "groupDeletedError": "Something went wrong - group was not deleted",
+            "groupLeavedError": "Something went wrong - group was not leaved"
         }
     },
     "validation": {

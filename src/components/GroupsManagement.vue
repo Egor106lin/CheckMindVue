@@ -432,17 +432,13 @@ function deleteGroup(id) {
     }
 }
 
-function leaveGroup(id) {
+async function leaveGroup(id) {
     try {
-        store.dispatch('leaveGroup', id).then(() => {
-            if (store.getters['getCanLeaveGroup']) {
-                // Покинуть группу
-            } else {
-                // Не покидать группу
-            }
-        })
+        await store.dispatch('leaveGroup', id)
+        getGroupsData()
+        showSuccess($t('toasts.success.groupLeaved'))
     } catch(error) {
-        // Не удалось покинуть группу
+        showError($t('toasts.success.groupLeavedError'))
     }
 }
 

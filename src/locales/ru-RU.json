@@ -151,11 +151,14 @@
         "success": {
             "linkCopied": "Ссылка скопирована в буфер обмена",
             "groupCreated": "Группа создана",
-            "groupDeleted": "Группа удалена"
+            "groupDeleted": "Группа удалена",
+            "groupLeaved": "Группа покинута"
         },
         "error": {
             "unknownProblem": "Что-то пошло не так",
-            "groupDeletedError": "Что-то пошло не так - группа не удалена"
+            "groupCreatedError": "Что-то пошло не так - группа не создана",
+            "groupDeletedError": "Что-то пошло не так - группа не удалена",
+            "groupLeavedError": "Что-то пошло не так - группа не покинута"
         }
     },
     "validation": {
