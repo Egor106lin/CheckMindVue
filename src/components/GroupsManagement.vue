@@ -90,14 +90,14 @@
                                             <button 
                                                 class="btn btn-sm btn-primary"
                                                 @click="generateInviteLink(scope.row.id)"
-                                                :title="$t('components.groupsManagement.actions.inviteLink')"
+                                                :title="$t('components.groupsManagement.actions.link')"
                                             >
                                                 <i class="bi bi-link-45deg"></i>
                                             </button>
                                             <button 
                                                 class="btn btn-sm btn-primary"
                                                 @click="generateInviteQRCode(scope.row.id)"
-                                                :title="$t('components.groupsManagement.actions.qrCode')"
+                                                :title="$t('components.groupsManagement.actions.qr')"
                                             >
                                                 <i class="bi bi-qr-code"></i>
                                             </button>
@@ -162,28 +162,24 @@
                                             @click="generateInviteLink(group.id)"
                                         >
                                             <i class="bi bi-link-45deg me-1"></i>
-                                            <span class="d-none d-sm-inline">{{ $t('components.groupsManagement.actions.link') }}</span>
                                         </button>
                                         <button 
                                             class="btn btn-sm btn-primary flex-fill"
                                             @click="generateInviteQRCode(group.id)"
                                         >
                                             <i class="bi bi-qr-code me-1"></i>
-                                            <span class="d-none d-sm-inline">{{ $t('components.groupsManagement.actions.qr') }}</span>
                                         </button>
                                         <button 
                                             class="btn btn-sm btn-outline-danger flex-fill"
                                             @click="leaveGroup(group.id)"
                                         >
                                             <i class="bi bi-box-arrow-right me-1"></i>
-                                            <span class="d-none d-sm-inline">{{ $t('components.groupsManagement.actions.leave') }}</span>
                                         </button>
                                         <button 
                                             class="btn btn-sm btn-danger flex-fill"
                                             @click="deleteGroup(group.id)"
                                         >
                                             <i class="bi bi-trash me-1"></i>
-                                            <span class="d-none d-sm-inline">{{ $t('components.groupsManagement.actions.delete') }}</span>
                                         </button>
                                     </div>
                                 </div>
@@ -426,15 +422,13 @@ function copyToClipboard() {
 
 function deleteGroup(id) {
     try {
-        store.dispatch('deleteGroup', id).then(() => {
-            if (store.getters['getCanDeleteGroup']) {
-                // Удалить группу
-            } else {
-                // Не удалять группу
-            }
-        })
+        store.dispatch('deleteGroup', id)
+        showSuccess($t('toasts.success.groupDeleted'))
     } catch(error) {
         console.log(error)
+        showError($t('toasts.error.groupDeletedError'))
+    } finally {
+        getGroupsData()
     }
 }
 
@@ -460,9 +454,9 @@ async function createGroup(title) {
         groupToCreate.value = ''
         status.value = store.getters['getStatus']
         message.value = store.getters['getMessage']
-        showSuccess(message.value)
+        showSuccess($t('toasts.success.groupCreated'))
     } catch(error) {
-        showError(message.value)
+        showError($t('toasts.error.unknownError'))
     } finally {
         getGroupsData()
     }

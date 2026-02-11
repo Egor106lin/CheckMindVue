@@ -48,6 +48,12 @@
                 "name": "Group name",
                 "ID": "ID",
                 "actions": "Actions"
+            },
+            "actions": {
+                "link": "Copy link",
+                "qr": "Show QR",
+                "leave": "Leave group",
+                "delete": "Delete group"
             }
         },
         "membersManagement": {
@@ -143,10 +149,13 @@
     },
     "toasts": {
         "success": {
-            "linkCopied": "The link has been copied to the clipboard"
+            "linkCopied": "The link has been copied to the clipboard",
+            "groupCreated": "Group was created",
+            "groupDeleted": "Group was deleted"
         },
         "error": {
-            "unknownProblem": "Something went wrong"
+            "unknownProblem": "Something went wrong",
+            "groupDeleted": "Something went wrong - group was not deleted"
         }
     },
     "validation": {

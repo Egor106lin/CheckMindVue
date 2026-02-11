@@ -48,6 +48,12 @@
                 "name": "Название группы",
                 "ID": "ID",
                 "actions": "Действия"
+            },
+            "actions": {
+                "link": "Скопировать ссылку",
+                "qr": "Показать QR",
+                "leave": "Покинуть группу",
+                "delete": "Удалить группу"
             }
         },
         "membersManagement": {
@@ -143,10 +149,13 @@
     },
     "toasts": {
         "success": {
-            "linkCopied": "Ссылка скопированна в буфер обмена"
+            "linkCopied": "Ссылка скопирована в буфер обмена",
+            "groupCreated": "Группа создана",
+            "groupDeleted": "Группа удалена"
         },
         "error": {
-            "unknownProblem": "Что-то пошло не так"
+            "unknownProblem": "Что-то пошло не так",
+            "groupDeletedError": "Что-то пошло не так - группа не удалена"
         }
     },
     "validation": {
