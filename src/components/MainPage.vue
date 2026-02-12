@@ -99,11 +99,16 @@
                             <button class="btn btn-primary flex-fill" @click="takeTheTest(test.id)">
                                 {{ $t('components.mainPage.test.edit') }}
                             </button>
-                            <button class="btn btn-secondary" style="min-width: 44px" :title="$t('components.mainPage.test.archive')" @click="archiveTest(test.id)">
+                            <button v-if="!test.archived" class="btn btn-secondary" style="min-width: 44px" :title="$t('components.mainPage.test.archive')" @click="archiveTest(test.id)">
                                 <i class="bi bi-archive"></i>
                             </button>
                             <button class="btn btn-danger" style="min-width: 44px" :title="$t('components.mainPage.test.delete')" @click="deleteTest(test.id)">
                                 <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                        <div v-if="group.role == 'Admin'" class="d-flex gap-1 mt-1">
+                            <button v-if="test.archived" class="btn btn-secondary w-100" :title="$t('components.mainPage.test.archive')" @click="dearchiveTest(test.id)">
+                                {{ $t('components.mainPage.test.dearchive') }}
                             </button>
                         </div>
                         <div v-else-if="group.role == 'User'">
@@ -189,8 +194,22 @@ async function archiveTest(testID) {
         await store.dispatch('archiveTest', {
             testID: testID
         })
+        getGroupsData()
         const status = store.getters['getArchiveTestStatus']
-        status == 'success' ? showSuccess($t('toasts.success.testDeleted')) : showError($t('toasts.error.testDeletedError'))
+        status == 'success' ? showSuccess($t('toasts.success.testArchived')) : showError($t('toasts.error.testArchivedError'))
+    } catch(error) {
+        showError($t('toasts.error.unknownError'))
+    }
+}
+
+async function dearchiveTest(testID) {
+    try {
+        await store.dispatch('dearchiveTest', {
+            testID: testID
+        })
+        getGroupsData()
+        const status = store.getters['getDearchiveTestStatus']
+        status == 'success' ? showSuccess($t('toasts.success.testDearchived')) : showError($t('toasts.error.testDearchivedError'))
     } catch(error) {
         showError($t('toasts.error.unknownError'))
     }

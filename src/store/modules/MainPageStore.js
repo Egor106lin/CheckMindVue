@@ -4,12 +4,14 @@ const MainPageStore = {
     state: {
         groupsWithTests: null,
         deleteTestStatus: null,
-        archiveTestStatus: null
+        archiveTestStatus: null,
+        dearchiveTestStatus: null
     },
     getters: {
         getGroupsWithTests: state => state.groupsWithTests,
         getDeleteTestStatus: state => state.deleteTestStatus,
-        getArchiveTestStatus: state => state.archiveTestStatus
+        getArchiveTestStatus: state => state.archiveTestStatus,
+        getDearchiveTestStatus: state => state.dearchiveTestStatus
     },
     mutations: {
         setGroupsWithTests(state, groupsWithTests) {
@@ -20,6 +22,9 @@ const MainPageStore = {
         },
         setArchiveTestStatus(state, archiveTestStatus) {
             state.archiveTestStatus = archiveTestStatus
+        },
+        setDearchiveTestStatus(state, dearchiveTestStatus) {
+            state.dearchiveTestStatus = dearchiveTestStatus
         },
     },
     actions: {
@@ -49,6 +54,16 @@ const MainPageStore = {
                     test_id: payload.testID
                 })
                 commit('setArchiveTestStatus', response.data.status)
+            } catch(error) {
+                console.log(error)
+            }
+        },
+        async dearchiveTest({ commit }, payload) {
+            try {
+                const response = await api.post('/api/tests/dearchive', {
+                    test_id: payload.testID
+                })
+                commit('setDearchiveTestStatus', response.data.status)
             } catch(error) {
                 console.log(error)
             }
