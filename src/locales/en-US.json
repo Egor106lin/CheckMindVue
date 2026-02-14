@@ -156,6 +156,7 @@
             "groupCreated": "Group was created",
             "groupDeleted": "Group was deleted",
             "groupLeaved": "Group was leaved",
+            "personDeleted": "Person was deleted from this group",
             "testDeleted": "Test was deleted",
             "testArchived": "Test war archived",
             "testDearchived": "Test was dearchived"
@@ -165,6 +166,7 @@
             "groupCreatedError": "Something went wrong - group was not created",
             "groupDeletedError": "Something went wrong - group was not deleted",
             "groupLeavedError": "Something went wrong - group was not leaved",
+            "personDeletedError": "Something went wrong - person was not deleted from this group",
             "testDeletedError": "Something went wrong - test was not deleted",
             "testArchivedError": "Something went wrong - test was not archived",
             "testDearchivedError": "Something went wrong - test was not dearchived"

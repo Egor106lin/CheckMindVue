@@ -38,7 +38,7 @@
                                 </button>
                                 <button
                                     class="btn btn-outline-danger btn-sm"
-                                    @click="handleDelete(scope.row)"
+                                    @click="handleDelete(scope.row.id)"
                                 >
                                     <i class="bi bi-person-dash"></i>
                                 </button>
@@ -72,7 +72,7 @@
                         </button>
                         <button
                             class="btn btn-outline-danger btn-sm w-100"
-                            @click="handleDelete(member)"
+                            @click="handleDelete(member.id)"
                         >
                             <i class="bi bi-person-dash me-1"></i>
                             {{ $t('components.membersManagement.delete') }}
@@ -90,6 +90,7 @@
 
 <script setup>
 import { ref, onBeforeMount, defineProps, defineEmits } from 'vue'
+import { showSuccess, showError } from '@/utils/notifications'
 import { ElTable, ElTableColumn } from 'element-plus';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
@@ -115,7 +116,11 @@ const props = defineProps({
 
 const emit = defineEmits(['cancel'])
 
-onBeforeMount(async () => {
+onBeforeMount(() => {
+    getMembers()
+})
+
+async function getMembers() {
     try {
         await store.dispatch('getMembers', {
             groupID: props.groupId,
@@ -126,16 +131,26 @@ onBeforeMount(async () => {
             number: index + 1
         }))
     } catch (error) {
-        console.error('Ошибка:', error)
+        showError($t('toasts.error.unknownError'))
     }
-})
+}
 
 function handleMakeAdmin(member) {
     console.log('Make admin:', member)
 }
 
-function handleDelete(member) {
-    console.log('Delete member:', member)
+async function handleDelete(member_id) {
+    try {
+        await store.dispatch('deleteMember', {
+            userID: member_id,
+            groupID: props.groupId
+        })
+        getMembers()
+        const status = store.getters['getStatus']
+        status == 'success' ? showSuccess($t('toasts.success.personDeleted')) : showError($t('toasts.error.personDeletedError'))
+    } catch (error) {
+        showError($t('toasts.error.unknownError'))
+    }
 }
 </script>
 
