@@ -29,14 +29,15 @@
                         <template #default="scope">
                             <div class="d-flex gap-2">
                                 <button
-                                    v-if="!scope.row.admin && isAdmin"
+                                    v-if="!scope.row.admin && isAdmin && !scope.row.you"
                                     class="btn btn-outline-primary btn-sm"
-                                    @click="handleMakeAdmin(scope.row)"
+                                    @click="handleMakeAdmin(scope.row.id)"
                                 >
                                     <i class="bi bi-person-check me-1"></i>
                                     {{ $t('components.membersManagement.makeAdmin') }}
                                 </button>
                                 <button
+                                    v-if="!scope.row.you"
                                     class="btn btn-outline-danger btn-sm"
                                     @click="handleDelete(scope.row.id)"
                                 >
@@ -65,7 +66,7 @@
                         <button
                             v-if="!member.admin"
                             class="btn btn-outline-primary btn-sm w-100"
-                            @click="handleMakeAdmin(member)"
+                            @click="handleMakeAdmin(member.id)"
                         >
                             <i class="bi bi-person-check me-1"></i>
                             {{ $t('components.membersManagement.makeAdmin') }}
@@ -135,8 +136,18 @@ async function getMembers() {
     }
 }
 
-function handleMakeAdmin(member) {
-    console.log('Make admin:', member)
+async function handleMakeAdmin(member_id) {
+    try {
+        await store.dispatch('makeMemberAdmin', {
+            userID: member_id,
+            groupID: props.groupId
+        })
+        getMembers()
+        const status = store.getters['getStatus']
+        status == 'success' ? showSuccess($t('toasts.success.personPromoted')) : showError($t('toasts.error.personPromotedError'))
+    } catch (error) {
+        showError($t('toasts.error.unknownError'))
+    }
 }
 
 async function handleDelete(member_id) {

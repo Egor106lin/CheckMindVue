@@ -40,6 +40,17 @@ const MembersManagement = {
             } catch(error) {
                 commit('setStatus', 'error')
             }
+        },
+        async makeMemberAdmin({ commit }, payload) {
+            try {
+                const response = await api.post('/api/groups/make_member_admin', {
+                    user_id: payload.userID,
+                    group_id: payload.groupID
+                })
+                commit('setStatus', response.data.status)
+            } catch(error) {
+                commit('setStatus', 'error')
+            }
         }
     }
 }
