@@ -64,6 +64,7 @@
                                     type="checkbox"
                                     :value="optionIndex"
                                     v-model="answers[questionNow - 1].options"
+                                    @change="saveAnswersToStorage"
                                     :id="'option-' + questionNow + '-' + optionIndex"
                                 >
                             </div>
@@ -140,7 +141,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref, watch } from 'vue';
 import router from '@/router/routes'
 import { ElTable, ElTableColumn } from 'element-plus';
 import PageHeader from './PageHeader.vue';
@@ -149,7 +150,7 @@ const $t = useI18n().t
 const store = useStore()
 
 const test = ref()
-const answers = ref()
+const answers = ref([])
 const testResult = ref(null)
 
 const groupIDFromUrl = router.currentRoute.value.query['test_id']
@@ -157,13 +158,66 @@ const groupIDFromUrl = router.currentRoute.value.query['test_id']
 const testInProgress = ref(true)
 const questionNow = ref(1)
 
-onBeforeMount(() => {
-    const questionNowLocalStorage = localStorage.getItem('questionNow')
-    if (questionNowLocalStorage == null) {
-        questionNow.value = 1
+const getStorageKey = (suffix) => {
+    if (!test.value?.testID) return null
+    return `test_${test.value.testID}_${suffix}`
+}
+
+const saveQuestionNowToStorage = () => {
+    const key = getStorageKey('questionNow')
+    if (key) localStorage.setItem(key, questionNow.value.toString())
+}
+
+const saveAnswersToStorage = () => {
+    const key = getStorageKey('answers')
+    if (key) localStorage.setItem(key, JSON.stringify(answers.value))
+}
+
+const loadFromStorage = () => {
+    if (!test.value?.testID) return
+    const qKey = getStorageKey('questionNow')
+    const savedQuestion = localStorage.getItem(qKey)
+    if (savedQuestion) {
+        questionNow.value = parseInt(savedQuestion)
     } else {
-        questionNow.value = parseInt(questionNowLocalStorage)
+        questionNow.value = 1
     }
+
+    const aKey = getStorageKey('answers')
+    const savedAnswers = localStorage.getItem(aKey)
+    if (savedAnswers) {
+        try {
+            const parsed = JSON.parse(savedAnswers)
+            if (Array.isArray(parsed) && parsed.length === test.value.questionsQuantity) {
+                answers.value = parsed
+            } else {
+                answers.value = Array.from({ length: test.value.questionsQuantity }).map(() => ({
+                    question: '',
+                    options: []
+                }))
+            }
+        } catch {
+            answers.value = Array.from({ length: test.value.questionsQuantity }).map(() => ({
+                question: '',
+                options: []
+            }))
+        }
+    } else {
+        answers.value = Array.from({ length: test.value.questionsQuantity }).map(() => ({
+            question: '',
+            options: []
+        }))
+    }
+}
+
+const clearStorage = () => {
+    const qKey = getStorageKey('questionNow')
+    const aKey = getStorageKey('answers')
+    if (qKey) localStorage.removeItem(qKey)
+    if (aKey) localStorage.removeItem(aKey)
+}
+
+onBeforeMount(() => {
     getTestAndAnswers()
 })
 
@@ -173,24 +227,16 @@ async function getTestAndAnswers() {
             testID: groupIDFromUrl
         })
         test.value = store.getters.test
-
-        const answersLocaleStorage = JSON.parse(localStorage.getItem('answers'))
-        if (answersLocaleStorage == null) {
-            answers.value = Array.from({ length: test.value.questionsQuantity }).map(() => ({
-                question: '',
-                options: []
-            }))
-        } else {
-            answers.value = answersLocaleStorage
-        }
+        loadFromStorage()
     } catch (error) {
         console.error('Ошибка:', error)
     }
 }
 
 function changeQuestion(next = true) {
-    localStorage.setItem('answers', JSON.stringify(answers.value))
-    localStorage.setItem('questionNow', questionNow.value.toString())
+    saveAnswersToStorage()
+    saveQuestionNowToStorage()
+
     if (next) {
         if (questionNow.value < test.value.questionsQuantity) {
             questionNow.value++
@@ -204,7 +250,12 @@ function changeQuestion(next = true) {
             return
         }
     }
+    saveQuestionNowToStorage()
 }
+
+watch(answers, () => {
+    saveAnswersToStorage()
+}, { deep: true })
 
 async function finishTest() {
     try {      
@@ -223,8 +274,7 @@ async function finishTest() {
         
         testResult.value = store.getters.result
         testInProgress.value = false
-        localStorage.removeItem('answers')
-        localStorage.removeItem('questionNow')
+        clearStorage()
     } catch (error) {
         console.error('Ошибка при завершении теста:', error)
         throw error
