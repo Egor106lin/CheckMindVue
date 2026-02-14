@@ -314,6 +314,7 @@
                 <MembersManagement
                     :groupName="membersOfGroupToWatchData.groupName"
                     :isAdmin="membersOfGroupToWatchData.isAdmin"
+                    :group-id="membersOfGroupToWatchData.id"
                     @cancel="isUserManagementOpened = false"
                 />
             </div>
@@ -349,6 +350,7 @@ const message = ref()
 const membersOfGroupToWatchData = ref({
     groupName: '',
     isAdmin: '',
+    id: ""
 })
 
 const userGroupsData = ref([])
@@ -389,6 +391,7 @@ function openMembersManager(groupData, isAdmin) {
     isUserManagementOpened.value = true
     membersOfGroupToWatchData.value.groupName = groupData.name
     membersOfGroupToWatchData.value.isAdmin = isAdmin
+    membersOfGroupToWatchData.value.id = groupData.id
 }
 
 async function generateInviteQRCode(id) {

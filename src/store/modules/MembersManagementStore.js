@@ -15,12 +15,10 @@ const MembersManagement = {
     actions: {
         async getMembers({ commit }, payload) {
             try {
-                const response = await api.get('/api/groups/get_members', {
-                    params: {
-                        groupID: payload.groupID
-                    },
+                const response = await api.post('/api/groups/get_members', {
+                    group_id: payload.groupID
                 })
-                const membersJSON = JSON.parse(response.data.data)
+                const membersJSON = response.data.data
                 console.log(membersJSON)
                 commit('setMembers', membersJSON)
             } catch(error) {

@@ -11,19 +11,21 @@
                     </button>
                 </div>
             </div>
-            
-            <div class="table-responsive">
+            <div class="d-none d-md-block table-responsive">
                 <ElTable :data="tableData" class="rounded-5">
                     <ElTableColumn prop="number" :label="$t('components.membersManagement.№')" sortable width="80" />
                     <ElTableColumn prop="admin" :label="$t('components.membersManagement.admin')" width="150">
                         <template #default="scope">
                             <div v-if="scope.row.admin">
-                                <i class="bi bi-check-lg text-success"></i>
+                                <i class="bi bi-check-lg"></i>
+                            </div>
+                            <div v-else-if="!scope.row.admin">
+                                <i class="bi bi-x-lg"></i>
                             </div>
                         </template>
                     </ElTableColumn>
                     <ElTableColumn prop="name" :label="$t('components.membersManagement.name')" />
-                    <ElTableColumn v-if="isAdmin" fixed="right" align="center" prop="actions" width="200">
+                    <ElTableColumn v-if="isAdmin" fixed="right" align="center" prop="actions">
                         <template #default="scope">
                             <div class="d-flex gap-2">
                                 <button
@@ -45,6 +47,43 @@
                     </ElTableColumn>
                 </ElTable>
             </div>
+            <div class="d-md-none members-mobile-list">
+                <div v-for="(member, index) in tableData" :key="index" class="member-card">
+                    <div class="member-header">
+                        <span class="member-number">#{{ member.number }}</span>
+                        <span v-if="member.admin" class="admin-badge">
+                            <i class="bi bi-check-lg"></i>
+                            {{ $t('components.membersManagement.admin') }}
+                        </span>
+                    </div>
+                    
+                    <div class="member-name">
+                        <strong>{{ member.name }}</strong>
+                    </div>
+                    
+                    <div v-if="isAdmin" class="member-actions">
+                        <button
+                            v-if="!member.admin"
+                            class="btn btn-outline-primary btn-sm w-100"
+                            @click="handleMakeAdmin(member)"
+                        >
+                            <i class="bi bi-person-check me-1"></i>
+                            {{ $t('components.membersManagement.makeAdmin') }}
+                        </button>
+                        <button
+                            class="btn btn-outline-danger btn-sm w-100"
+                            @click="handleDelete(member)"
+                        >
+                            <i class="bi bi-person-dash me-1"></i>
+                            {{ $t('components.membersManagement.delete') }}
+                        </button>
+                    </div>
+                    <div v-else class="member-actions-placeholder"></div>
+                </div>
+                <div v-if="!tableData?.length" class="text-center text-muted py-4">
+                    {{ $t('components.membersManagement.noMembers') }}
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -59,9 +98,12 @@ const $t = useI18n().t
 const store = useStore()
 const tableData = ref()
 
-// eslint-disable-next-line
 const props = defineProps({
     groupName: {
+        type: String,
+        required: true
+    },
+    groupId: {
         type: String,
         required: true
     },
@@ -76,9 +118,13 @@ const emit = defineEmits(['cancel'])
 onBeforeMount(async () => {
     try {
         await store.dispatch('getMembers', {
-            groupID: 43,
+            groupID: props.groupId,
         })
-        tableData.value = store.getters.members
+        const members = store.getters.members
+        tableData.value = members.map((member, index) => ({
+            ...member,
+            number: index + 1
+        }))
     } catch (error) {
         console.error('Ошибка:', error)
     }
@@ -139,16 +185,84 @@ function handleDelete(member) {
     overflow: hidden;
 }
 
+/* Мобильные стили */
+.members-mobile-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.member-card {
+    background-color: white;
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.member-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.member-number {
+    color: #6c757d;
+    font-weight: 600;
+}
+
+.admin-badge {
+    background-color: #e7f3ff;
+    color: #0d6efd;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.member-name {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    word-break: break-word;
+}
+
+.member-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.member-actions .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    font-size: 0.95rem;
+}
+
+.member-actions-placeholder {
+    height: 8px;
+}
+
 @media (max-width: 768px) {
     .card {
         border-radius: 16px;
     }
     
-    .btn-outline-primary span {
+    .btn-outline-primary span,
+    .btn-outline-danger span {
         display: none;
     }
     
-    .btn-outline-primary i {
+    .btn-outline-primary i,
+    .btn-outline-danger i {
         margin-right: 0 !important;
     }
 }
@@ -160,6 +274,25 @@ function handleDelete(member) {
     
     h3 {
         font-size: 1.3rem;
+    }
+    
+    .member-card {
+        padding: 12px;
+    }
+    
+    .member-name {
+        font-size: 1rem;
+    }
+    
+    .member-actions .btn {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 400px) {
+    .member-card {
+        padding: 10px;
     }
 }
 </style>
