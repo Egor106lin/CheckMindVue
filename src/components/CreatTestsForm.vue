@@ -45,24 +45,54 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="group_id" class="form-label small text-muted mb-1">
-                                {{ $t('components.createTestsForm.testDataForm.groupId') }}
+                            <label class="form-label small text-muted mb-1">
+                                {{ $t('components.createTestsForm.testDataForm.groupName') }}
                             </label>
-                            <input
-                                id="group_id"
-                                v-model="state.group_id"
-                                @blur="v$.group_id.$touch()"
-                                class="form-control"
-                                type="text"
-                                :disabled="!canCreateTestsForm"
-                                :placeholder="$t('components.createTestsForm.testDataForm.groupId')"
-                            >
+                            <div v-if="groups.length > 0" class="dropdown">
+                                <button 
+                                    class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center" 
+                                    type="button" 
+                                    id="groupDropdown" 
+                                    data-bs-toggle="dropdown" 
+                                    aria-expanded="false"
+                                    :disabled="!canCreateTestsForm"
+                                >
+                                    <span v-if="selectedGroup">
+                                        {{ selectedGroup.name }}
+                                    </span>
+                                    <span v-else class="text-muted">
+                                        {{ $t('components.createTestsForm.testDataForm.selectGroup') }}
+                                    </span>
+                                    <i class="bi bi-chevron-down"></i>
+                                </button>
+                                <ul class="dropdown-menu w-100 p-3" aria-labelledby="groupDropdown" style="max-height: 300px; overflow-y: auto;">
+                                    <li v-for="group in groups" :key="group.id" class="mb-2">
+                                        <div class="form-check">
+                                            <input 
+                                                class="form-check-input" 
+                                                type="radio" 
+                                                name="groupRadio"
+                                                :id="'group-' + group.id" 
+                                                :value="String(group.id)"
+                                                v-model="state.group_id"
+                                                @change="v$.group_id.$touch()"
+                                            >
+                                            <label class="form-check-label d-flex justify-content-between w-100" :for="'group-' + group.id">
+                                                <span>{{ group.name }}</span>
+                                                <small class="text-muted">ID: {{ group.id }}</small>
+                                            </label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-else-if="groups.length == 0">
+                                <label class="form-label text-muted mb-1">
+                                    {{ $t('components.createTestsForm.testDataForm.noGroups') }}
+                                </label>
+                            </div>
                             <div v-if="v$.group_id.$error" class="text-danger small mt-1">
                                 <span v-if="v$.group_id.required.$invalid">
                                     {{ $t('validation.required') }}
-                                </span>
-                                <span v-if="v$.group_id.numeric.$invalid">
-                                    {{ $t('validation.numeric') }}
                                 </span>
                             </div>
                         </div>
@@ -124,23 +154,36 @@
 <script setup>
 import { useI18n } from 'vue-i18n';
 import useVuelidate from '@vuelidate/core';
-import { required, numeric, minValue, maxValue } from '@vuelidate/validators';
+import { required, numeric, minValue, maxValue, helpers } from '@vuelidate/validators';
 import { ref, computed, reactive, onBeforeMount } from 'vue';
 import createTestsWriter from './CreateTestsWriter.vue';
 import router from '@/router/routes';
 import PageHeader from './PageHeader.vue';
+import { useStore } from 'vuex';
 
 const $t = useI18n().t
+const store = useStore()
 const canCreateTestsForm = ref(true)
 
-onBeforeMount(() => {
+const groups = ref([])
+
+onBeforeMount(async () => {
+    try {
+        await store.dispatch('getGroupsToCreateTest')
+        const groupsData = store.getters.getGroupsList
+        groups.value = Array.isArray(groupsData) ? groupsData : []
+    } catch (error) {
+        console.error('Ошибка загрузки групп:', error)
+        groups.value = []
+    }
+
     const formData = localStorage.getItem('formData')
-    if (formData != null) {
-        const testParams = JSON.parse(formData)
-        state.test_name = testParams.test_name || ''
-        state.test_description = testParams.test_description || ''
-        state.group_id = testParams.group_id || ''
-        state.questions_quantity = testParams.questions_quantity || ''
+    if (formData) {
+        const saved = JSON.parse(formData)
+        state.test_name = saved.test_name || ''
+        state.test_description = saved.test_description || ''
+        state.group_id = saved.group_id != null ? String(saved.group_id) : null
+        state.questions_quantity = saved.questions_quantity || ''
         canCreateTestsForm.value = false
     }
 })
@@ -148,14 +191,19 @@ onBeforeMount(() => {
 const state = reactive({
     test_name: '',
     test_description: '',
-    group_id: '',
+    group_id: null,
     questions_quantity: '',  
+})
+
+const selectedGroup = computed(() => {
+    if (!Array.isArray(groups.value)) return null
+    return groups.value.find(g => String(g.id) === state.group_id)
 })
 
 const rules = computed(() => ({
     test_name: { required },
     test_description: { required },
-    group_id: { required, numeric },
+    group_id: { required: helpers.withMessage($t('validation.required'), value => value !== null && value !== '') },
     questions_quantity: { 
         required, 
         numeric, 
@@ -202,12 +250,15 @@ const finishedTest = () => {
     border-radius: 20px;
 }
 
-.form-control:focus {
+.form-control:focus,
+.btn-outline-secondary:focus {
     border: 2px solid #3846D3;
     border-radius: 15px;
+    box-shadow: none;
 }
 
-.form-control {
+.form-control,
+.btn-outline-secondary {
     outline: none !important;
     box-shadow: none !important;
     border-radius: 15px;
@@ -215,10 +266,22 @@ const finishedTest = () => {
     padding: 10px 15px;
 }
 
-.form-control:disabled {
+.form-control:disabled,
+.btn-outline-secondary:disabled {
     background-color: #f8f9fa;
     opacity: 0.7;
     cursor: not-allowed;
+}
+
+.btn-outline-secondary {
+    background-color: white;
+    color: #212529;
+    text-align: left;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #f8f9fa;
+    border-color: #ced4da;
 }
 
 .btn-primary {
@@ -231,11 +294,6 @@ const finishedTest = () => {
 
 .btn-primary:hover {
     background-color: #2a37b0;
-}
-
-.btn-outline-secondary {
-    border-radius: 15px;
-    padding: 10px 20px;
 }
 
 .btn-primary.disabled,
@@ -253,12 +311,37 @@ const finishedTest = () => {
     font-weight: 500;
 }
 
+.dropdown-menu {
+    border-radius: 15px;
+    border: 2px solid #f3f3f3;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.dropdown-menu .form-check {
+    padding-left: 1.5rem;
+}
+
+.dropdown-menu .form-check-input {
+    margin-left: -1.5rem;
+}
+
+.dropdown-menu .form-check-label {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 0.95rem;
+}
+
 @media (min-width: 768px) {
     .h6.h4-md {
         font-size: 1.5rem;
     }
     
-    .form-control {
+    .form-control,
+    .btn-outline-secondary {
         padding: 12px 18px;
     }
 }
@@ -278,19 +361,24 @@ const finishedTest = () => {
         border-radius: 16px;
     }
     
-    .btn-primary, .btn-outline-secondary {
+    .btn-primary {
         min-height: 48px;
         padding: 12px 16px;
         font-size: 1rem;
     }
     
-    .form-control {
+    .form-control,
+    .btn-outline-secondary {
         padding: 12px 16px;
         font-size: 1rem;
     }
     
     hr {
         margin: 15px 0;
+    }
+
+    .dropdown-menu {
+        max-height: 250px;
     }
 }
 
@@ -307,7 +395,7 @@ const finishedTest = () => {
         font-size: 1.1rem;
     }
     
-    .btn-primary, .btn-outline-secondary {
+    .btn-primary {
         min-height: 52px;
     }
     
@@ -321,11 +409,13 @@ const finishedTest = () => {
     margin-top: 4px;
 }
 
-.form-control.is-invalid {
+.form-control.is-invalid,
+.btn-outline-secondary.is-invalid {
     border-color: #dc3545 !important;
 }
 
-.form-control.is-invalid:focus {
+.form-control.is-invalid:focus,
+.btn-outline-secondary.is-invalid:focus {
     box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25) !important;
 }
 </style>

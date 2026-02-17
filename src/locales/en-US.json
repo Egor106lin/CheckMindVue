@@ -78,14 +78,13 @@
             "scanForQuickAccess": "Scan for quick access"
         },
         "createTestsForm": {
-            "alert": {
-                "alertNotAdmin": "Tests can be created by administrator only :("
-            },
             "testDataForm": {
                 "createNewTest": "Create a new test",
                 "testName": "Test Name",
                 "testDescription": "Test Description",
-                "groupId": "Group ID (must be numeric)",
+                "groupName": "Group name",
+                "noGroups": "You did not create any groups",
+                "selectGroup": "Select a group to give it a test",
                 "questionsQuanity": "Questions quanity (must be numeric)"
             }
         },

@@ -78,14 +78,13 @@
             "scanForQuickAccess": "Отсканируйте для быстрого перехода"
         },
         "createTestsForm": {
-            "alert": {
-                "alertNotAdmin": "Создавать тесты может только администратор :("
-            },
             "testDataForm": {
                 "createNewTest": "Создать новый тест",
                 "testName": "Название теста",
                 "testDescription": "Описание теста",
-                "groupId": "ID группы",
+                "groupName": "Название группы",
+                "noGroups": "Вы ещё не создали ни одной группы",
+                "selectGroup": "Выберите группу для задания ей теста",
                 "questionsQuanity": "Количество вопросов"
             }
         },
