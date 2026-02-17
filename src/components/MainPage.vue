@@ -79,7 +79,7 @@
                     :key="test.id"
                 >
                     <div class="card card-test card-body h-100">
-                        <h5 class="card-title">{{ test.test_name }}</h5>
+                        <h5 class="card-title" :class="test.archived ? 'text-muted' : ''">{{ test.test_name }}</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary">
                             {{ $t('components.mainPage.test.questions') }} {{ test.questions_quantity }}
                         </h6>
