@@ -423,10 +423,11 @@ function copyToClipboard() {
     showSuccess($t('toasts.success.linkCopied'))
 }
 
-function deleteGroup(id) {
+async function deleteGroup(id) {
     try {
-        store.dispatch('deleteGroup', id)
-        showSuccess($t('toasts.success.groupDeleted'))
+        await store.dispatch('deleteGroup', id)
+        const status = store.getters.getStatus
+        status ? showSuccess($t('toasts.success.groupDeleted')) : showError($t('toasts.error.groupDeletedError'))
     } catch(error) {
         console.log(error)
         showError($t('toasts.error.groupDeletedError'))
@@ -439,7 +440,8 @@ async function leaveGroup(id) {
     try {
         await store.dispatch('leaveGroup', id)
         getGroupsData()
-        showSuccess($t('toasts.success.groupLeaved'))
+        const status = store.getters.getStatus
+        status ? showSuccess($t('toasts.success.groupLeaved')) : showError($t('toasts.error.groupLeavedError'))
     } catch(error) {
         showError($t('toasts.success.groupLeavedError'))
     }
@@ -451,7 +453,7 @@ async function createGroup(title) {
     try {
         await store.dispatch('createGroup', title)
         groupToCreate.value = ''
-        status.value = store.getters['getStatus']
+        status.value = store.getters.getStatus
         message.value = store.getters['getMessage']
         showSuccess($t('toasts.success.groupCreated'))
     } catch(error) {

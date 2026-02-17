@@ -39,7 +39,7 @@ const GroupsManagementStore = {
                 commit('setAdminGroupsData', response.data.adminGroupsData)
                 commit('setUserGroupsData', response.data.userGroupsData)
             } catch (error) {
-                console.log(error)
+                commit('setStatus', 'error')
             }
         },
         async getInviteUrl({ commit }, id) {
@@ -55,9 +55,8 @@ const GroupsManagementStore = {
                 const response = await api.post('/api/groups/delete', id)
                 commit('setStatus', response.data.status)
                 commit('setMessage', response.data.message)
-                console.log(response.data)
             } catch (error) {
-                console.log(error)
+                commit('setStatus', 'error')
             }
         },
         async leaveGroup({ commit }, id) {
@@ -65,9 +64,8 @@ const GroupsManagementStore = {
                 const response = await api.post('/api/groups/leave', id)
                 commit('setStatus', response.data.status)
                 commit('setMessage', response.data.message)
-                console.log(response.data)
             } catch (error) {
-                console.log(error)
+                commit('setStatus', 'error')
             }
         },
         async createGroup({ commit }, title) {
@@ -77,9 +75,8 @@ const GroupsManagementStore = {
                 })
                 commit('setStatus', response.data.status)
                 commit('setMessage', response.data.message)
-                console.log(response.data)
             } catch (error) {
-                console.log(error)
+                commit('setStatus', 'error')
             }
         },
         async joinGroup({ commit }, id) {
@@ -87,9 +84,8 @@ const GroupsManagementStore = {
                 const response = await api.post('/api/groups/join', id)
                 commit('setStatus', response.data.status)
                 commit('setMessage', response.data.message)
-                console.log(response.data)
             } catch (error) {
-                console.log(error)
+                commit('setStatus', 'error')
             }
         },
     }
