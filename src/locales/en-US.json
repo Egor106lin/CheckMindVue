@@ -80,6 +80,7 @@
         "createTestsForm": {
             "testDataForm": {
                 "createNewTest": "Create a new test",
+                "cancelTestCreation": "Cancel test creation",
                 "testName": "Test Name",
                 "testDescription": "Test Description",
                 "groupName": "Group name",

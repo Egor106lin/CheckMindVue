@@ -138,13 +138,19 @@
                         >
                             {{ $t('components.createTestsForm.testDataForm.createNewTest') }}
                         </button>
+                        <button
+                            v-if="!canCreateTestsForm"
+                            class="btn btn-danger mb-1 mt-1"
+                            @click="cancelTestCreation()"
+                        >
+                            {{ $t('components.createTestsForm.testDataForm.cancelTestCreation') }}
+                        </button>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-md-8 mt-3 mt-md-0" v-if="!canCreateTestsForm && !user">
                 <create-tests-writer 
                     @leaveOnMain="finishedTest()"
-                    @editForm="enableEditing()"
                 />
             </div>
         </div>
@@ -214,7 +220,7 @@ const rules = computed(() => ({
 
 const v$ = useVuelidate(rules, state)
 
-const saveFormData = () => {
+function saveFormData() {
     v$.value.$touch()
     
     if (v$.value.$invalid) {
@@ -227,15 +233,18 @@ const saveFormData = () => {
     localStorage.setItem('canCreateTestsForm', JSON.stringify(false))
 }
 
-const enableEditing = () => {
-    canCreateTestsForm.value = true
-    localStorage.removeItem('canCreateTestsForm')
-}
-
-const finishedTest = () => {
+function finishedTest() {
     localStorage.removeItem('formData')
     localStorage.removeItem('canCreateTestsForm')
     router.push('/')    
+}
+
+function cancelTestCreation() {
+    canCreateTestsForm.value = true
+    localStorage.removeItem('formData')
+    localStorage.removeItem('canCreateTestsForm')
+    localStorage.removeItem('questionWrittenByUserNow')
+    localStorage.removeItem('testCreatedByUser')
 }
 </script>
 
@@ -301,6 +310,13 @@ const finishedTest = () => {
     background-color: #6c757d;
     cursor: not-allowed;
     opacity: 0.65;
+}
+
+.btn-danger {
+    background-color: #d33838;
+    border-radius: 15px;
+    padding: 12px 20px;
+    border: none;
 }
 
 .h6.h4-md {
