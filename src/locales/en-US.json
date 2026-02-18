@@ -24,7 +24,8 @@
                 "create": "Create test",
                 "archive": "Archive test (users won't see it)",
                 "dearchive": "Return from archive",
-                "delete": "Delete this test"
+                "delete": "Delete this test",
+                "watchResults": "View results"
             }
         },
         "groupsManagement": {
@@ -87,7 +88,7 @@
                 "groupName": "Group name",
                 "noGroups": "You did not create any groups",
                 "selectGroup": "Select a group to give it a test",
-                "questionsQuanity": "Questions quanity (must be numeric)"
+                "questionsQuantity": "Questions quantity (must be numeric)"
             }
         },
         "createTestsWriter": {
@@ -139,7 +140,7 @@
                 "join": "Join",
                 "create": "Create",
                 "groupId": "Group ID: ",
-                "usersQuanity": "Users quanity"
+                "usersQuantity": "Users quantity"
             },
             "guide": {
                 "title": "Guide",
@@ -149,6 +150,12 @@
                 "rule4": "If you are administrator, you can create tests on page 'Exercises'.",
                 "btnCreateTests": "Create test!"
             }
+        },
+        "testResults": {
+            "title": "Test results",
+            "name": "Name",
+            "points": "Points",
+            "time": "Time"
         }
     },
     "toasts": {
@@ -177,9 +184,9 @@
         }
     },
     "validation": {
-        "required": "",
-        "numeric": "",
-        "minValue": "",
-        "maxValue": ""
+        "required": "This field is required",
+        "numeric": "Must be a number",
+        "minValue": "Value is below minimum",
+        "maxValue": "Value exceeds maximum"
     }
 }

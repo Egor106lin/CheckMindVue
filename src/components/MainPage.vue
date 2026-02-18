@@ -107,8 +107,13 @@
                             </button>
                         </div>
                         <div v-if="group.role == 'Admin'" class="d-flex gap-1 mt-1">
-                            <button v-if="test.archived" class="btn btn-secondary w-100" :title="$t('components.mainPage.test.archive')" @click="dearchiveTest(test.id)">
+                            <button v-if="test.archived" class="btn btn-secondary w-100" :title="$t('components.mainPage.test.dearchive')" @click="dearchiveTest(test.id)">
                                 {{ $t('components.mainPage.test.dearchive') }}
+                            </button>
+                        </div>
+                        <div v-if="group.role == 'Admin'" class="d-flex gap-1 mt-1">
+                            <button class="btn btn-secondary w-100" @click="openTestResults(test.attempts)">
+                                {{ $t('components.mainPage.test.watchResults') }}
                             </button>
                         </div>
                         <div v-else-if="group.role == 'User'">
@@ -131,6 +136,14 @@
             </div>
         </div>
     </div>
+    <div v-if="isResultsModalOpen" class="modal-overlay" @click.self="closeResultsModal">
+        <div class="modal-content">
+            <TestResults
+            :results="testResultsData"
+            @close="closeResultsModal"
+            />
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -138,12 +151,27 @@ import { useI18n } from 'vue-i18n';
 import router from '@/router/routes'
 import { ref, onMounted } from 'vue'
 import PageHeader from './PageHeader.vue';
+import TestResults from './TestResults.vue'
 import { useStore } from 'vuex';
 import { showError, showSuccess } from '@/utils/notifications';
 
 const store = useStore()
 const $t = useI18n().t
 const groups = ref([])
+const isResultsModalOpen = ref(false);
+const testResultsData = ref()
+
+function openTestResults(attempts) {
+    console.log(attempts)
+    testResultsData.value = attempts
+    isResultsModalOpen.value = true
+}
+
+function closeResultsModal() {
+  isResultsModalOpen.value = false;
+  testResultsData.value = [];
+}
+
 
 async function getGroupsData() {
     try {
@@ -288,6 +316,42 @@ async function dearchiveTest(testID) {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @media (max-width: 768px) {
