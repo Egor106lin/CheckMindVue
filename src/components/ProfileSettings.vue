@@ -136,6 +136,7 @@ import PageHeader from './PageHeader.vue';
 import { useStore } from 'vuex';
 import ModalConfirmDeleteAccount from './ModalConfirmDeleteAccount.vue';
 import router from '@/router/routes';
+import { showError } from '@/utils/notifications';
 
 const store = useStore()
 const $t = useI18n().t
@@ -192,8 +193,15 @@ function deleteAccount() {
     isModalVisible.value = true
 }
 
-function handleConfirmDelete() {
-    console.log('Аккаунт удален')
+async function handleConfirmDelete() {
+    await store.dispatch('deleteAccount')
+    const status = store.getters.getStatus
+    if (status == 'success') {
+        localStorage.clear()
+        router.push('/login')
+    } else {
+        showError($t('toasts.error.accountDeletedError'))
+    }
     isModalVisible.value = false
 }
 

@@ -171,7 +171,8 @@
             "personPromotedError": "Something went wrong - person was not promoted",
             "testDeletedError": "Something went wrong - test was not deleted",
             "testArchivedError": "Something went wrong - test was not archived",
-            "testDearchivedError": "Something went wrong - test was not dearchived"
+            "testDearchivedError": "Something went wrong - test was not dearchived",
+            "accountDeletedError": "Something went wrong - account was not deleted"
         }
     },
     "validation": {
