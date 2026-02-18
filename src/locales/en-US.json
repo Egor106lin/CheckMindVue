@@ -64,7 +64,8 @@
             "makeAdmin": "Make as admin",
             "№": "№",
             "admin": "Administrator",
-            "name": "Name"
+            "name": "Name",
+            "delete": "Delete user"
         },
         "acceptInvite": {
             "title": "Group invitation",

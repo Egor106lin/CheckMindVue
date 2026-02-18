@@ -64,7 +64,8 @@
             "makeAdmin": "Сделать администратором",
             "№": "№",
             "admin": "Администратор",
-            "name": "Имя"
+            "name": "Имя",
+            "delete": "Delete user"
         },
         "acceptInvite": {
             "title": "Приглашение в группу",

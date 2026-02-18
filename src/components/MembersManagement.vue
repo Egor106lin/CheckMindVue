@@ -72,6 +72,7 @@
                             {{ $t('components.membersManagement.makeAdmin') }}
                         </button>
                         <button
+                            v-if="!member.you"
                             class="btn btn-outline-danger btn-sm w-100"
                             @click="handleDelete(member.id)"
                         >
