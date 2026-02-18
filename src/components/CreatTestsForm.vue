@@ -98,7 +98,7 @@
                         </div>
                         <div class="mb-4">
                             <label for="questions_quantity" class="form-label small text-muted mb-1">
-                                {{ $t('components.createTestsForm.testDataForm.questionsQuanity') }}
+                                {{ $t('components.createTestsForm.testDataForm.questionsQuantity') }}
                             </label>
                             <input
                                 id="questions_quantity"
@@ -109,7 +109,7 @@
                                 min="1"
                                 max="30"
                                 :disabled="!canCreateTestsForm"
-                                :placeholder="$t('components.createTestsForm.testDataForm.questionsQuanity')"
+                                :placeholder="$t('components.createTestsForm.testDataForm.questionsQuantity')"
                             >
                             <div v-if="v$.questions_quantity.$error" class="text-danger small mt-1">
                                 <span v-if="v$.questions_quantity.required.$invalid">
