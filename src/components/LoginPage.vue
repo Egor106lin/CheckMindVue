@@ -1,5 +1,9 @@
 <template>
     <div class="background">
+        <div class="decoration">
+            <img src="../assets/images/notepad.svg" alt="Notepad" class="notepad">
+            <img src="../assets/images/abc.svg" alt="ABC" class="abc">
+        </div>
         <div class="container d-flex align-items-center min-vh-100">
             <div class="row w-100 justify-content-center">
                 <div class="col-12 col-md-8 col-lg-5">
@@ -59,13 +63,47 @@ async function loginWithGoogle() {
 
 <style lang="css" scoped>
 .background {
+    position: relative;
     min-height: 100vh;
     background-image: url('/src/assets/images/background_light.svg') !important;
     background-size: cover;
     background-position: center;
+    overflow: hidden;
+}
+
+.decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.notepad {
+    position: absolute;
+    left: 5%;
+    top: 20%;
+    width: 360px;
+    height: auto;
+    opacity: 0.7;
+    transform: rotate(-5deg);
+}
+
+.abc {
+    position: absolute;
+    right: 5%;
+    bottom: 15%;
+    width: 400px;
+    height: auto;
+    opacity: 0.7;
+    transform: rotate(5deg);
 }
 
 .card {
+    position: relative;
+    z-index: 2;
     border-radius: 35px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
@@ -73,7 +111,7 @@ async function loginWithGoogle() {
 }
 
 .btn-primary {
-    background-color: #3f48ad;
+    background-color: #3846D3;
     border-radius: 20px;
     border: none;
     font-size: 1.2rem;
@@ -112,7 +150,6 @@ h1 {
     
     .card {
         border-radius: 30px;
-        box-shadow: 5px 5px 15px 0 #3846D3;
     }
     
     .card-body {
@@ -138,6 +175,18 @@ h1 {
     .btn-primary:hover {
         transform: none;
     }
+    
+    .notepad {
+        width: 120px;
+        left: 2%;
+        top: 15%;
+    }
+    
+    .abc {
+        width: 140px;
+        right: 2%;
+        bottom: 10%;
+    }
 }
 
 @media (max-width: 576px) {
@@ -157,6 +206,10 @@ h1 {
     .btn-primary {
         border-radius: 16px;
         font-size: 1rem;
+    }
+    
+    .notepad, .abc {
+        display: none;
     }
 }
 
