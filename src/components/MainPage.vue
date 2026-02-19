@@ -96,7 +96,7 @@
                             </div>
                         </div>
                         <div v-if="group.role == 'Admin'" class="d-flex gap-1">
-                            <button class="btn btn-primary flex-fill" @click="takeTheTest(test.id)">
+                            <button class="btn btn-primary flex-fill disabled">
                                 {{ $t('components.mainPage.test.edit') }}
                             </button>
                             <button v-if="!test.archived" class="btn btn-secondary" style="min-width: 44px" :title="$t('components.mainPage.test.archive')" @click="archiveTest(test.id)">

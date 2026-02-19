@@ -25,14 +25,14 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col text-center">
-                                    <button class="btn btn-primary w-100 py-3">
+                                    <button class="btn btn-primary w-100 py-3 disabled">
                                         <span class="h5 mb-0">Зайти с VK</span>
                                     </button>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col text-center">
-                                    <button class="btn btn-primary w-100 py-3">
+                                    <button class="btn btn-primary w-100 py-3 disabled">
                                         <span class="h5 mb-0">Зайти с Яндекс</span>
                                     </button>
                                 </div>
