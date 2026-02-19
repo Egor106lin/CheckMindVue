@@ -6,11 +6,12 @@ import MainPage from '@/components/MainPage.vue'
 import GroupsManagement from '@/components/GroupsManagement.vue'
 import CreatTestsForm from '@/components/CreatTestsForm.vue'
 import TestingInProgress from '@/components/TestingInProgress.vue'
+import AcceptInvite from '@/components/AcceptInvite.vue'
 
 const routes = [
     {
-      path: '/login',
-      component: LoginPage  
+        path: '/login',
+        component: LoginPage  
     },
     {
         path: '/',
@@ -21,7 +22,11 @@ const routes = [
         component: GroupsManagement
     },
     {
-        path: '/profile_settings',
+        path: '/join',
+        component: AcceptInvite
+    },
+    {
+        path: '/profile',
         component: ProfileSettings
     },
     {   
@@ -29,7 +34,7 @@ const routes = [
         component: CreatTestsForm
     },
     {   
-        path: '/testing/:groupID/:testName',
+        path: '/testing',
         component: TestingInProgress
     }
 ]

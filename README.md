@@ -36,7 +36,7 @@ cd CheckMindVue/
 npm install
 ```
 
-Запуск локального сервера
+Запуск development сервера
 ```
 npm run serve
 ```

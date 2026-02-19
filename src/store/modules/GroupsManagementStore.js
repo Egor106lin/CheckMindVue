@@ -2,27 +2,92 @@ import api from '@/store/api.js'
 
 const GroupsManagementStore = {
     state: {
-        groupsData: null,
+        adminGroupsData: null,
+        userGroupsData: null,
+        inviteUrl: null,
+        status: null,
+        message: null
     },
     getters: {
-        getGroupsData: state => state.groupsData,
+        getAdminGroupsData: state => state.adminGroupsData,
+        getUserGroupsData: state => state.userGroupsData,
+        getInviteUrl: state => state.inviteUrl,
+        getStatus: state => state.status,
+        getMessage: state => state.message
     },
     mutations: {
-
-        setGroupsData(state, data) {
-            state.groupsData = data
+        setAdminGroupsData(state, data) {
+            state.adminGroupsData = data
+        },
+        setUserGroupsData(state, data) {
+            state.userGroupsData = data
+        },
+        setInviteUrl(state, inviteUrl) {
+            state.inviteUrl = inviteUrl
+        },
+        setStatus(state, status) {
+            state.status = status
+        },
+        setMessage(state, message) {
+            state.message = message
         }
     },
     actions: {
         async getGroupsData({ commit }) {
             try {
-                const response = await api.get('/groups/get_data')
-                commit('setGroupsData', response.data)
-                return response.data
+                const response = await api.get('/api/groups/get_list')
+                commit('setAdminGroupsData', response.data.adminGroupsData)
+                commit('setUserGroupsData', response.data.userGroupsData)
             } catch (error) {
-                commit('setGroupsData', [{"number":1,"owner":"Александр","group_size":15,"name":"Проект","ID":"123456789"},{"number":2,"owner":"Мария","group_size":8,"name":"Группа","ID":"987654321"},{"number":3,"owner":"Иван","group_size":22,"name":"Команда","ID":"456123789"},{"number":4,"owner":"Ольга","group_size":5,"name":"Отдел","ID":"321654987"},{"number":5,"owner":"Дмитрий","group_size":17,"name":"Разработка","ID":"789123456"}])
+                commit('setStatus', 'error')
             }
-        }
+        },
+        async getInviteUrl({ commit }, id) {
+            try {
+                const response = await api.get(`api/invite/generate/${id}`)
+                commit('setInviteUrl', response.data.invite_url)
+            } catch (error) {
+                commit('setInviteUrl', '')
+            }
+        },
+        async deleteGroup({ commit }, id) {
+            try {
+                const response = await api.post('/api/groups/delete', id)
+                commit('setStatus', response.data.status)
+                commit('setMessage', response.data.message)
+            } catch (error) {
+                commit('setStatus', 'error')
+            }
+        },
+        async leaveGroup({ commit }, id) {
+            try {
+                const response = await api.post('/api/groups/leave', id)
+                commit('setStatus', response.data.status)
+                commit('setMessage', response.data.message)
+            } catch (error) {
+                commit('setStatus', 'error')
+            }
+        },
+        async createGroup({ commit }, title) {
+            try {
+                const response = await api.post('/api/groups/create', {
+                    group_title: title
+                })
+                commit('setStatus', response.data.status)
+                commit('setMessage', response.data.message)
+            } catch (error) {
+                commit('setStatus', 'error')
+            }
+        },
+        async joinGroup({ commit }, id) {
+            try {
+                const response = await api.post('/api/groups/join', id)
+                commit('setStatus', response.data.status)
+                commit('setMessage', response.data.message)
+            } catch (error) {
+                commit('setStatus', 'error')
+            }
+        },
     }
 }
 

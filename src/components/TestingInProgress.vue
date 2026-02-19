@@ -1,73 +1,135 @@
 <template>
     <PageHeader />
-    <div class="container">
-        <div class="row mt-5">
-            <div class="col">
-                <div v-if="testInProgress" class="card card-body">
-                    <div class="row mb-2">
-                        <div :class="questionNow == test?.questionsQuantity ? 'col-6' : 'col-8'">
-                            <h5 class="card-title">
+    <div class="container mt-3 px-md-3 px-2">
+        <div class="row">
+            <div class="col-12">
+                <div v-if="testInProgress" class="card card-body zone">
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-6 col-md-8">
+                            <h5 class="card-title mb-0">
                                 {{ $t('components.testingInProgress.testName') }} <b>"{{ test?.testName }}"</b>
                             </h5>
-                            <h5 class="card-title">
+                        </div>
+                        <div class="col-6 col-md-4 text-end">
+                            <button
+                                class="btn btn-primary desktop-btn"
+                                v-if="questionNow != 1"
+                                @click="changeQuestion(false)"
+                            >
+                                <i class="bi bi-arrow-left"></i>
+                                <span class="ms-1 d-none d-md-inline">{{ $t('components.testingInProgress.previousQuestion') }}</span>
+                            </button>
+                            <button
+                                class="btn btn-primary desktop-btn"
+                                v-if="questionNow < test?.questionsQuantity"
+                                @click="changeQuestion(true)"
+                            >
+                                <span class="me-1 d-none d-md-inline">{{ $t('components.testingInProgress.nextQuestion') }}</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                            <button
+                                v-if="questionNow == test?.questionsQuantity"
+                                class="btn btn-danger desktop-btn"
+                                :disabled="btnFinishDisabled()"
+                                @click="finishTest()"
+                            >
+                                <i class="bi bi-check"></i>
+                                <span class="ms-1 d-none d-md-inline">{{ $t('components.testingInProgress.finishTest') }}</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <h5 class="card-subtitle text-body-secondary">
                                 {{ $t('components.testingInProgress.questionNumber') }} 
                                 {{ questionNow }} / {{ test?.questionsQuantity }}
                             </h5>
                         </div>
-                        <div class="col-2">
-                            <button class="btn btn-secondary" @click="changeQuestion(false)">Предыдущий вопрос</button>
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-primary" @click="changeQuestion(true)">Следующий вопрос</button>
-                        </div>
-                        <div v-if="questionNow == test?.questionsQuantity" class="col-1">
-                            <button
-                                class="btn btn-danger"
-                                :disabled="btnFinishDisabled()"
-                                @click="finishTest()"
-                            >Завершить</button>
-                        </div>
                     </div>
+                    
                     <hr>
-                    <div class="row mb-2">
-                        <div class="col">
-                            <h3>{{ test?.questionsAndOptions[questionNow - 1]?.question }}</h3>
+                    
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h4 class="mb-3">{{ test?.questionsAndOptions[questionNow - 1]?.question }}</h4>
                         </div>
                     </div>
-                    <div v-for="option in test?.questionsAndOptions[questionNow - 1]?.options" :key="option">
-                        <div class="row">
+                    
+                    <div v-for="(option, optionIndex) in test?.questionsAndOptions[questionNow - 1]?.options" :key="optionIndex" class="mb-3">
+                        <div class="row align-items-center option-row">
                             <div class="col-1">
                                 <input
                                     class="form-check-input large-checkbox"
                                     type="checkbox"
-                                    :value="option.title"
+                                    :value="optionIndex"
                                     v-model="answers[questionNow - 1].options"
+                                    @change="saveAnswersToStorage"
+                                    :id="'option-' + questionNow + '-' + optionIndex"
                                 >
                             </div>
                             <div class="col-11">
-                                <p>{{ option.title }}</p>
+                                <label :for="'option-' + questionNow + '-' + optionIndex" class="option-label w-100 mb-0">
+                                    {{ option.title }}
+                                </label>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div v-if="!testInProgress" class="card card-body">
-                    <div class="row">
-                        <h3 class="card-title">Тест <b>"{{ result?.testName }}"</b> пройден!</h3>
+                
+                <div v-if="!testInProgress && testResult" class="card card-body zone">
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <h3 class="card-title">Тест <b>"{{ testResult.testName }}"</b> пройден!</h3>
+                        </div>
                     </div>
-                    <div class="row">
-                        <h5>Ваш результат: <b>{{ result?.result }} / {{ result?.questionsQuantity }}</b></h5>
+                    
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h5>Ваш результат: <b>{{ testResult.userScore }} / {{ testResult.maxScore }}</b></h5>
+                        </div>
                     </div>
-                    <div v-for="question in result?.mistakes" :key="question">
-                        <div class="row">
-                            <div class="col-8">
-                                <p>{{ question?.question }}</p>
+                    <div class="d-none d-md-block">
+                        <ElTable :data="testResult.detailedResults" class="rounded-5 mt-3">
+                            <ElTableColumn prop="question" label="Вопрос" width="200"/>
+                            <ElTableColumn prop="userAnswers" label="Выбранные ответы"/>
+                            <ElTableColumn prop="correctAnswers" label="Правильные ответы"/>
+                            <ElTableColumn prop="pointsEarned" label="Набранные баллы" width="140"/>
+                            <ElTableColumn prop="maxPoints" label="Максимум баллов" width="140"/>
+                        </ElTable>
+                    </div>
+                    <div class="d-md-none">
+                        <div v-for="(result, index) in testResult.detailedResults" :key="index" class="card mb-3">
+                            <div class="card-body">
+                                <h6 class="card-title mb-2">Вопрос {{ index + 1 }}</h6>
+                                <p class="small text-muted mb-2">{{ result.question }}</p>
+                                
+                                <div class="row small mb-2">
+                                    <div class="col-6">
+                                        <p class="mb-1"><strong>Выбрано:</strong></p>
+                                        <p class="mb-0">{{ result.userAnswers || '—' }}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="mb-1"><strong>Правильно:</strong></p>
+                                        <p class="mb-0">{{ result.correctAnswers || '—' }}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="row small">
+                                    <div class="col-6">
+                                        <p class="mb-1"><strong>Баллы:</strong></p>
+                                        <p class="mb-0">{{ result.pointsEarned }} / {{ result.maxPoints }}</p>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-4" v-if="question?.correct">
-                                <p>{{ $t('components.testingInProgress.rightAnswer') }}</p>
-                            </div>
-                            <div class="col-4" v-else-if="!question?.correct">
-                                <p>{{ $t('components.testingInProgress.wrongAnswer') }}</p>
-                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <button class="btn btn-primary w-100 w-md-auto px-4" @click="pushOnMain()">
+                                На главную
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -79,61 +141,102 @@
 <script setup>
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
-import { onBeforeMount, ref } from 'vue';
-import { useRoute } from 'vue-router'
+import { onBeforeMount, ref, watch } from 'vue';
+import router from '@/router/routes'
+import { ElTable, ElTableColumn } from 'element-plus';
 import PageHeader from './PageHeader.vue';
 
 const $t = useI18n().t
 const store = useStore()
 
 const test = ref()
-const answers = ref()
-const result = ref()
+const answers = ref([])
+const testResult = ref(null)
 
-const router = useRoute()
-const groupIDFromUrl = router.params.groupID
-const testNameFromUrl = router.params.testName
+const groupIDFromUrl = router.currentRoute.value.query['test_id']
 
 const testInProgress = ref(true)
 const questionNow = ref(1)
 
+const getStorageKey = (suffix) => {
+    if (!test.value?.testID) return null
+    return `test_${test.value.testID}_${suffix}`
+}
 
-onBeforeMount(() => {
-    const questionNowLocalStorage = localStorage.getItem('questionNow')
-    if (questionNowLocalStorage == null) {
-        questionNow.value = 1
+const saveQuestionNowToStorage = () => {
+    const key = getStorageKey('questionNow')
+    if (key) localStorage.setItem(key, questionNow.value.toString())
+}
+
+const saveAnswersToStorage = () => {
+    const key = getStorageKey('answers')
+    if (key) localStorage.setItem(key, JSON.stringify(answers.value))
+}
+
+const loadFromStorage = () => {
+    if (!test.value?.testID) return
+    const qKey = getStorageKey('questionNow')
+    const savedQuestion = localStorage.getItem(qKey)
+    if (savedQuestion) {
+        questionNow.value = parseInt(savedQuestion)
     } else {
-        questionNow.value = questionNowLocalStorage
+        questionNow.value = 1
     }
-    getTestAndAnswers()
-})
 
-function getTestAndAnswers() {
-    try {
-        store.dispatch('getTest', {
-            groupID: groupIDFromUrl,
-            testName: testNameFromUrl
-        }).then( () => {
-            test.value = store.getters.test
-
-            const answersLocaleStorage = JSON.parse(localStorage.getItem('answers'))
-            if (answersLocaleStorage == null) {
+    const aKey = getStorageKey('answers')
+    const savedAnswers = localStorage.getItem(aKey)
+    if (savedAnswers) {
+        try {
+            const parsed = JSON.parse(savedAnswers)
+            if (Array.isArray(parsed) && parsed.length === test.value.questionsQuantity) {
+                answers.value = parsed
+            } else {
                 answers.value = Array.from({ length: test.value.questionsQuantity }).map(() => ({
                     question: '',
                     options: []
                 }))
-            } else {
-                answers.value = answersLocaleStorage
-            }    
+            }
+        } catch {
+            answers.value = Array.from({ length: test.value.questionsQuantity }).map(() => ({
+                question: '',
+                options: []
+            }))
+        }
+    } else {
+        answers.value = Array.from({ length: test.value.questionsQuantity }).map(() => ({
+            question: '',
+            options: []
+        }))
+    }
+}
+
+const clearStorage = () => {
+    const qKey = getStorageKey('questionNow')
+    const aKey = getStorageKey('answers')
+    if (qKey) localStorage.removeItem(qKey)
+    if (aKey) localStorage.removeItem(aKey)
+}
+
+onBeforeMount(() => {
+    getTestAndAnswers()
+})
+
+async function getTestAndAnswers() {
+    try {
+        await store.dispatch('getTest', {
+            testID: groupIDFromUrl
         })
+        test.value = store.getters.test
+        loadFromStorage()
     } catch (error) {
         console.error('Ошибка:', error)
     }
 }
 
 function changeQuestion(next = true) {
-    localStorage.setItem('answers', JSON.stringify(answers.value))
-    localStorage.setItem('questionNow', questionNow.value)
+    saveAnswersToStorage()
+    saveQuestionNowToStorage()
+
     if (next) {
         if (questionNow.value < test.value.questionsQuantity) {
             questionNow.value++
@@ -147,26 +250,35 @@ function changeQuestion(next = true) {
             return
         }
     }
+    saveQuestionNowToStorage()
 }
 
-function finishTest() {
-    try {
-        store.dispatch('checkAnswers').then( () => {
-            result.value = store.getters.result   
+watch(answers, () => {
+    saveAnswersToStorage()
+}, { deep: true })
+
+async function finishTest() {
+    try {      
+        const answersForBackend = []
+        answers.value.forEach((answer, index) => {
+            const questionText = test.value.questionsAndOptions[index]?.question || `Вопрос ${index + 1}`
+            answersForBackend.push({
+                question: questionText,
+                answers: answer.options
+            })
         })
+        await store.dispatch('checkAnswers', { 
+            answers: answersForBackend, 
+            testID: test.value.testID 
+        })
+        
+        testResult.value = store.getters.result
+        testInProgress.value = false
+        clearStorage()
     } catch (error) {
-        console.error('Ошибка:', error)
+        console.error('Ошибка при завершении теста:', error)
+        throw error
     }
-    testInProgress.value = false
-    answers.value.forEach((answer, index) => {
-        if (test.value.questionsAndOptions[index]?.question) {
-            answer.question = test.value.questionsAndOptions[index].question;
-        }
-    });
-    answers.value.unshift({ groupID: test.value.groupID })
-    answers.value.unshift({ testName: test.value.testName })
-    localStorage.removeItem('answers')
-    localStorage.removeItem('questionNow')
 }
 
 function btnFinishDisabled() {
@@ -178,41 +290,26 @@ function btnFinishDisabled() {
     });
     return res.value
 }
+
+function pushOnMain() {
+    router.push('/')
+}
 </script>
 
 <style lang="css" scoped>
-
-.large-checkbox {
-    transform: scale(1.3);
-    opacity: 0.9;
-    cursor: pointer;
+.zone {
+    border-radius: 20px;
+    box-shadow: 10px 5px 5px #858383;
 }
+
 .card {
     border: 2px solid #3846D3;
     border-radius: 20px;
 }
 
-.form-control:focus {
-    border: 2px solid #3846D3;
-    border-radius: 20px;
-}
-
-.form-control {
-    outline: none !important;
-    box-shadow: none !important;
-    border-radius: 20px;
-    border: 2px solid #f3f3f3;
-}
-
 .btn-primary {
+    border-radius: 15px;
     background-color: #3846D3;
-    border-radius: 15px;
-    border: none;
-}
-
-.btn-secondary {
-    background-color: #232b86;
-    border-radius: 15px;
     border: none;
 }
 
@@ -222,4 +319,193 @@ function btnFinishDisabled() {
     border: none;
 }
 
+.large-checkbox {
+    transform: scale(1.3);
+    opacity: 0.9;
+    cursor: pointer;
+}
+
+.option-row:hover {
+    background-color: rgba(56, 70, 211, 0.05);
+    border-radius: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.option-label {
+    cursor: pointer;
+    padding: 10px 0;
+    display: block;
+}
+
+.desktop-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+:deep(.el-table) {
+    --el-table-border-color: #dee2e6;
+    --el-table-header-bg-color: #f8f9fa;
+    --el-table-text-color: #495057;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+:deep(.el-table th.el-table__cell) {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.text-end {
+    text-align: right !important;
+}
+
+.d-flex.flex-wrap.gap-2.justify-content-end {
+    justify-content: flex-end !important;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    
+    .zone {
+        box-shadow: 5px 3px 3px #d1d1d1;
+        border-radius: 16px;
+    }
+    
+    .card {
+        border-radius: 16px;
+    }
+    
+    .btn-primary, .btn-danger {
+        min-height: 44px;
+        padding: 10px 16px;
+        font-size: 0.95rem;
+    }
+    
+    .desktop-btn {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+        min-height: 40px;
+        min-width: 40px;
+    }
+    
+    .large-checkbox {
+        transform: scale(1.5);
+    }
+    
+    .option-label {
+        padding: 12px 0;
+        font-size: 1rem;
+    }
+    
+    h4 {
+        font-size: 1.3rem;
+    }
+    
+    h5 {
+        font-size: 1.1rem;
+    }
+    
+    .desktop-btn span {
+        display: none;
+    }
+    
+    .desktop-btn i {
+        margin: 0 !important;
+    }
+    
+    .col-6.text-end {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    
+    .col-6:first-child {
+        padding-left: 12px;
+        padding-right: 5px;
+    }
+    
+    .card-title {
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+@media (max-width: 576px) {
+    .card {
+        border-radius: 14px;
+    }
+    
+    .zone {
+        border-radius: 14px;
+    }
+    
+    h3 {
+        font-size: 1.4rem;
+    }
+    
+    h4 {
+        font-size: 1.2rem;
+    }
+    
+    .large-checkbox {
+        transform: scale(1.6);
+    }
+    
+    .option-label {
+        font-size: 1.05rem;
+        padding: 14px 0;
+    }
+    
+    .desktop-btn {
+        padding: 6px 8px;
+        min-height: 36px;
+        min-width: 36px;
+    }
+    
+    .d-flex.flex-wrap.gap-2.justify-content-end {
+        gap: 6px !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .col-11 {
+        padding-left: 10px;
+    }
+    
+    .large-checkbox {
+        transform: scale(1.7);
+    }
+    
+    .option-label {
+        font-size: 1.1rem;
+    }
+    
+    .desktop-btn {
+        padding: 5px 6px;
+        min-height: 34px;
+        min-width: 34px;
+    }
+    
+    .col-6.text-end {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+    
+    .col-6:first-child {
+        padding-left: 12px;
+        padding-right: 2px;
+    }
+    
+    .card-title {
+        font-size: 0.9rem;
+    }
+}
 </style>

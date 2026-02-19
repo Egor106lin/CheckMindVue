@@ -3,30 +3,40 @@ import api from '@/store/api.js'
 const CreateTestsStore = {
     state: {
         testData: null,
-        error: null
+        groupsList: null
     },
     getters: {
         getTestData: state => state.testData,
-        getError: state => state.error
+        getGroupsList: state => state.groupsList
     },
     mutations: {
-        setError(state, error) {
-            state.error = error
-        },
         setTestData(state, data) {
             state.testData = data
+        },
+        setGroupsList(state, groupsList) {
+            state.groupsList = groupsList
         }
     },
     actions: {
         async sendTestData({ commit }, testData) {
-            commit('setError', null)
             try {
-                const response = await api.post('/tests/created_test', testData)
+                const response = await api.post('/api/tests/created_test', testData, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
                 commit('setTestData', response.data)
                 return response.data
             } catch (error) {
-                commit('setError', error.response?.data?.message || 'Ошибка отправки данных')
-                throw error
+                console.log(error)
+            }
+        },
+        async getGroupsToCreateTest({ commit }) {
+            try {
+                const response = await api.get('/api/tests/get_groups_to_create_test')
+                commit('setGroupsList', response.data.groups)
+            } catch(error) {
+                commit('setGroupsList', [])
             }
         }
     }

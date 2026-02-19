@@ -1,94 +1,114 @@
 <template>
 <div>
     <div class="col">
-        <div v-if="testInProgress" class="card">
+        <div v-if="testInProgress" class="card zone">
             <div class="card-body">
-                <div class="row">
-                    <div class="col-4 card-title">
-                        <h5>{{ $t('components.createTestsWriter.everyQuestionForm.questionNumber') }} {{ questionWrittenByUserNow + 1}}</h5>
+                <div class="row mb-3 align-items-center">
+                    <div class="col-12 col-md-4 mb-2 mb-md-0">
+                        <h5 class="card-title mb-0">{{ $t('components.createTestsWriter.everyQuestionForm.questionNumber') }} {{ questionWrittenByUserNow + 1}}</h5>
                     </div>
-                    <div class="col-4">
-                        <button
-                            class="btn btn-secondary w-100"
-                            :disabled="!(questionWrittenByUserNow > 0)"
-                            @click="previousQuestion"
-                        >{{ $t('components.createTestsWriter.everyQuestionForm.buttons.previousButton') }}</button>
-                    </div>
-                    <div class="col-4" v-if="questionWrittenByUserNow + 1 < testData.questions_quantity">
-                        <button
-                            class="btn btn-primary w-100"
-                            type="submit"
-                            id="next-btn"
-                            :disabled="disableNextQuestionButton()"
-                            @click="nextQuestion()"
-                        >{{ $t('components.createTestsWriter.everyQuestionForm.buttons.nextButton') }}</button>
-                    </div>
-                    <div class="col-4" v-else-if="questionWrittenByUserNow + 1 == testData.questions_quantity">
-                        <div class="col d-flex justify-content-end">
+                    <div class="col-12 col-md-8">
+                        <div class="d-flex flex-wrap gap-2">
                             <button
-                                class="btn btn-primary w-100"
+                                class="btn btn-outline-secondary"
+                                :disabled="!(questionWrittenByUserNow > 0)"
+                                @click="previousQuestion"
+                            >
+                                <i class="bi bi-arrow-left d-md-none"></i>
+                                <span class="d-none d-md-inline">{{ $t('components.createTestsWriter.everyQuestionForm.buttons.previousButton') }}</span>
+                            </button>
+                            
+                            <button
+                                class="btn btn-primary"
+                                v-if="questionWrittenByUserNow + 1 < testData.questions_quantity"
+                                :disabled="disableNextQuestionButton()"
+                                @click="nextQuestion()"
+                            >
+                                <span class="d-none d-md-inline">{{ $t('components.createTestsWriter.everyQuestionForm.buttons.nextButton') }}</span>
+                                <i class="bi bi-arrow-right d-md-none"></i>
+                            </button>
+                            
+                            <button
+                                v-if="questionWrittenByUserNow + 1 == testData.questions_quantity"
+                                class="btn btn-success"
                                 :disabled="disableSaveButton()"
                                 @click="saveTest()"
-                            >{{ $t('components.createTestsWriter.everyQuestionForm.buttons.saveTest') }}</button>
+                            >
+                                <i class="bi bi-check-circle me-1"></i>
+                                {{ $t('components.createTestsWriter.everyQuestionForm.buttons.saveTest') }}
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div class="row mt-2 mb-2">
-                    <div class="col">
+                
+                <div class="row mt-3 mb-3">
+                    <div class="col-12">
                         <input
                             v-model="testCreatedByUser[questionWrittenByUserNow].question"
-                            class="form-control"
+                            class="form-control form-control-lg"
                             :placeholder="$t('components.createTestsWriter.everyQuestionForm.questionTitle')"
                         >
                     </div>
                 </div>
-                <div class="row mt-2 mb-2">
-                    <div class="col-8">
+                
+                <div class="row mt-3 mb-3 align-items-center">
+                    <div class="col-12 col-md-8 mb-2 mb-md-0">
                         <h5>{{ $t('components.createTestsWriter.everyQuestionForm.answerOptions') }}</h5>
                     </div>
-                    <div class="col-4">
+                    <div class="col-12 col-md-4">
                         <button
-                            class="btn btn-primary w-100"
+                            class="btn btn-outline-primary w-100"
                             :disabled="testCreatedByUser[questionWrittenByUserNow].options.length >= 10"
                             @click="addOption"
-                        >{{ $t('components.createTestsWriter.everyQuestionForm.buttons.addOption') }}</button>
+                        >
+                            <i class="bi bi-plus-circle me-1"></i>
+                            {{ $t('components.createTestsWriter.everyQuestionForm.buttons.addOption') }}
+                        </button>
                     </div>
                 </div>
-                <div v-for="option in testCreatedByUser[questionWrittenByUserNow].options" :key="option" class="row">
-                    <div class="row">
-                        <div class="col-1">
-                            <input v-model="option.correct" class="form-check-input large-checkbox" type="checkbox">
-                        </div>
-                        <div class="col-10">
-                            <input v-model="option.title" class="form-control">
-                        </div>
-                        <div class="col-1">
+                
+                <div v-for="(option, index) in testCreatedByUser[questionWrittenByUserNow].options" :key="index" class="row mb-3">
+                    <div class="col-12">
+                        <div class="input-group">
+                            <div class="input-group-text">
+                                <input v-model="option.correct" class="form-check-input mt-0" type="checkbox" />
+                            </div>
+                            <input v-model="option.title" class="form-control" />
                             <button
-                                class="btn btn-danger"
+                                class="btn btn-outline-danger"
                                 :disabled="testCreatedByUser[questionWrittenByUserNow].options.length <= 2"
                                 @click="deleteOption(option)"
-                            >{{ $t('components.createTestsWriter.everyQuestionForm.buttons.deleteOption') }}</button>
+                            >
+                                <i class="bi bi-trash"></i>
+                                <span class="d-none d-md-inline ms-1">{{ $t('components.createTestsWriter.everyQuestionForm.buttons.deleteOption') }}</span>
+                            </button>
                         </div>
-                        <div class="d-flex justify-content-center"><hr class="mt-2 mb-2 w-50"></div>
                     </div>
                 </div>
-                <div class="row">
-                    <p>{{ $t('components.createTestsWriter.everyQuestionForm.rule1') }}</p>
+                
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <p class="text-muted small">{{ $t('components.createTestsWriter.everyQuestionForm.rule1') }}</p>
+                    </div>
                 </div>
             </div>
         </div>
-        <div v-if="!testInProgress" class="card">
+        
+        <div v-if="!testInProgress" class="card zone">
             <div class="card-body">
-                <div class="card-title">
-                    <h5>{{ $t('components.createTestsWriter.readyTestCard.title') }}</h5>
-                </div>
-                <div class="row">
-                    <div class="col-10">
-                        <p>{{ $t('components.createTestsWriter.readyTestCard.forGroup') }} <b>{{ testData.group_id }}</b></p>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <h5 class="card-title">{{ $t('components.createTestsWriter.readyTestCard.title') }}</h5>
                     </div>
-                    <div class="col-2">
+                </div>
+                
+                <div class="row align-items-center">
+                    <div class="col-12 col-md-10 mb-3 mb-md-0">
+                        <p class="mb-0">{{ $t('components.createTestsWriter.readyTestCard.forGroup') }} <b class="badge bg-primary">{{ testData.group_id }}</b></p>
+                    </div>
+                    <div class="col-12 col-md-2">
                         <button
-                            class="btn btn-primary"
+                            class="btn btn-primary w-100"
                             @click="leaveOnMain()"
                         >{{ $t('components.createTestsWriter.readyTestCard.buttons.leave') }}</button>
                     </div>
@@ -101,30 +121,47 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n';
-import { ref, defineEmits } from 'vue';
+import { ref, defineEmits, onBeforeMount } from 'vue';
 import { useStore } from 'vuex';
 
 const store = useStore()
 
 const $t = useI18n().t
 const testInProgress = ref(true)
+const testCreatedByUser = ref()
 
 const emit = defineEmits(['leaveOnMain'])
-
 const testData = JSON.parse(localStorage.getItem('formData') || null)
-const testCreatedByUser = ref(Array.from({ length: testData.questions_quantity }).map(() => ({
-    question: '',
-    options: [
-        { title: '', correct: false},
-        { title: '', correct: false}
-    ]
-})));
+const questionWrittenByUserNow = ref()
 
-const questionWrittenByUserNow = ref(0)
+
+onBeforeMount(() => {
+    let questionWrittenByUserNowLS = localStorage.getItem('questionWrittenByUserNow')
+    if (questionWrittenByUserNowLS != null) {
+        questionWrittenByUserNow.value = JSON.parse(questionWrittenByUserNowLS)
+    } else {
+        questionWrittenByUserNow.value = 0
+    }
+    let testCreatedByUserLS = localStorage.getItem('testCreatedByUser')
+    if (testCreatedByUserLS != null) {
+        testCreatedByUser.value = JSON.parse(testCreatedByUserLS)
+    } else {
+        testCreatedByUser.value = Array.from({ length: testData.questions_quantity }).map(() => ({
+            question: '',
+            options: [
+                { title: '', correct: false},
+                { title: '', correct: false}
+            ]
+        }));
+    }
+})
+
+
 
 function nextQuestion() {
     localStorage.setItem('testCreatedByUser', JSON.stringify(testCreatedByUser.value))
     questionWrittenByUserNow.value++
+    localStorage.setItem('questionWrittenByUserNow', JSON.stringify(questionWrittenByUserNow.value))
 }
 
 function previousQuestion() {
@@ -203,16 +240,17 @@ async function saveTest() {
 function leaveOnMain() {
     localStorage.removeItem('testCreatedByUser')
     localStorage.removeItem('formData')
+    localStorage.removeItem('questionWrittenByUserNow')
     emit('leaveOnMain')
 }
 </script>
 
 <style lang="css" scoped>
-.large-checkbox {
-    transform: scale(1.7);
-    opacity: 0.9;
-    cursor: pointer;
+.zone {
+    border-radius: 20px;
+    box-shadow: 10px 5px 5px #858383;
 }
+
 .card {
     border: 2px solid #3846D3;
     border-radius: 20px;
@@ -220,31 +258,119 @@ function leaveOnMain() {
 
 .form-control:focus {
     border: 2px solid #3846D3;
-    border-radius: 20px;
+    border-radius: 15px;
 }
 
 .form-control {
     outline: none !important;
     box-shadow: none !important;
-    border-radius: 20px;
+    border-radius: 15px;
     border: 2px solid #f3f3f3;
+}
+
+.form-control-lg {
+    padding: 14px 18px;
+    font-size: 1.1rem;
 }
 
 .btn-primary {
     background-color: #3846D3;
-    border-radius: 15px;
+    border-radius: 12px;
     border: none;
 }
 
-.btn-secondary {
-    background-color: #232b86;
-    border-radius: 15px;
+.btn-success {
+    background-color: #28a745;
+    border-radius: 12px;
     border: none;
 }
 
-.btn-danger {
-    background-color: #d33838;
-    border-radius: 15px;
-    border: none;
+.btn-outline-secondary {
+    border-radius: 12px;
+    border: 2px solid #6c757d;
+    color: #6c757d;
+}
+
+.btn-outline-primary {
+    border-radius: 12px;
+    border: 2px solid #3846D3;
+    color: #3846D3;
+}
+
+.btn-outline-danger {
+    border-radius: 12px;
+    border: 2px solid #dc3545;
+    color: #dc3545;
+}
+
+.input-group-text {
+    background-color: transparent;
+    border-right: none;
+}
+
+.input-group .form-control {
+    border-left: none;
+}
+
+.badge {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .zone {
+        box-shadow: 5px 3px 3px #d1d1d1;
+        border-radius: 16px;
+    }
+    
+    .card {
+        border-radius: 16px;
+    }
+    
+    .btn, .form-control {
+        min-height: 48px;
+    }
+    
+    .form-control-lg {
+        padding: 12px 16px;
+        font-size: 1rem;
+    }
+    
+    .btn-outline-danger span {
+        display: none;
+    }
+    
+    .input-group {
+        flex-direction: column;
+    }
+    
+    .input-group > * {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    
+    .input-group > *:last-child {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .card {
+        border-radius: 14px;
+    }
+    
+    .zone {
+        border-radius: 14px;
+    }
+    
+    h5 {
+        font-size: 1.1rem;
+    }
+    
+    .btn {
+        font-size: 1rem;
+        padding: 12px 16px;
+    }
 }
 </style>

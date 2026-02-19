@@ -8,35 +8,98 @@
             "profile": "Profile"
         },
         "mainPage": {
-            "headerInGroup": "Tests suggested to you by the group administrator",
-            "startTest": "Take the test",
-            "headerNotInGroup": "Join the group in the profile tab and start taking tests!",
-            "noTests": "You do not have any tests to take"
+            "checkMind": "CheckMind",
+            "description1": "Welcome to CheckMind, your digital knowledge platform. This is a non-profit project created to bring people together in learning.",
+            "description2": "Create thematic groups in which you can easily create fascinating tests with different types of questions and instantly share them with your group. For the participants, this is an opportunity to test themselves, learn something new and see their progress.",
+            "description3": "The simple and intuitive interface works on any device. There is nothing superfluous here — just clear objectives and clear results.",
+            "admin": "Admin",
+            "user": "User",
+            "testsQuantity": "Tests quantity:",
+            "noTests": "No tests have been created for this group",
+            "test": {
+                "questions": "Questions:",
+                "noDescription": "No description",
+                "edit": "Edit",
+                "take": "Take the test",
+                "create": "Create test",
+                "archive": "Archive test (users won't see it)",
+                "dearchive": "Return from archive",
+                "delete": "Delete this test",
+                "watchResults": "View results"
+            }
         },
         "groupsManagement": {
-            "title": "Your groups"
+            "newGroup": {
+                "create": {
+                    "title": "Create group",
+                    "placeholder": "Group name"
+                },
+                "join": {
+                    "title": "Join group",
+                    "placeholder": "Group ID"
+                }
+            },
+            "adminGroups": {
+                "title": "Groups you are an administrator of"
+            },
+            "userGroups": {
+                "title": "Groups you are a member of"
+            },
+            "columns": {
+                "№": "№",
+                "owner": "Owner",
+                "members": "Members",
+                "name": "Group name",
+                "ID": "ID",
+                "actions": "Actions"
+            },
+            "actions": {
+                "link": "Copy link",
+                "qr": "Show QR",
+                "leave": "Leave group",
+                "delete": "Delete group"
+            }
+        },
+        "membersManagement": {
+            "title": "Members of group",
+            "makeAdmin": "Make as admin",
+            "№": "№",
+            "admin": "Administrator",
+            "name": "Name",
+            "delete": "Delete user"
+        },
+        "acceptInvite": {
+            "title": "Group invitation",
+            "youWereInvited": "You have been added to the group",
+            "invitedBy": "You were invited by the group administrator",
+            "email": "Email:",
+            "home": "Go to Home"
+        },
+        "qrCode": {
+            "title": "QR code for invitation",
+            "scanForQuickAccess": "Scan for quick access"
         },
         "createTestsForm": {
-            "alert": {
-                "alertNotAdmin": "Tests can be created by administrator only :("
-            },
             "testDataForm": {
                 "createNewTest": "Create a new test",
+                "cancelTestCreation": "Cancel test creation",
                 "testName": "Test Name",
                 "testDescription": "Test Description",
-                "groupId": "Group ID (must be numeric)",
-                "questionsQuanity": "Questions quanity (must be numeric)"
+                "groupName": "Group name",
+                "noGroups": "You did not create any groups",
+                "selectGroup": "Select a group to give it a test",
+                "questionsQuantity": "Questions quantity (must be numeric)"
             }
         },
         "createTestsWriter": {
             "everyQuestionForm": {
                 "questionNumber": "Question",
-                "rule1": "This is the test creation window. The + and - buttons allow you to add and remove answer options. Minimum 2 questions required, maximum - 10. There can be any number of correct answer options. The arrow buttons allow navigation between questions. It is impossible to proceed to the next question until the current one meets the requirements, but you can always go back to previous questions.",
+                "rule1": "There can be from 2 to 10 answer options, with 1 or more correct. You can't move on to the next question until the current one is filled in, but you can always go back.",
                 "questionTitle": "Question title:",
                 "answerOptions": "Answer options (mark correct by checkbox):",
                 "buttons": {
-                    "previousButton": "<- Previous question",
-                    "nextButton": "Next question ->",
+                    "previousButton": "Previous question",
+                    "nextButton": "Next question",
                     "addOption": "Add option",
                     "deleteOption": "-",
                     "saveTest": "Save"
@@ -54,26 +117,21 @@
         "testingInProgress": {
             "questionNumber": "Question number",
             "testName": "Test:",
-            "nextQuestion": "Next question",
-            "previousQuestion": "Previous question",
+            "nextQuestion": "Next",
+            "previousQuestion": "Back",
+            "finishTest": "Finish",
             "rightAnswer": "Right",
             "wrongAnswer": "Wrong"
         },
         "profileSettings": {
+            "title": "About user",
             "userActions": {
-                "title": "About user",
                 "userManagement": "Actions",
-                "name": "Name",
-                "sirname": "Sirname",
-                "role": "Role",
-                "roles": {
-                    "user": "User",
-                    "admin": "Administrator"
-                },
-                "changePhoto": "Change photo",
-                "changeName": "Change name",
-                "changePassword": "Change password",
-                "logout": "Logout"
+                "name": "Name:",
+                "email": "Email:",
+                "sync": "Sync with",
+                "logout": "Logout",
+                "deleteAccount": "Delete account"
             },
             "groupsActions": {
                 "title": "Groups actions",
@@ -82,7 +140,7 @@
                 "join": "Join",
                 "create": "Create",
                 "groupId": "Group ID: ",
-                "usersQuanity": "Users quanity"
+                "usersQuantity": "Users quantity"
             },
             "guide": {
                 "title": "Guide",
@@ -92,6 +150,43 @@
                 "rule4": "If you are administrator, you can create tests on page 'Exercises'.",
                 "btnCreateTests": "Create test!"
             }
+        },
+        "testResults": {
+            "title": "Test results",
+            "name": "Name",
+            "points": "Points",
+            "time": "Time"
         }
+    },
+    "toasts": {
+        "success": {
+            "linkCopied": "The link has been copied to the clipboard",
+            "groupCreated": "Group was created",
+            "groupDeleted": "Group was deleted",
+            "groupLeaved": "Group was leaved",
+            "personDeleted": "Person was deleted from this group",
+            "personPromoted": "Person was promoted",
+            "testDeleted": "Test was deleted",
+            "testArchived": "Test war archived",
+            "testDearchived": "Test was dearchived"
+        },
+        "error": {
+            "unknownProblem": "Something went wrong",
+            "groupCreatedError": "Something went wrong - group was not created",
+            "groupDeletedError": "Something went wrong - group was not deleted",
+            "groupLeavedError": "Something went wrong - group was not leaved",
+            "personDeletedError": "Something went wrong - person was not deleted from this group",
+            "personPromotedError": "Something went wrong - person was not promoted",
+            "testDeletedError": "Something went wrong - test was not deleted",
+            "testArchivedError": "Something went wrong - test was not archived",
+            "testDearchivedError": "Something went wrong - test was not dearchived",
+            "accountDeletedError": "Something went wrong - account was not deleted"
+        }
+    },
+    "validation": {
+        "required": "This field is required",
+        "numeric": "Must be a number",
+        "minValue": "Value is below minimum",
+        "maxValue": "Value exceeds maximum"
     }
 }
