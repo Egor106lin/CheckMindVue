@@ -5,15 +5,26 @@
 </template>
 
 <script setup>
-import { onErrorCaptured } from 'vue';
+import { onMounted, onBeforeUnmount, ref } from 'vue'
+import axios from 'axios'
 
-onErrorCaptured((err) => {
-  const errMsg = err?.message || err?.toString() || '';
-  if (errMsg.includes('ResizeObserver')) {
-    return false
+const refreshInterval = ref(null)
+
+const refreshToken = async () => {
+  try {
+    await axios.post('/api/profile/refresh_token')
+    console.log('Токен успешно обновлён')
+  } catch (error) {
+    console.error('Ошибка обновления токена', error)
   }
-  console.error('App error:', err);
-  return false
+}
+
+onMounted(() => {
+  refreshInterval.value = setInterval(refreshToken, 30 * 60 * 1000)
+})
+
+onBeforeUnmount(() => {
+  clearInterval(refreshInterval.value)
 })
 </script>
 
