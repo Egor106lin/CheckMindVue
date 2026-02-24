@@ -42,7 +42,7 @@
                                                 <button 
                                                     class="dropdown-item" 
                                                     type="button"
-                                                    @click="selectedLocale = 'en-EN'; changeLanguage()"
+                                                    @click="selectedLocale = 'en-US'; changeLanguage()"
                                                 >
                                                     En
                                                 </button>
@@ -171,7 +171,7 @@ async function loadData() {
 function getLanguageName(code) {
     const languages = {
         'ru-RU': 'Ru',
-        'en-EN': 'En'
+        'en-US': 'En'
     }
     return languages[code] || code
 }
