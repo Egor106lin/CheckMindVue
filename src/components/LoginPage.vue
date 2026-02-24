@@ -47,12 +47,15 @@
 
 <script setup>
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 
 const store = useStore()
+const route = useRoute()
 
 async function loginWithGoogle() {
     try {
-        await store.dispatch('loginWithGoogle')
+        const redirectPath = route.query.redirect || ''
+        await store.dispatch('loginWithGoogle', redirectPath)
         const link = store.getters.link
         window.location.href = link
     } catch(error) {

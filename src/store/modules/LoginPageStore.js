@@ -13,11 +13,10 @@ const LoginPageStore = {
         ),
     },
     actions: {
-        async loginWithGoogle({ commit }) {
+        async loginWithGoogle({ commit }, stateParam = '') {
             try {
-                const response = await api.get('/api/url/google')
-                console.log('Response data:', response.data)
-                
+                const params = stateParam ? { state: stateParam } : {}
+                const response = await api.get('/api/url/google', params)
                 if (response.data) {
                     commit('setLink', response.data)
                     return response.data
