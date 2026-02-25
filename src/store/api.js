@@ -15,7 +15,23 @@ apiClient.interceptors.response.use(
     (error) => {
         if (error.response?.status === 401) {
             const currentPath = router.currentRoute.value.fullPath;
-            router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
+            if (currentPath.startsWith('/login')) {
+                return Promise.reject(error);
+            }
+            const urlParams = new URLSearchParams(currentPath.split('?')[1]);
+            const existingRedirect = urlParams.get('redirect');
+            let redirectTarget = existingRedirect || currentPath;
+            if (redirectTarget?.includes('/login')) {
+                const nestedUrl = new URL(redirectTarget, 'http://localhost');
+                const nestedRedirect = nestedUrl.searchParams.get('redirect');
+                if (nestedRedirect) {
+                    redirectTarget = nestedRedirect;
+                } else {
+                    redirectTarget = '/';
+                }
+            }
+            
+            router.push(`/login?redirect=${encodeURIComponent(redirectTarget)}`);
         }
         return Promise.reject(error);
     }
