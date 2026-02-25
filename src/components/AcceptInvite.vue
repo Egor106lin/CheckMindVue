@@ -1,7 +1,7 @@
 <template>
     <PageHeader />
     <div class="container mt-3 px-md-3 px-2">
-        <div v-if="!loading" class="card zone card-body">
+        <div v-if="!loading && status != 'error'" class="card zone card-body">
             <div class="row mb-3">
                 <div class="col-12">
                     <h2 class="card-title h4 h2-md">{{ $t('components.acceptInvite.title') }}</h2>
@@ -34,7 +34,7 @@
             </div>
         </div>
         
-        <div v-else-if="loading" class="card zone card-body">
+        <div v-if="loading" class="card zone card-body">
             <div class="row">
                 <div class="col-12 text-center">
                     <div class="spinner-border text-primary" role="status">
@@ -42,6 +42,12 @@
                     </div>
                     <h2 class="card-title mt-3 h4 h2-md">Ожидание данных...</h2>
                 </div>
+            </div>
+        </div>
+
+        <div v-else-if="status == 'error'" class="card zone card-body">
+            <div class="row">
+                <h2 class="card-title">{{ message }}</h2>
             </div>
         </div>
     </div>
@@ -60,11 +66,15 @@ const $t = useI18n().t
 const store = useStore()
 const groupData = ref()
 const loading = ref(true)
+const status = ref('')
+const message = ref('')
 
 onMounted(async () => {
     try {
         await store.dispatch('acceptInvite', router.currentRoute.value.query.token)
-        groupData.value= store.getters['getGroupData']
+        status.value = store.getters['getStatus']
+        message.value = store.getters['getMessage']
+        groupData.value = store.getters['getGroupData']
         loading.value = false
     } catch(error) {
         showError($t('toasts.error.unknownProblem'))
