@@ -57,7 +57,15 @@
                 "link": "Copy link",
                 "qr": "Show QR",
                 "leave": "Leave group",
-                "delete": "Delete group"
+                "delete": "Delete group",
+                "rename": "Rename"
+            },
+            "renameModal": {
+                "title": "Rename group",
+                "message": "Enter new name for group <strong>{name}</strong> (ID: {id}):",
+                "placeholder": "New name",
+                "cancel": "Cancel",
+                "rename": "Rename"
             }
         },
         "membersManagement": {
@@ -168,7 +176,8 @@
             "personPromoted": "Person was promoted",
             "testDeleted": "Test was deleted",
             "testArchived": "Test war archived",
-            "testDearchived": "Test was dearchived"
+            "testDearchived": "Test was dearchived",
+            "groupRenamed": "Group was renamed"
         },
         "error": {
             "unknownProblem": "Something went wrong",

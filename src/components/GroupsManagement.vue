@@ -68,10 +68,20 @@
                                 </el-table-column>
                                 
                                 <el-table-column
-                                    prop="name"
                                     :label="$t('components.groupsManagement.columns.name')"
                                     min-width="180"
                                 >
+                                    <template #default="scope">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <span>{{ scope.row.name }}</span>
+                                            <button 
+                                                class="btn btn-sm btn-outline-secondary ms-2"
+                                                @click="openRenameModal(scope.row)"
+                                            >
+                                                <i class="bi bi-pen"></i><span>{{ $t('components.groupsManagement.actions.rename') }}</span>
+                                            </button>
+                                        </div>
+                                    </template>
                                 </el-table-column>
                                 
                                 <el-table-column
@@ -129,7 +139,16 @@
                             >
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <h5 class="card-title mb-0">{{ group.name }}</h5>
+                                        <div class="d-flex align-items-center flex-wrap gap-1">
+                                            <h5 class="card-title mb-0">{{ group.name }}</h5>
+                                            <button 
+                                                class="btn btn-sm btn-outline-secondary" 
+                                                @click="openRenameModal(group)"
+                                                title="Переименовать группу"
+                                            >
+                                                <i class="bi bi-pen"></i>
+                                            </button>
+                                        </div>
                                         <span class="badge bg-primary">#{{ group.number }}</span>
                                     </div>
                                     
@@ -322,6 +341,15 @@
         <QRCodeComponent
             v-model="openQR"
             :qrCodeUrl="qrCodeUrl"
+            @click.self="openQR = false"
+        />
+        <ModalRenameGroup
+            v-model="isRenameModalOpen"
+            :groupName="selectedGroup.name"
+            :groupID="selectedGroup.id"
+            @rename="renameGroup"
+            @cancel="isRenameModalOpen = false"
+            @click.self="isRenameModalOpen = false"
         />
     </div>
 </template>
@@ -335,12 +363,14 @@ import QRCode from 'qrcode'
 import PageHeader from './PageHeader.vue';
 import MembersManagement from './MembersManagement.vue';
 import QRCodeComponent from './QRCode.vue';
+import ModalRenameGroup from './ModalRenameGroup.vue';
 
 const someGroupsAdmin = ref(false)
 const someGroupsUser = ref(false)
 const $t = useI18n().t
 const store = useStore()
 const isUserManagementOpened = ref(false)
+const isRenameModalOpen = ref(false)
 const inviteUrl = ref('')
 const qrCodeUrl = ref('')
 const openQR = ref(false)
@@ -350,6 +380,10 @@ const message = ref()
 const membersOfGroupToWatchData = ref({
     groupName: '',
     isAdmin: '',
+    id: ""
+})
+const selectedGroup = ref({
+    name: "",
     id: ""
 })
 
@@ -462,6 +496,25 @@ async function createGroup(title) {
         getGroupsData()
     }
 }
+
+function openRenameModal(group) {
+    selectedGroup.value = { name: group.name, id: group.id }
+    isRenameModalOpen.value = true
+}
+
+async function renameGroup(title, id) {
+    status.value = ''
+    try {
+        await store.dispatch('renameGroup', title, id)
+        status.value = store.getters.getStatus
+        showSuccess($t('toasts.success.groupRenamed'))
+    } catch(error) {
+        showError($t('toasts.error.unknownError'))
+    } finally {
+        getGroupsData()
+    }
+}
+
 </script>
 
 <style lang="css" scoped>
@@ -485,6 +538,19 @@ async function createGroup(title) {
 
 .btn-outline-primary:hover {
     background-color: #3846D3;
+    color: white;
+}
+
+.btn-outline-secondary {
+    border-radius: 15px;
+    border: 2px solid #6c757d;
+    color: #6c757d;
+    background-color: transparent;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
     color: white;
 }
 

@@ -88,6 +88,14 @@ const GroupsManagementStore = {
                 commit('setStatus', 'error')
             }
         },
+        async renameGroup({ commit }, data) {
+            try {
+                const response = await api.post('/api/groups/rename', data)
+                commit('setStatus', response.data.status)
+            } catch (error) {
+                commit('setStatus', 'error')
+            }
+        },
     }
 }
 

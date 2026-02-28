@@ -57,7 +57,15 @@
                 "link": "Скопировать ссылку",
                 "qr": "Показать QR",
                 "leave": "Покинуть группу",
-                "delete": "Удалить группу"
+                "delete": "Удалить группу",
+                "rename": "Переименовать"
+            },
+            "renameModal": {
+                "title": "Переименование группы",
+                "message": "Введите новое название для группы <strong>{name}</strong> (ID: {id}):",
+                "placeholder": "Новое название",
+                "cancel": "Отмена",
+                "rename": "Переименовать"
             }
         },
         "membersManagement": {
@@ -168,7 +176,8 @@
             "personPromoted": "Пользователь теперь администратор",
             "testDeleted": "Тест удалён",
             "testArchived": "Тест помещён в архив",
-            "testDearchived": "Тест восстановлен из архива"
+            "testDearchived": "Тест восстановлен из архива",
+            "groupRenamed": "Группа переименована"
         },
         "error": {
             "unknownProblem": "Что-то пошло не так",
