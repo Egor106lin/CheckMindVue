@@ -8,7 +8,7 @@
                         <h5 class="card-title mb-0">{{ $t('components.createTestsWriter.everyQuestionForm.questionNumber') }} {{ questionWrittenByUserNow + 1}}</h5>
                     </div>
                     <div class="col-12 col-md-8">
-                        <div class="d-flex flex-wrap gap-2">
+                        <div class="d-flex flex-wrap gap-2 justify-content-end">
                             <button
                                 class="btn btn-outline-secondary"
                                 :disabled="!(questionWrittenByUserNow > 0)"
@@ -40,7 +40,6 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="row mt-3 mb-3">
                     <div class="col-12">
                         <input
@@ -50,10 +49,25 @@
                         >
                     </div>
                 </div>
-                
-                <div class="row mt-3 mb-3 align-items-center">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                :id="'singleCorrect_' + questionWrittenByUserNow"
+                                v-model="testCreatedByUser[questionWrittenByUserNow].singleCorrect"
+                                @change="handleSingleCorrectToggle"
+                            >
+                            <label class="form-check-label" :for="'singleCorrect_' + questionWrittenByUserNow">
+                                {{  $t('components.createTestsWriter.everyQuestionForm.oneAnswer') }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3 align-items-center">
                     <div class="col-12 col-md-8 mb-2 mb-md-0">
-                        <h5>{{ $t('components.createTestsWriter.everyQuestionForm.answerOptions') }}</h5>
+                        <h5 class="mb-0">{{ $t('components.createTestsWriter.everyQuestionForm.answerOptions') }}</h5>
                     </div>
                     <div class="col-12 col-md-4">
                         <button
@@ -66,12 +80,25 @@
                         </button>
                     </div>
                 </div>
-                
                 <div v-for="(option, index) in testCreatedByUser[questionWrittenByUserNow].options" :key="index" class="row mb-3">
                     <div class="col-12">
                         <div class="input-group">
                             <div class="input-group-text">
-                                <input v-model="option.correct" class="form-check-input mt-0" type="checkbox" />
+                                <input
+                                    v-if="!testCreatedByUser[questionWrittenByUserNow].singleCorrect"
+                                    v-model="option.correct"
+                                    class="form-check-input mt-0"
+                                    type="checkbox"
+                                />
+                                <input
+                                    v-else
+                                    class="form-check-input mt-0"
+                                    type="radio"
+                                    :name="'correct_' + questionWrittenByUserNow"
+                                    :value="index"
+                                    :checked="option.correct"
+                                    @change="setSingleCorrect(index)"
+                                />
                             </div>
                             <input v-model="option.title" class="form-control" />
                             <button
@@ -93,7 +120,6 @@
                 </div>
             </div>
         </div>
-        
         <div v-if="!testInProgress" class="card zone">
             <div class="card-body">
                 <div class="row mb-3">
@@ -134,7 +160,6 @@ const emit = defineEmits(['leaveOnMain'])
 const testData = JSON.parse(localStorage.getItem('formData') || null)
 const questionWrittenByUserNow = ref()
 
-
 onBeforeMount(() => {
     let questionWrittenByUserNowLS = localStorage.getItem('questionWrittenByUserNow')
     if (questionWrittenByUserNowLS != null) {
@@ -148,6 +173,7 @@ onBeforeMount(() => {
     } else {
         testCreatedByUser.value = Array.from({ length: testData.questions_quantity }).map(() => ({
             question: '',
+            singleCorrect: false,
             options: [
                 { title: '', correct: false},
                 { title: '', correct: false}
@@ -155,8 +181,6 @@ onBeforeMount(() => {
         }));
     }
 })
-
-
 
 function nextQuestion() {
     localStorage.setItem('testCreatedByUser', JSON.stringify(testCreatedByUser.value))
@@ -175,6 +199,25 @@ function addOption() {
 function deleteOption(option) {
     let index = testCreatedByUser.value[questionWrittenByUserNow.value].options.indexOf(option)
     testCreatedByUser.value[questionWrittenByUserNow.value].options.splice(index, 1)
+}
+
+function handleSingleCorrectToggle() {
+    const currentQ = testCreatedByUser.value[questionWrittenByUserNow.value]
+    if (currentQ.singleCorrect) {
+        const correctIndices = currentQ.options.reduce((acc, opt, idx) => opt.correct ? [...acc, idx] : acc, [])
+        if (correctIndices.length > 1) {
+            for (let i = 1; i < correctIndices.length; i++) {
+                currentQ.options[correctIndices[i]].correct = false
+            }
+        }
+    }
+}
+
+function setSingleCorrect(index) {
+    const currentQ = testCreatedByUser.value[questionWrittenByUserNow.value]
+    currentQ.options.forEach((opt, i) => {
+        opt.correct = (i === index)
+    })
 }
 
 function disableNextQuestionButton() {
@@ -208,16 +251,21 @@ function isOnlySpacesOrEmpty(inputText) {
 }
 
 function findUncorrectOption() {
-    let getCorrectOption = false
+    const currentQ = testCreatedByUser.value[questionWrittenByUserNow.value]
+    let correctCount = 0
     let emptyOption = false
-    for (const option of testCreatedByUser.value[questionWrittenByUserNow.value].options) {
+    for (const option of currentQ.options) {
         if (isOnlySpacesOrEmpty(option.title)) {
             emptyOption = true
         } else if (option.correct == true) {
-            getCorrectOption = true
+            correctCount++
         }
     }
-    return !getCorrectOption || emptyOption
+    if (currentQ.singleCorrect) {
+        return correctCount !== 1 || emptyOption
+    } else {
+        return correctCount === 0 || emptyOption
+    }
 }
 
 async function saveTest() {

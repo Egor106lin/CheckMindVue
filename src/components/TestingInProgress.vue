@@ -59,14 +59,27 @@
                     <div v-for="(option, optionIndex) in test?.questionsAndOptions[questionNow - 1]?.options" :key="optionIndex" class="mb-3">
                         <div class="row align-items-center option-row">
                             <div class="col-1">
-                                <input
-                                    class="form-check-input large-checkbox"
-                                    type="checkbox"
-                                    :value="optionIndex"
-                                    v-model="answers[questionNow - 1].options"
-                                    @change="saveAnswersToStorage"
-                                    :id="'option-' + questionNow + '-' + optionIndex"
-                                >
+                                <template v-if="test?.questionsAndOptions[questionNow - 1]?.singleCorrect">
+                                    <input
+                                        class="form-check-input large-radio"
+                                        type="radio"
+                                        :name="'q' + questionNow"
+                                        :value="optionIndex"
+                                        :checked="answers[questionNow - 1]?.options.includes(optionIndex)"
+                                        @change="setSingleAnswer(optionIndex)"
+                                        :id="'option-' + questionNow + '-' + optionIndex"
+                                    >
+                                </template>
+                                <template v-else>
+                                    <input
+                                        class="form-check-input large-checkbox"
+                                        type="checkbox"
+                                        :value="optionIndex"
+                                        v-model="answers[questionNow - 1].options"
+                                        @change="saveAnswersToStorage"
+                                        :id="'option-' + questionNow + '-' + optionIndex"
+                                    >
+                                </template>
                             </div>
                             <div class="col-11">
                                 <label :for="'option-' + questionNow + '-' + optionIndex" class="option-label w-100 mb-0">
@@ -233,6 +246,15 @@ async function getTestAndAnswers() {
     }
 }
 
+function setSingleAnswer(optionIndex) {
+    const idx = questionNow.value - 1
+    if (!answers.value[idx]) {
+        answers.value[idx] = { options: [] }
+    }
+    answers.value[idx].options = [optionIndex]
+    saveAnswersToStorage()
+}
+
 function changeQuestion(next = true) {
     saveAnswersToStorage()
     saveQuestionNowToStorage()
@@ -319,7 +341,7 @@ function pushOnMain() {
     border: none;
 }
 
-.large-checkbox {
+.large-checkbox, .large-radio {
     transform: scale(1.3);
     opacity: 0.9;
     cursor: pointer;
@@ -395,7 +417,7 @@ function pushOnMain() {
         min-width: 40px;
     }
     
-    .large-checkbox {
+    .large-checkbox, .large-radio {
         transform: scale(1.5);
     }
     
@@ -455,7 +477,7 @@ function pushOnMain() {
         font-size: 1.2rem;
     }
     
-    .large-checkbox {
+    .large-checkbox, .large-radio {
         transform: scale(1.6);
     }
     
@@ -480,7 +502,7 @@ function pushOnMain() {
         padding-left: 10px;
     }
     
-    .large-checkbox {
+    .large-checkbox, .large-radio {
         transform: scale(1.7);
     }
     
