@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
 import LoginPage from '@/components/LoginPage.vue'
+import VkCallback from '@/components/VkCallback.vue'
 import ProfileSettings from '@/components/ProfileSettings.vue'
 import MainPage from '@/components/MainPage.vue'
 import GroupsManagement from '@/components/GroupsManagement.vue'
@@ -12,6 +13,10 @@ const routes = [
     {
         path: '/login',
         component: LoginPage  
+    },
+    {
+        path: '/vk/callback',
+        component: VkCallback
     },
     {
         path: '/',

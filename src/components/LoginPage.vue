@@ -25,7 +25,7 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col text-center">
-                                    <button class="btn btn-primary w-100 py-3 disabled">
+                                    <button class="btn btn-primary w-100 py-3" @click="loginWithVK()">
                                         <span class="h5 mb-0">Зайти с VK</span>
                                     </button>
                                 </div>
@@ -48,6 +48,7 @@
 <script setup>
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
+import { generateCodeVerifier, generateCodeChallenge } from '@/utils/pkce';
 
 const store = useStore()
 const route = useRoute()
@@ -56,6 +57,26 @@ async function loginWithGoogle() {
     try {
         const redirectPath = route.query.redirect || ''
         await store.dispatch('loginWithGoogle', redirectPath)
+        const link = store.getters.link
+        window.location.href = link
+    } catch(error) {
+        console.log(error)
+    }
+}
+
+async function loginWithVK() {
+    try {
+        const redirectPath = route.query.redirect || ''
+        const codeVerifier = generateCodeVerifier()
+        const codeChallenge = await generateCodeChallenge(codeVerifier)
+        sessionStorage.setItem('vk_code_verifier', codeVerifier)
+        if (redirectPath) {
+            sessionStorage.setItem('vk_state', redirectPath)
+        }
+        await store.dispatch('loginWithVK', { 
+            stateParam: redirectPath, 
+            codeChallenge 
+        })
         const link = store.getters.link
         window.location.href = link
     } catch(error) {
