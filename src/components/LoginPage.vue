@@ -25,7 +25,7 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col text-center">
-                                    <button class="btn btn-primary w-100 py-3" @click="loginWithVK()">
+                                    <button class="btn btn-primary disabled w-100 py-3">
                                         <span class="h5 mb-0">Зайти с VK</span>
                                     </button>
                                 </div>
@@ -64,6 +64,7 @@ async function loginWithGoogle() {
     }
 }
 
+// eslint-disable-next-line
 async function loginWithVK() {
     try {
         const redirectPath = route.query.redirect || ''
