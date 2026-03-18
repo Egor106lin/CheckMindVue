@@ -3,6 +3,19 @@
     <div class="col">
         <div v-if="testInProgress" class="card zone">
             <div class="card-body">
+                <div class="row mb-3" v-if="testData">
+                    <div class="col-12">
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-primary" 
+                                role="progressbar"
+                                :style="{ width: ((questionWrittenByUserNow + 1) / testData.questions_quantity * 100) + '%' }"
+                                :aria-valuenow="questionWrittenByUserNow + 1"
+                                aria-valuemin="1"
+                                :aria-valuemax="testData.questions_quantity">
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row mb-3 align-items-center">
                     <div class="col-12 col-md-4 mb-2 mb-md-0">
                         <h5 class="card-title mb-0">{{ $t('components.createTestsWriter.everyQuestionForm.questionNumber') }} {{ questionWrittenByUserNow + 1}}</h5>
@@ -371,35 +384,52 @@ function leaveOnMain() {
         box-shadow: 5px 3px 3px #d1d1d1;
         border-radius: 16px;
     }
-    
+
     .card {
         border-radius: 16px;
     }
-    
+
     .btn, .form-control {
-        min-height: 48px;
+        min-height: 44px;
+        padding: 8px 12px;
+        font-size: 0.95rem;
     }
-    
+
     .form-control-lg {
-        padding: 12px 16px;
+        padding: 10px 14px;
         font-size: 1rem;
     }
-    
+
     .btn-outline-danger span {
         display: none;
     }
-    
+
     .input-group {
-        flex-direction: column;
+        flex-wrap: wrap;
     }
-    
-    .input-group > * {
-        width: 100%;
-        margin-bottom: 8px;
+
+    .input-group-text {
+        padding: 0.375rem 0.5rem;
     }
-    
-    .input-group > *:last-child {
-        margin-bottom: 0;
+
+    .input-group .form-control {
+        flex: 1 1 140px;
+        min-width: 140px;
+    }
+
+    .input-group .btn-outline-danger {
+        width: auto;
+        flex: 0 0 auto;
+        margin-left: 4px;
+        padding: 0.375rem 0.5rem;
+    }
+
+    .d-flex.flex-wrap.gap-2.justify-content-end .btn {
+        min-width: 44px;
+    }
+
+    .card-body {
+        overflow-x: hidden;
     }
 }
 
@@ -407,18 +437,69 @@ function leaveOnMain() {
     .card {
         border-radius: 14px;
     }
-    
     .zone {
         border-radius: 14px;
     }
-    
     h5 {
         font-size: 1.1rem;
     }
-    
-    .btn {
-        font-size: 1rem;
-        padding: 12px 16px;
+    .input-group .form-control {
+        flex: 1 1 120px;
+        min-width: 120px;
+    }
+    .input-group .btn-outline-danger {
+        padding: 0.375rem 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .input-group {
+        flex-wrap: wrap;
+    }
+    .input-group-text {
+        width: auto;
+        padding: 0.375rem 0.5rem;
+    }
+    .input-group .form-control {
+        flex: 1 1 calc(100% - 100px);
+        min-width: 0;
+    }
+    .input-group .btn-outline-danger {
+        width: auto;
+        margin-left: 4px;
+        flex: 0 0 auto;
+    }
+}
+
+@media (max-width: 400px) {
+    .input-group {
+        flex-wrap: wrap;
+    }
+    .input-group-text {
+        width: 100%;
+        justify-content: center;
+        border-radius: 12px 12px 0 0;
+        border-bottom: none;
+        background-color: #f8f9fa;
+    }
+    .input-group .form-control {
+        flex: 1 1 100%;
+        border-radius: 0;
+        margin: 0;
+        border-top: none;
+        border-bottom: none;
+    }
+    .input-group .btn-outline-danger {
+        width: 100%;
+        border-radius: 0 0 12px 12px;
+        margin-top: 0;
+        margin-left: 0;
+        border-top: none;
+        background-color: #fff;
+    }
+    .input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
     }
 }
 </style>
