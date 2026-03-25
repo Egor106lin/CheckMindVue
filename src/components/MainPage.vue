@@ -17,9 +17,9 @@
             <div class="col-12">
                 <div class="card card-nf card-body mb-2 zone">
                     <div>
-                        <p>Начните работу с создания групп!</p>
+                        <p>{{ $t('components.mainPage.startWork') }}</p>
                     </div>
-                    <button class="btn btn-primary" @click="router.push('/groups')">Начать</button>
+                    <button class="btn btn-primary" @click="router.push('/groups')">{{ $t('components.mainPage.start') }}</button>
                 </div>
             </div>
         </div>
@@ -247,7 +247,7 @@ async function dearchiveTest(testID) {
 
 <style lang="css" scoped>
 .card {
-    border: 2px solid #3846D3;
+    box-shadow: 10px 5px 5px #858383;
     border-radius: 20px;
 }
 

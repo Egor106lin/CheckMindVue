@@ -3,18 +3,18 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Удаление аккаунта</h5>
+                    <h5 class="modal-title">{{ $t('components.profileSettings.deleteAccount.accountDeletion') }}</h5>
                     <button type="button" class="btn-close" aria-label="Close" @click="closeModal()"></button>
                 </div>
                 <div class="modal-body">
-                    <p>{{ username }}, Вы действительно хотите удалить Ваш аккаунт, привязанный к почте {{ email }}?</p>
+                    <p>{{ username }}, {{ $t('components.profileSettings.deleteAccount.approve') }} {{ email }}?</p>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" @click="cancel()">
-                        Отмена
+                        {{ $t('components.profileSettings.deleteAccount.cancel') }}
                     </button>
                     <button class="btn btn-danger" @click="confirm()">
-                        Удалить
+                        {{ $t('components.profileSettings.deleteAccount.delete') }}
                     </button>
                 </div>
             </div>
@@ -24,6 +24,9 @@
 
 <script setup>
 import { defineProps, defineEmits } from 'vue'
+import { useI18n } from 'vue-i18n';
+
+const $t = useI18n().t
 
 // eslint-disable-next-line
 const props = defineProps({

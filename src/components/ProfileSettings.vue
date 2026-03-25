@@ -149,10 +149,8 @@ const selectedLocale = ref(useI18n().locale)
 const providerBadgeClass = computed(() => {
     const provider = userData.value?.provider?.toLowerCase()
     const classes = {
-        'google': 'bg-danger',
-        'github': 'bg-dark',
-        'facebook': 'bg-primary',
-        'email': 'bg-secondary'
+        'Google': 'bg-primary',
+        'VK': 'bg-primary'
     }
     return `badge ${classes[provider] || 'bg-secondary'}`
 })
@@ -183,6 +181,8 @@ function changeLanguage() {
 
 function logout() {
     const currentLocale = localStorage.getItem('locale')
+    sessionStorage.removeItem('vk_code_verifier')
+    sessionStorage.removeItem('vk_state')
     store.dispatch('leave')
     router.push('/login')
     localStorage.clear()
@@ -197,6 +197,8 @@ async function handleConfirmDelete() {
     await store.dispatch('deleteAccount')
     const status = store.getters.getStatus
     if (status == 'success') {
+        sessionStorage.removeItem('vk_code_verifier')
+        sessionStorage.removeItem('vk_state')
         localStorage.clear()
         router.push('/login')
     } else {
@@ -216,7 +218,7 @@ onMounted(() => {
 
 <style lang="css" scoped>
 .card {
-    border: 2px solid #3846D3;
+    box-shadow: 10px 5px 5px #858383;
     border-radius: 20px;
 }
 

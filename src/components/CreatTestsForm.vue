@@ -255,7 +255,7 @@ function cancelTestCreation() {
 }
 
 .card {
-    border: 2px solid #3846D3;
+    box-shadow: 10px 5px 5px #858383;
     border-radius: 20px;
 }
 

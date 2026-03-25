@@ -4,6 +4,19 @@
         <div class="row">
             <div class="col-12">
                 <div v-if="testInProgress" class="card card-body zone">
+                    <div class="row mb-3" v-if="test">
+                        <div class="col-12">
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-primary" 
+                                    role="progressbar"
+                                    :style="{ width: (questionNow / test.questionsQuantity * 100) + '%' }"
+                                    :aria-valuenow="questionNow"
+                                    aria-valuemin="1"
+                                    :aria-valuemax="test.questionsQuantity">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row mb-3 align-items-center">
                         <div class="col-6 col-md-8">
                             <h5 class="card-title mb-0">
