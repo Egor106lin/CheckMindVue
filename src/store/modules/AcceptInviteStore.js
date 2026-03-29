@@ -30,7 +30,7 @@ const AcceptInviteStore = {
                 commit('setStatus', response.data.status)
                 commit('setMessage', response.data.message)
                 if (status != "error") {
-                    commit('setGroupData', response.data.groupData)
+                    commit('setGroupData', response.data.data.groupData)
                 }
             } catch(error) {
                 console.error('Error getting Google URL:', error)

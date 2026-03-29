@@ -44,7 +44,7 @@ const TestingInProgress = {
                     test_id: payload.testID
                 })
                 commit('setAnswers', payload.answers)
-                commit('setResult', response.data)
+                commit('setResult', response.data.data)
             } catch (error) {
                 console.log(error)
             }

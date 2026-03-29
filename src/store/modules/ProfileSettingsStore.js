@@ -21,7 +21,7 @@ const ProfileSettingsStore = {
         async getUserData({ commit }) {
             try {
                 const response = await api.get('/api/profile/user_data')
-                commit('setUserData', response.data)
+                commit('setUserData', response.data.data)
             } catch(error) {
                 console.log('ошибка')
             }

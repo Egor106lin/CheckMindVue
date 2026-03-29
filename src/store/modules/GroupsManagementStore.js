@@ -36,8 +36,8 @@ const GroupsManagementStore = {
         async getGroupsData({ commit }) {
             try {
                 const response = await api.get('/api/groups/get_list')
-                commit('setAdminGroupsData', response.data.adminGroupsData)
-                commit('setUserGroupsData', response.data.userGroupsData)
+                commit('setAdminGroupsData', response.data.data.adminGroupsData)
+                commit('setUserGroupsData', response.data.data.userGroupsData)
             } catch (error) {
                 commit('setStatus', 'error')
             }
@@ -45,7 +45,7 @@ const GroupsManagementStore = {
         async getInviteUrl({ commit }, id) {
             try {
                 const response = await api.get(`api/invite/generate/${id}`)
-                commit('setInviteUrl', response.data.invite_url)
+                commit('setInviteUrl', response.data.data.inviteUrl)
             } catch (error) {
                 commit('setInviteUrl', '')
             }

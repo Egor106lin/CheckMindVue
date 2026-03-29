@@ -31,8 +31,8 @@ const MainPageStore = {
         async getGroupsWithTests({ commit }) {
             try {
                 const response = await api.get('/api/groups/get_list')
-                const adminGroups = response.data.adminGroupsData
-                const userGroups = response.data.userGroupsData
+                const adminGroups = response.data.data.adminGroupsData
+                const userGroups = response.data.data.userGroupsData
                 commit('setGroupsWithTests', [...adminGroups, ...userGroups])
             } catch (error) {
                 console.log(error)

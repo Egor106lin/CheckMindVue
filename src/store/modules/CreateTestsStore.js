@@ -25,8 +25,8 @@ const CreateTestsStore = {
                         'Content-Type': 'application/json'
                     }
                 })
-                commit('setTestData', response.data)
-                return response.data
+                commit('setTestData', response.data.receivedData)
+                return response.data.receivedData
             } catch (error) {
                 console.log(error)
             }
@@ -34,7 +34,7 @@ const CreateTestsStore = {
         async getGroupsToCreateTest({ commit }) {
             try {
                 const response = await api.get('/api/tests/get_groups_to_create_test')
-                commit('setGroupsList', response.data.groups)
+                commit('setGroupsList', response.data.data.groups)
             } catch(error) {
                 commit('setGroupsList', [])
             }
