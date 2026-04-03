@@ -133,7 +133,7 @@ async function getMembers() {
             number: index + 1
         }))
     } catch (error) {
-        showError($t('toasts.error.unknownError'))
+        showError($t('toasts.error.unknownProblem'))
     }
 }
 
@@ -147,7 +147,7 @@ async function handleMakeAdmin(member_id) {
         const status = store.getters['getStatus']
         status == 'success' ? showSuccess($t('toasts.success.personPromoted')) : showError($t('toasts.error.personPromotedError'))
     } catch (error) {
-        showError($t('toasts.error.unknownError'))
+        showError($t('toasts.error.unknownProblem'))
     }
 }
 
@@ -161,7 +161,7 @@ async function handleDelete(member_id) {
         const status = store.getters['getStatus']
         status == 'success' ? showSuccess($t('toasts.success.personDeleted')) : showError($t('toasts.error.personDeletedError'))
     } catch (error) {
-        showError($t('toasts.error.unknownError'))
+        showError($t('toasts.error.unknownProblem'))
     }
 }
 </script>
