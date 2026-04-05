@@ -11,8 +11,26 @@
                     </button>
                 </div>
             </div>
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="input-group search-group">
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input
+                            type="text"
+                            class="form-control"
+                            :placeholder="$t('components.membersManagement.searchPlaceholder')"
+                            v-model="searchQuery"
+                        />
+                        <button v-if="searchQuery" class="btn btn-outline-secondary" @click="searchQuery = ''">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
             <div class="d-none d-md-block table-responsive">
-                <ElTable :data="tableData" class="rounded-5">
+                <ElTable :data="filteredMembers" class="rounded-5">
                     <ElTableColumn prop="number" :label="$t('components.membersManagement.№')" sortable width="80" />
                     <ElTableColumn prop="admin" :label="$t('components.membersManagement.admin')" width="150">
                         <template #default="scope">
@@ -46,10 +64,19 @@
                             </div>
                         </template>
                     </ElTableColumn>
+                    <template #empty>
+                        <div class="empty-table">
+                            <i class="bi bi-people fs-1 text-muted"></i>
+                            <p class="mt-2 mb-0 text-muted">{{ $t('components.membersManagement.noData') }}</p>
+                        </div>
+                    </template>
                 </ElTable>
             </div>
             <div class="d-md-none members-mobile-list">
-                <div v-for="(member, index) in tableData" :key="index" class="member-card">
+                <div v-if="filteredMembers.length === 0" class="text-center text-muted py-4">
+                    {{ $t('components.membersManagement.noMembers') }}
+                </div>
+                <div v-for="(member, index) in filteredMembers" :key="index" class="member-card">
                     <div class="member-header">
                         <span class="member-number">#{{ member.number }}</span>
                         <span v-if="member.admin" class="admin-badge">
@@ -82,16 +109,13 @@
                     </div>
                     <div v-else class="member-actions-placeholder"></div>
                 </div>
-                <div v-if="!tableData?.length" class="text-center text-muted py-4">
-                    {{ $t('components.membersManagement.noMembers') }}
-                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onBeforeMount, defineProps, defineEmits } from 'vue'
+import { ref, onBeforeMount, defineProps, defineEmits, computed } from 'vue'
 import { showSuccess, showError } from '@/utils/notifications'
 import { ElTable, ElTableColumn } from 'element-plus';
 import { useStore } from 'vuex';
@@ -100,6 +124,7 @@ import { useI18n } from 'vue-i18n';
 const $t = useI18n().t
 const store = useStore()
 const tableData = ref()
+const searchQuery = ref('')
 
 const props = defineProps({
     groupName: {
@@ -117,6 +142,13 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['cancel'])
+
+const filteredMembers = computed(() => {
+    if (!tableData.value) return []
+    if (!searchQuery.value.trim()) return tableData.value
+    const query = searchQuery.value.trim().toLowerCase()
+    return tableData.value.filter(member => member.name?.toLowerCase().includes(query))
+})
 
 onBeforeMount(() => {
     getMembers()
@@ -210,6 +242,53 @@ async function handleDelete(member_id) {
     --el-table-text-color: #495057;
     border-radius: 12px;
     overflow: hidden;
+}
+
+/* Поисковая группа — такой же стиль, как в TestResults */
+.search-group {
+    display: flex;
+    align-items: stretch;
+}
+
+.search-group .input-group-text {
+    border-radius: 20px 0 0 20px;
+    border: 2px solid #f3f3f3;
+    border-right: none;
+    background-color: white;
+}
+
+.search-group .form-control {
+    border: 2px solid #f3f3f3;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    flex: 1;
+}
+
+.search-group:not(:has(.btn-outline-secondary)) .form-control {
+    border-radius: 0 20px 20px 0;
+    border-right: 2px solid #f3f3f3;
+}
+
+.search-group .form-control:focus {
+    border-color: #3846D3;
+    box-shadow: none;
+    position: relative;
+    z-index: 2;
+}
+
+.search-group .btn-outline-secondary {
+    border-radius: 0 20px 20px 0;
+    border: 2px solid #f3f3f3;
+    border-left: none;
+    background-color: white;
+    color: #6c757d;
+}
+
+.search-group .btn-outline-secondary:hover {
+    background-color: #f8f9fa;
+    border-color: #f3f3f3;
+    color: #3846D3;
 }
 
 /* Мобильные стили */

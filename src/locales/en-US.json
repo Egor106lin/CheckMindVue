@@ -72,11 +72,13 @@
         },
         "membersManagement": {
             "title": "Members of group",
+            "searchPlaceholder": "Search by name...",
             "makeAdmin": "Make as admin",
             "№": "№",
             "admin": "Administrator",
             "name": "Name",
-            "delete": "Delete user"
+            "delete": "Delete user",
+            "noData": "No members"
         },
         "acceptInvite": {
             "title": "Group invitation",
@@ -172,7 +174,12 @@
             "title": "Test results",
             "name": "Name",
             "points": "Points",
-            "time": "Time"
+            "time": "Time",
+            "averageScore": "Average Score",
+            "medianScore": "Median Score",
+            "searchPlaceholder": "Search by name...",
+            "noResults": "No results found",
+            "noData": "No results"
         }
     },
     "toasts": {
