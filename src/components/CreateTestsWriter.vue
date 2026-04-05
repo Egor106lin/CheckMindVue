@@ -125,10 +125,10 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="row mt-3">
                     <div class="col-12">
-                        <p class="text-muted small">{{ $t('components.createTestsWriter.everyQuestionForm.rule1') }}</p>
+                        <p v-if="testCreatedByUser[questionWrittenByUserNow].singleCorrect" class="text-muted small">{{ $t('components.createTestsWriter.everyQuestionForm.rule2') }}</p>
+                        <p v-else class="text-muted small">{{ $t('components.createTestsWriter.everyQuestionForm.rule1') }}</p>
                     </div>
                 </div>
             </div>
@@ -140,7 +140,6 @@
                         <h5 class="card-title">{{ $t('components.createTestsWriter.readyTestCard.title') }}</h5>
                     </div>
                 </div>
-                
                 <div class="row align-items-center">
                     <div class="col-12 col-md-10 mb-3 mb-md-0">
                         <p class="mb-0">{{ $t('components.createTestsWriter.readyTestCard.forGroup') }} <b class="badge bg-primary">{{ testData.group_id }}</b></p>
