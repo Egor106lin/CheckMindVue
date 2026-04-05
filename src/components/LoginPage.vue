@@ -108,11 +108,13 @@ async function loginWithVK() {
 
 .background {
     position: relative;
+    width: 100%;
     min-height: 100vh;
     background-image: url('/src/assets/images/background_light.svg') !important;
     background-size: cover;
     background-position: center;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .decoration {
@@ -123,6 +125,7 @@ async function loginWithVK() {
     height: 100%;
     pointer-events: none;
     z-index: 1;
+    overflow: hidden;
 }
 
 .notepad {
@@ -130,6 +133,7 @@ async function loginWithVK() {
     left: 5%;
     top: 20%;
     width: 360px;
+    max-width: 40vw;
     height: auto;
     opacity: 0.7;
     transform: rotate(-5deg);
@@ -140,9 +144,28 @@ async function loginWithVK() {
     right: 5%;
     bottom: 15%;
     width: 400px;
+    max-width: 45vw;
     height: auto;
     opacity: 0.7;
     transform: rotate(5deg);
+}
+
+.container {
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.col-12, .col-md-8, .col-lg-5 {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .card {
@@ -153,6 +176,8 @@ async function loginWithVK() {
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    width: 100%;
 }
 
 .blue {
@@ -171,6 +196,10 @@ h1 {
     margin-bottom: 0;
 }
 
+.text-white-50 {
+    color: rgba(255, 255, 255, 0.5);
+}
+
 @media (max-width: 768px) {
     .background {
         padding: 20px 0;
@@ -178,6 +207,8 @@ h1 {
     
     .card {
         border-radius: 30px;
+        margin: 0 10px;
+        width: calc(100% - 20px);
     }
     
     .card-body {
@@ -193,23 +224,18 @@ h1 {
         padding: 8px 16px;
     }
     
-    .btn-outline-light {
-        border-radius: 25px;
-        font-size: 1rem;
-        padding-top: 1rem !important;
-        padding-bottom: 1rem !important;
-    }
-    
     .notepad {
         width: 120px;
         left: 2%;
         top: 15%;
+        max-width: 30vw;
     }
     
     .abc {
         width: 140px;
         right: 2%;
         bottom: 10%;
+        max-width: 35vw;
     }
 }
 
@@ -227,23 +253,19 @@ h1 {
         padding: 6px 12px;
     }
     
-    .btn-outline-light {
-        border-radius: 20px;
-        font-size: 0.95rem;
-    }
-    
     .notepad, .abc {
         display: none;
+    }
+    
+    .card {
+        margin: 0 10px;
+        width: calc(100% - 20px);
     }
 }
 
 @media (max-width: 400px) {
     h1 {
         font-size: 1.5rem;
-    }
-    
-    .btn-outline-light {
-        font-size: 0.9rem;
     }
 }
 </style>

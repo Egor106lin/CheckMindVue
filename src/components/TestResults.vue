@@ -42,10 +42,10 @@ import { defineEmits, defineProps } from 'vue'
 const $t = useI18n().t;
 
 defineProps({
-  results: {
-    type: Array,
-    required: true
-  }
+    results: {
+        type: Array,
+        required: true
+    }
 })
 
 defineEmits(['close'])
