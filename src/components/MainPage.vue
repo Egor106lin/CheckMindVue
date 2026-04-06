@@ -128,7 +128,7 @@
                 <div class="col-12">
                     <button
                         class="btn btn-light w-md-auto"
-                        @click="router.push('/create_tests')"
+                        @click="router.push({ path: '/create_tests', query: { groupID: group.id } })"
                     >
                         {{ $t('components.mainPage.test.create') }}
                     </button>

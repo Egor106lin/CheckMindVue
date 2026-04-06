@@ -134,7 +134,7 @@
                                 'disabled': v$.$invalid || !v$.$dirty || !canCreateTestsForm,
                                 'opacity-50': v$.$invalid || !v$.$dirty || !canCreateTestsForm
                             }"
-                            :disabled="v$.$invalid || !v$.$dirty || !canCreateTestsForm"
+                            :disabled="v$.$invalid || !canCreateTestsForm"
                         >
                             {{ $t('components.createTestsForm.testDataForm.createNewTest') }}
                         </button>
@@ -166,9 +166,11 @@ import createTestsWriter from './CreateTestsWriter.vue';
 import router from '@/router/routes';
 import PageHeader from './PageHeader.vue';
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 
-const $t = useI18n().t
+const route = useRoute();
 const store = useStore()
+const $t = useI18n().t
 const canCreateTestsForm = ref(true)
 
 const groups = ref([])
@@ -182,7 +184,20 @@ onBeforeMount(async () => {
         console.error('Ошибка загрузки групп:', error)
         groups.value = []
     }
-
+    const groupIDFromQuery = route.query.groupID
+    if (groupIDFromQuery && groups.value.length) {
+        const foundGroup = groups.value.find(g => String(g.id) === String(groupIDFromQuery))
+        if (foundGroup) {
+            localStorage.removeItem('formData')
+            localStorage.removeItem('canCreateTestsForm')
+            localStorage.removeItem('questionWrittenByUserNow')
+            localStorage.removeItem('testCreatedByUser')
+            state.group_id = String(foundGroup.id)
+            canCreateTestsForm.value = true
+            v$.value.group_id.$touch()
+            return
+        }
+    }
     const formData = localStorage.getItem('formData')
     if (formData) {
         const saved = JSON.parse(formData)
