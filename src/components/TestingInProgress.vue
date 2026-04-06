@@ -51,7 +51,6 @@
                             </button>
                         </div>
                     </div>
-                    
                     <div class="row mb-3">
                         <div class="col-12">
                             <h5 class="card-subtitle text-body-secondary">
@@ -60,56 +59,39 @@
                             </h5>
                         </div>
                     </div>
-                    
                     <hr>
-                    
                     <div class="row mb-4">
                         <div class="col-12">
                             <h4 class="mb-3">{{ test?.questionsAndOptions[questionNow - 1]?.question }}</h4>
                         </div>
                     </div>
-                    
-                    <div v-for="(option, optionIndex) in test?.questionsAndOptions[questionNow - 1]?.options" :key="optionIndex" class="mb-3">
-                        <div class="row align-items-center option-row">
-                            <div class="col-1">
-                                <template v-if="test?.questionsAndOptions[questionNow - 1]?.singleCorrect">
-                                    <input
-                                        class="form-check-input large-radio"
-                                        type="radio"
-                                        :name="'q' + questionNow"
-                                        :value="optionIndex"
-                                        :checked="answers[questionNow - 1]?.options.includes(optionIndex)"
-                                        @change="setSingleAnswer(optionIndex)"
-                                        :id="'option-' + questionNow + '-' + optionIndex"
-                                    >
-                                </template>
-                                <template v-else>
-                                    <input
-                                        class="form-check-input large-checkbox"
-                                        type="checkbox"
-                                        :value="optionIndex"
-                                        v-model="answers[questionNow - 1].options"
-                                        @change="saveAnswersToStorage"
-                                        :id="'option-' + questionNow + '-' + optionIndex"
-                                    >
-                                </template>
-                            </div>
-                            <div class="col-11">
-                                <label :for="'option-' + questionNow + '-' + optionIndex" class="option-label w-100 mb-0">
-                                    {{ option.title }}
-                                </label>
-                            </div>
+                    <div v-for="(option, optionIndex) in test?.questionsAndOptions[questionNow - 1]?.options" :key="optionIndex" class="option-card" :class="{ selected: isOptionSelected(optionIndex) }" @click="toggleOption(optionIndex)">
+                        <div class="option-card-content">
+                            <input
+                                type="checkbox"
+                                v-if="!test?.questionsAndOptions[questionNow - 1]?.singleCorrect"
+                                :checked="isOptionSelected(optionIndex)"
+                                disabled
+                                class="form-check-input"
+                            />
+                            <input
+                                type="radio"
+                                v-else
+                                :name="'q' + questionNow"
+                                :checked="isOptionSelected(optionIndex)"
+                                disabled
+                                class="form-check-input"
+                            />
+                            <span class="option-text">{{ option.title }}</span>
                         </div>
                     </div>
                 </div>
-                
                 <div v-if="!testInProgress && testResult" class="card card-body zone">
                     <div class="row mb-3">
                         <div class="col-12">
                             <h3 class="card-title">Тест <b>"{{ testResult.testName }}"</b> пройден!</h3>
                         </div>
                     </div>
-                    
                     <div class="row mb-4">
                         <div class="col-12">
                             <h5>Ваш результат: <b>{{ testResult.userScore }} / {{ testResult.maxScore }}</b></h5>
@@ -118,8 +100,16 @@
                     <div class="d-none d-md-block">
                         <ElTable :data="testResult.detailedResults" class="rounded-5 mt-3">
                             <ElTableColumn prop="question" label="Вопрос" width="200"/>
-                            <ElTableColumn prop="userAnswers" label="Выбранные ответы"/>
-                            <ElTableColumn prop="correctAnswers" label="Правильные ответы"/>
+                            <ElTableColumn label="Выбранные ответы">
+                                <template #default="scope">
+                                    {{ formatAnswers(scope.row.userAnswers) }}
+                                </template>
+                            </ElTableColumn>
+                            <ElTableColumn label="Правильные ответы">
+                                <template #default="scope">
+                                    {{ formatAnswers(scope.row.correctAnswers) }}
+                                </template>
+                            </ElTableColumn>
                             <ElTableColumn prop="pointsEarned" label="Набранные баллы" width="140"/>
                             <ElTableColumn prop="maxPoints" label="Максимум баллов" width="140"/>
                         </ElTable>
@@ -129,18 +119,16 @@
                             <div class="card-body">
                                 <h6 class="card-title mb-2">Вопрос {{ index + 1 }}</h6>
                                 <p class="small text-muted mb-2">{{ result.question }}</p>
-                                
                                 <div class="row small mb-2">
                                     <div class="col-6">
                                         <p class="mb-1"><strong>Выбрано:</strong></p>
-                                        <p class="mb-0">{{ result.userAnswers || '—' }}</p>
+                                        <p class="mb-0">{{ formatAnswers(result.userAnswers) }}</p>
                                     </div>
                                     <div class="col-6">
                                         <p class="mb-1"><strong>Правильно:</strong></p>
-                                        <p class="mb-0">{{ result.correctAnswers || '—' }}</p>
+                                        <p class="mb-0">{{ formatAnswers(result.correctAnswers) }}</p>
                                     </div>
                                 </div>
-                                
                                 <div class="row small">
                                     <div class="col-6">
                                         <p class="mb-1"><strong>Баллы:</strong></p>
@@ -150,7 +138,6 @@
                             </div>
                         </div>
                     </div>
-                    
                     <div class="row mt-4">
                         <div class="col-12">
                             <button class="btn btn-primary w-100 w-md-auto px-4" @click="pushOnMain()">
@@ -259,12 +246,27 @@ async function getTestAndAnswers() {
     }
 }
 
-function setSingleAnswer(optionIndex) {
-    const idx = questionNow.value - 1
-    if (!answers.value[idx]) {
-        answers.value[idx] = { options: [] }
+function isOptionSelected(optionIndex) {
+    const currentAnswers = answers.value[questionNow.value - 1]?.options || []
+    return currentAnswers.includes(optionIndex)
+}
+
+function toggleOption(optionIndex) {
+    const index = questionNow.value - 1
+    if (!answers.value[index]) {
+        answers.value[index] = { options: [] }
     }
-    answers.value[idx].options = [optionIndex]
+    
+    if (test.value?.questionsAndOptions[questionNow.value - 1]?.singleCorrect) {
+        answers.value[index].options = [optionIndex]
+    } else {
+        const current = answers.value[index].options
+        if (current.includes(optionIndex)) {
+            answers.value[index].options = current.filter(i => i !== optionIndex)
+        } else {
+            answers.value[index].options = [...current, optionIndex]
+        }
+    }
     saveAnswersToStorage()
 }
 
@@ -326,6 +328,14 @@ function btnFinishDisabled() {
     return res.value
 }
 
+function formatAnswers(answers) {
+    if (!answers) return '—'
+    if (Array.isArray(answers)) {
+        return answers.length ? answers.join(', ') : '—'
+    }
+    return answers
+}
+
 function pushOnMain() {
     router.push('/')
 }
@@ -338,7 +348,7 @@ function pushOnMain() {
 }
 
 .card {
-    border: 2px solid #3846D3;
+    border: none;
     border-radius: 20px;
 }
 
@@ -352,24 +362,6 @@ function pushOnMain() {
     background-color: #d33838;
     border-radius: 15px;
     border: none;
-}
-
-.large-checkbox, .large-radio {
-    transform: scale(1.3);
-    opacity: 0.9;
-    cursor: pointer;
-}
-
-.option-row:hover {
-    background-color: rgba(56, 70, 211, 0.05);
-    border-radius: 10px;
-    transition: background-color 0.2s ease;
-}
-
-.option-label {
-    cursor: pointer;
-    padding: 10px 0;
-    display: block;
 }
 
 .desktop-btn {
@@ -402,6 +394,66 @@ function pushOnMain() {
     justify-content: flex-end !important;
 }
 
+.option-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 16px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: #fff;
+}
+
+.option-card:hover {
+    border-color: #3846D3;
+    background-color: #f8f9ff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.option-card.selected {
+    background-color: #eef2ff;
+    border-color: #3846D3;
+}
+
+.option-card-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.option-card .form-check-input {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin: 0;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.option-text {
+    font-size: 1rem;
+    line-height: 1.4;
+    color: #212529;
+}
+
+@media (max-width: 768px) {
+    .option-card {
+        padding: 10px 14px;
+    }
+    .option-text {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .option-card {
+        padding: 8px 12px;
+    }
+    .option-text {
+        font-size: 0.9rem;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         padding-left: 12px;
@@ -428,23 +480,6 @@ function pushOnMain() {
         font-size: 0.9rem;
         min-height: 40px;
         min-width: 40px;
-    }
-    
-    .large-checkbox, .large-radio {
-        transform: scale(1.5);
-    }
-    
-    .option-label {
-        padding: 12px 0;
-        font-size: 1rem;
-    }
-    
-    h4 {
-        font-size: 1.3rem;
-    }
-    
-    h5 {
-        font-size: 1.1rem;
     }
     
     .desktop-btn span {
@@ -490,15 +525,6 @@ function pushOnMain() {
         font-size: 1.2rem;
     }
     
-    .large-checkbox, .large-radio {
-        transform: scale(1.6);
-    }
-    
-    .option-label {
-        font-size: 1.05rem;
-        padding: 14px 0;
-    }
-    
     .desktop-btn {
         padding: 6px 8px;
         min-height: 36px;
@@ -513,14 +539,6 @@ function pushOnMain() {
 @media (max-width: 400px) {
     .col-11 {
         padding-left: 10px;
-    }
-    
-    .large-checkbox, .large-radio {
-        transform: scale(1.7);
-    }
-    
-    .option-label {
-        font-size: 1.1rem;
     }
     
     .desktop-btn {

@@ -115,7 +115,6 @@
                     "previousButton": "Previous question",
                     "nextButton": "Next question",
                     "addOption": "Add option",
-                    "deleteOption": "-",
                     "saveTest": "Save"
                 }
             },

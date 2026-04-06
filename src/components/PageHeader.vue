@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-md sticky-top">
+  <nav class="navbar navbar-expand-md sticky-top user-select-none">
     <div class="container-fluid">
       <div class="d-flex align-items-center">
         <router-link to="/"><img :src="logo" alt="Логотип" class="rounded-circle me-2"></router-link>

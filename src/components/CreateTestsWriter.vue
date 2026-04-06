@@ -120,7 +120,6 @@
                                 @click="deleteOption(option)"
                             >
                                 <i class="bi bi-trash"></i>
-                                <span class="d-none d-md-inline ms-1">{{ $t('components.createTestsWriter.everyQuestionForm.buttons.deleteOption') }}</span>
                             </button>
                         </div>
                     </div>
@@ -376,6 +375,69 @@ function leaveOnMain() {
     font-size: 0.9rem;
     padding: 6px 12px;
     border-radius: 10px;
+}
+
+.input-group-text .form-check-input {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-top: 0;
+    cursor: pointer;
+    border: 2px solid #ced4da;
+    transition: all 0.2s ease;
+}
+
+.input-group-text .form-check-input:checked {
+    background-color: #3846D3;
+    border-color: #3846D3;
+}
+
+.input-group-text .form-check-input[type="radio"]:checked {
+    background-color: #3846D3;
+    border-color: #3846D3;
+}
+
+.input-group-text .form-check-input:focus {
+    box-shadow: none;
+    border-color: #3846D3;
+}
+
+.row .col-12 .form-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-left: 0;
+    margin-bottom: 0;
+    min-height: auto;
+}
+
+.row .col-12 .form-check .form-check-input {
+    float: none;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-top: 0;
+    margin-left: 0;
+    flex-shrink: 0;
+    border: 2px solid #ced4da;
+    background-color: #fff;
+    cursor: pointer;
+    position: relative;
+}
+
+.row .col-12 .form-check .form-check-input:checked {
+    background-color: #3846D3;
+    border-color: #3846D3;
+}
+
+.row .col-12 .form-check .form-check-input:focus {
+    box-shadow: none;
+    border-color: #3846D3;
+}
+
+.row .col-12 .form-check .form-check-label {
+    margin-bottom: 0;
+    line-height: 1.2;
+    cursor: pointer;
+    padding-left: 0;
 }
 
 @media (max-width: 768px) {
