@@ -128,13 +128,26 @@
             }
         },
         "testingInProgress": {
-            "questionNumber": "Вопрос номер",
-            "testName": "Тест:",
-            "nextQuestion": "Далее",
-            "previousQuestion": "Назад",
-            "finishTest": "Завершить",
-            "rightAnswer": "Верно",
-            "wrongAnswer": "Неверно"
+            "question": {
+                "questionNumber": "Номер вопроса",
+                "testName": "Тест:",
+                "nextQuestion": "Далее",
+                "previousQuestion": "Назад",
+                "finishTest": "Завершить"
+            },
+            "results": {
+                "testCompleted": "Тест '{name}' пройден!",
+                "result": "Ваш результат:",
+                "question": "Вопрос",
+                "selectedAnswers": "Выбранные ответы",
+                "correctAnswers": "Правильные ответы",
+                "pointsEarned": "Набранные баллы",
+                "maxPoints": "Максимум баллов",
+                "selected": "Выбрано:",
+                "correct": "Правильно:",
+                "points": "Баллы"
+            },
+            "home": "На главную"
         },
         "profileSettings": {
             "title": "О пользователе",

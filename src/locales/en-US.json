@@ -128,13 +128,26 @@
             }
         },
         "testingInProgress": {
-            "questionNumber": "Question number",
-            "testName": "Test:",
-            "nextQuestion": "Next",
-            "previousQuestion": "Back",
-            "finishTest": "Finish",
-            "rightAnswer": "Right",
-            "wrongAnswer": "Wrong"
+            "question": {
+                "questionNumber": "Question number",
+                "testName": "Test:",
+                "nextQuestion": "Next",
+                "previousQuestion": "Back",
+                "finishTest": "Finish"
+            },
+            "results": {
+                "testCompleted": "Test '{name}' completed!",
+                "result": "Your result:",
+                "question": "Question",
+                "selectedAnswers": "Selected answers",
+                "correctAnswers": "Correct answers",
+                "pointsEarned": "Points earned",
+                "maxPoints": "Max points",
+                "selected": "Selected:",
+                "correct": "Correct:",
+                "points": "Points"
+            },
+            "home": "Go to Home"
         },
         "profileSettings": {
             "title": "About user",

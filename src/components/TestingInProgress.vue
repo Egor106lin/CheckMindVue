@@ -20,7 +20,7 @@
                     <div class="row mb-3 align-items-center">
                         <div class="col-6 col-md-8">
                             <h5 class="card-title mb-0">
-                                {{ $t('components.testingInProgress.testName') }} <b>"{{ test?.testName }}"</b>
+                                {{ $t('components.testingInProgress.question.testName') }} <b>"{{ test?.testName }}"</b>
                             </h5>
                         </div>
                         <div class="col-6 col-md-4 text-end">
@@ -30,14 +30,14 @@
                                 @click="changeQuestion(false)"
                             >
                                 <i class="bi bi-arrow-left"></i>
-                                <span class="ms-1 d-none d-md-inline">{{ $t('components.testingInProgress.previousQuestion') }}</span>
+                                <span class="ms-1 d-none d-md-inline">{{ $t('components.testingInProgress.question.previousQuestion') }}</span>
                             </button>
                             <button
                                 class="btn btn-primary desktop-btn"
                                 v-if="questionNow < test?.questionsQuantity"
                                 @click="changeQuestion(true)"
                             >
-                                <span class="me-1 d-none d-md-inline">{{ $t('components.testingInProgress.nextQuestion') }}</span>
+                                <span class="me-1 d-none d-md-inline">{{ $t('components.testingInProgress.question.nextQuestion') }}</span>
                                 <i class="bi bi-arrow-right"></i>
                             </button>
                             <button
@@ -47,14 +47,14 @@
                                 @click="finishTest()"
                             >
                                 <i class="bi bi-check"></i>
-                                <span class="ms-1 d-none d-md-inline">{{ $t('components.testingInProgress.finishTest') }}</span>
+                                <span class="ms-1 d-none d-md-inline">{{ $t('components.testingInProgress.question.finishTest') }}</span>
                             </button>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-12">
                             <h5 class="card-subtitle text-body-secondary">
-                                {{ $t('components.testingInProgress.questionNumber') }} 
+                                {{ $t('components.testingInProgress.question.questionNumber') }} 
                                 {{ questionNow }} / {{ test?.questionsQuantity }}
                             </h5>
                         </div>
@@ -89,49 +89,49 @@
                 <div v-if="!testInProgress && testResult" class="card card-body zone">
                     <div class="row mb-3">
                         <div class="col-12">
-                            <h3 class="card-title">Тест <b>"{{ testResult.testName }}"</b> пройден!</h3>
+                            <h3 class="card-title">{{ $t('components.testingInProgress.results.testCompleted', { name: testResult.testName }) }}</h3>
                         </div>
                     </div>
                     <div class="row mb-4">
                         <div class="col-12">
-                            <h5>Ваш результат: <b>{{ testResult.userScore }} / {{ testResult.maxScore }}</b></h5>
+                            <h5>{{ $t('components.testingInProgress.results.result') }} <b>{{ testResult.userScore }} / {{ testResult.maxScore }}</b></h5>
                         </div>
                     </div>
                     <div class="d-none d-md-block">
                         <ElTable :data="testResult.detailedResults" class="rounded-5 mt-3">
-                            <ElTableColumn prop="question" label="Вопрос" width="200"/>
-                            <ElTableColumn label="Выбранные ответы">
+                            <ElTableColumn prop="question" :label="$t('components.testingInProgress.results.question')" width="200"/>
+                            <ElTableColumn :label="$t('components.testingInProgress.results.selectedAnswers')">
                                 <template #default="scope">
                                     {{ formatAnswers(scope.row.userAnswers) }}
                                 </template>
                             </ElTableColumn>
-                            <ElTableColumn label="Правильные ответы">
+                            <ElTableColumn :label="$t('components.testingInProgress.results.correctAnswers')">
                                 <template #default="scope">
                                     {{ formatAnswers(scope.row.correctAnswers) }}
                                 </template>
                             </ElTableColumn>
-                            <ElTableColumn prop="pointsEarned" label="Набранные баллы" width="140"/>
-                            <ElTableColumn prop="maxPoints" label="Максимум баллов" width="140"/>
+                            <ElTableColumn prop="pointsEarned" :label="$t('components.testingInProgress.results.pointsEarned')" width="140"/>
+                            <ElTableColumn prop="maxPoints" :label="$t('components.testingInProgress.results.maxPoints')" width="140"/>
                         </ElTable>
                     </div>
                     <div class="d-md-none">
                         <div v-for="(result, index) in testResult.detailedResults" :key="index" class="card mb-3">
                             <div class="card-body">
-                                <h6 class="card-title mb-2">Вопрос {{ index + 1 }}</h6>
+                                <h6 class="card-title mb-2">{{ $t('components.testingInProgress.results.question') }} {{ index + 1 }}</h6>
                                 <p class="small text-muted mb-2">{{ result.question }}</p>
                                 <div class="row small mb-2">
                                     <div class="col-6">
-                                        <p class="mb-1"><strong>Выбрано:</strong></p>
+                                        <p class="mb-1"><strong>{{ $t('components.testingInProgress.results.selected') }}</strong></p>
                                         <p class="mb-0">{{ formatAnswers(result.userAnswers) }}</p>
                                     </div>
                                     <div class="col-6">
-                                        <p class="mb-1"><strong>Правильно:</strong></p>
+                                        <p class="mb-1"><strong>{{ $t('components.testingInProgress.results.correct') }}</strong></p>
                                         <p class="mb-0">{{ formatAnswers(result.correctAnswers) }}</p>
                                     </div>
                                 </div>
                                 <div class="row small">
                                     <div class="col-6">
-                                        <p class="mb-1"><strong>Баллы:</strong></p>
+                                        <p class="mb-1"><strong>{{ $t('components.testingInProgress.results.points') }}</strong></p>
                                         <p class="mb-0">{{ result.pointsEarned }} / {{ result.maxPoints }}</p>
                                     </div>
                                 </div>
@@ -141,7 +141,7 @@
                     <div class="row mt-4">
                         <div class="col-12">
                             <button class="btn btn-primary w-100 w-md-auto px-4" @click="pushOnMain()">
-                                На главную
+                                {{ $t('components.testingInProgress.home') }}
                             </button>
                         </div>
                     </div>
