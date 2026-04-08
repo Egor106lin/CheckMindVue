@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="card card-nf card-body mb-4 zone" v-for="group in groups" :key="group">
-            <div class="row mt-2 align-items-center">
+            <div class="row mt-2 mb-2 align-items-center">
                 <div class="col-12 col-md-8">
                     <div class="d-flex align-items-center flex-wrap">
                         <h4 class="card-title mb-0 me-3">{{ group.name }}</h4>
