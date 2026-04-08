@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <div class="card zone">
         <div class="card-body">
             <div class="row align-items-center mb-3">
                 <div class="col-10 col-md-11">
@@ -11,6 +11,7 @@
                     </button>
                 </div>
             </div>
+
             <div class="row mb-3 g-2">
                 <div class="col-12 col-sm-6">
                     <div class="bg-light rounded-3 p-2 text-center">
@@ -22,6 +23,66 @@
                     <div class="bg-light rounded-3 p-2 text-center">
                         <small class="text-muted">{{ $t('components.testResults.medianScore') }}</small>
                         <h4 class="mb-0">{{ medianScore.toFixed(1) }}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3" style="border: none; background-color: #f8f9fa; border-radius: 20px;">
+                <div class="card-body p-3">
+                    <div class="form-check mb-3">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="gradeToggle"
+                            v-model="showExtraOptions"
+                        />
+                        <label class="form-check-label fw-semibold" for="gradeToggle">
+                            {{ $t('components.testResults.calculateGrades') }}
+                        </label>
+                    </div>
+
+                    <div v-if="showExtraOptions" class="grade-options">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                {{ $t('components.testResults.grade5') }}
+                                <span class="text-muted small">({{ $t('components.testResults.gradeCondition') }})</span>
+                            </label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                v-model.number="thresholds.grade5"
+                                :disabled="isGradeApplied"
+                                :placeholder="$t('components.testResults.fromPointsPlaceholder')"
+                            />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">
+                                {{ $t('components.testResults.grade4') }}
+                                <span class="text-muted small">({{ $t('components.testResults.gradeCondition') }})</span>
+                            </label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                v-model.number="thresholds.grade4"
+                                :disabled="isGradeApplied"
+                                :placeholder="$t('components.testResults.fromPointsPlaceholder')"
+                            />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">
+                                {{ $t('components.testResults.grade3') }}
+                                <span class="text-muted small">({{ $t('components.testResults.gradeCondition') }})</span>
+                            </label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                v-model.number="thresholds.grade3"
+                                :disabled="isGradeApplied"
+                                :placeholder="$t('components.testResults.fromPointsPlaceholder')"
+                            />
+                        </div>
+                        <button class="btn btn-primary w-100" @click="applyGrading">
+                            {{ $t('components.testResults.apply') }}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -43,11 +104,18 @@
                     </div>
                 </div>
             </div>
+
             <div class="d-none d-md-block table-responsive">
-                <ElTable :data="filteredResults" class="rounded-5" style="width: 100%">
+                <ElTable :data="tableData" class="rounded-5" style="width: 100%">
                     <ElTableColumn prop="name" :label="$t('components.testResults.name')" sortable />
                     <ElTableColumn prop="points" :label="$t('components.testResults.points')" sortable />
                     <ElTableColumn prop="time" :label="$t('components.testResults.time')" sortable />
+                    <ElTableColumn
+                        v-if="isGradeApplied"
+                        prop="grade"
+                        :label="$t('components.testResults.grade')"
+                        sortable
+                    />
                     <template #empty>
                         <div class="empty-table">
                             <i class="bi bi-inbox fs-1 text-muted"></i>
@@ -56,6 +124,7 @@
                     </template>
                 </ElTable>
             </div>
+
             <div class="d-md-none results-mobile-list">
                 <div v-if="filteredResults.length === 0" class="text-center text-muted py-4">
                     {{ $t('components.testResults.noResults') }}
@@ -63,6 +132,7 @@
                 <div v-for="(result, index) in filteredResults" :key="index" class="result-card">
                     <div class="result-header">
                         <span class="result-number">#{{ index + 1 }}</span>
+                        <span v-if="isGradeApplied" class="badge bg-success">{{ getGrade(result.points) }}</span>
                     </div>
                     <div class="result-name"><strong>{{ result.name }}</strong></div>
                     <div class="result-details">
@@ -78,7 +148,7 @@
 <script setup>
 import { ElTable, ElTableColumn } from 'element-plus';
 import { useI18n } from 'vue-i18n';
-import { defineEmits, defineProps, computed, ref } from 'vue'
+import { defineEmits, defineProps, computed, ref, watch } from 'vue'
 
 const $t = useI18n().t;
 
@@ -92,11 +162,46 @@ const props = defineProps({
 defineEmits(['close'])
 
 const searchQuery = ref('')
+const showExtraOptions = ref(false)
+const isGradeApplied = ref(false)
+const thresholds = ref({
+    grade5: null,
+    grade4: null,
+    grade3: null
+})
+
+watch(showExtraOptions, (newVal) => {
+    if (!newVal) {
+        isGradeApplied.value = false
+        thresholds.value = {
+            grade5: null,
+            grade4: null,
+            grade3: null
+        }
+    }
+})
 
 const filteredResults = computed(() => {
     if (!searchQuery.value.trim()) return props.results
     const query = searchQuery.value.trim().toLowerCase()
     return props.results.filter(r => r.name?.toLowerCase().includes(query))
+})
+
+const getGrade = (points) => {
+    if (!isGradeApplied.value) return null
+    const { grade5, grade4, grade3 } = thresholds.value
+    if (grade5 !== null && points >= grade5) return '5'
+    if (grade4 !== null && points >= grade4) return '4'
+    if (grade3 !== null && points >= grade3) return '3'
+    return '2'
+}
+
+const tableData = computed(() => {
+    if (!isGradeApplied.value) return filteredResults.value
+    return filteredResults.value.map(item => ({
+        ...item,
+        grade: getGrade(item.points)
+    }))
 })
 
 const averageScore = computed(() => {
@@ -116,9 +221,27 @@ const medianScore = computed(() => {
         return scores[mid]
     }
 })
+
+const applyGrading = () => {
+    const { grade5, grade4, grade3 } = thresholds.value
+    if (
+        grade5 !== null && !isNaN(grade5) &&
+        grade4 !== null && !isNaN(grade4) &&
+        grade3 !== null && !isNaN(grade3)
+    ) {
+        isGradeApplied.value = true
+    } else {
+        isGradeApplied.value = false
+    }
+}
 </script>
 
 <style lang="css" scoped>
+.zone {
+    border-radius: 20px;
+    box-shadow: 10px 5px 5px #858383;
+}
+
 .card {
     border: none !important;
     border-radius: 20px;
@@ -234,15 +357,49 @@ const medianScore = computed(() => {
     background-color: #f8f9fa !important;
 }
 
-@media (max-width: 768px) {
-    .card {
-        border-radius: 16px;
-    }
+.grade-options .form-control {
+    border-radius: 15px;
+    border: 2px solid #f3f3f3;
 }
 
-@media (max-width: 576px) {
+.grade-options .form-control:focus {
+    border-color: #3846D3;
+    box-shadow: none;
+}
+
+.btn-primary {
+    background-color: #3846D3;
+    border-radius: 12px;
+    border: none;
+    padding: 8px 16px;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background-color: #2c38b0;
+}
+
+.form-check-input:checked {
+    background-color: #3846D3;
+    border-color: #3846D3;
+}
+
+.form-check-input:focus {
+    box-shadow: none;
+    border-color: #3846D3;
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+@media (max-width: 768px) {
+    .zone {
+        box-shadow: 5px 3px 3px #858383;
+    }
     .card {
-        border-radius: 14px;
+        border-radius: 16px;
     }
     h3 {
         font-size: 1.3rem;
@@ -252,6 +409,12 @@ const medianScore = computed(() => {
     }
     .result-name {
         font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .card {
+        border-radius: 14px;
     }
 }
 </style>

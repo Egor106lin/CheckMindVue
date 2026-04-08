@@ -192,7 +192,15 @@
             "medianScore": "Median Score",
             "searchPlaceholder": "Search by name...",
             "noResults": "No results found",
-            "noData": "No results"
+            "noData": "No results",
+            "calculateGrades": "Calculate grades",
+            "grade5": "Grade 5",
+            "grade4": "Grade 4",
+            "grade3": "Grade 3",
+            "gradeCondition": "this grade is given if the specified number of points is scored",
+            "fromPointsPlaceholder": "Enter threshold",
+            "apply": "Apply",
+            "grade": "Grade"
         }
     },
     "toasts": {
